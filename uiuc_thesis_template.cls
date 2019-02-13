@@ -1,17 +1,17 @@
 %%
-%% This is file `uiucthesis2009.sty',
+%% This is file `uiucthesis2009.cls',
 %% generated with the docstrip utility.
 %%
 %% The original source files were:
 %%
-%% uiucthesis2009.dtx  (with options: `package')
+%% uiucthesis2009.dtx  (with options: `class')
 %% 
 %% IMPORTANT NOTICE:
 %% 
 %% For the copyright see the source file.
 %% 
 %% Any modified versions of this file must be renamed
-%% with new filenames distinct from uiucthesis2009.sty.
+%% with new filenames distinct from uiucthesis2009.cls.
 %% 
 %% For distribution of the original source see the terms
 %% for copying and modification in the file uiucthesis2009.dtx.
@@ -23,7 +23,7 @@
 \def\fileversion{v2.25a} \def\filedate{2009/10/10}
 %% Package and Class "uiucthesis2009" for use with LaTeX2e.
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{uiucthesis2009}
+\ProvidesClass{uiuc_thesis_template}
          [\filedate\ \fileversion\ UIUC Thesis (PJC)]
 \RequirePackage{setspace}
 \expandafter\ifx\csname @ifundefined\endcsname\relax
@@ -52,7 +52,10 @@
 \DeclareOption{offcenter}{\@thesisoffcentertrue}
 \DeclareOption{centerchapter}{\@centerchaptertrue}
 \DeclareOption{largecaps}{\@largecapstrue}
+\DeclareOption*{\PassOptionsToClass{\CurrentOption}{book}}
+\PassOptionsToClass{letterpaper,oneside}{book}
 \ProcessOptions
+\LoadClass{book}
 \if@proquest
     \nofiles    % don't overwrite the .aux files
     \def\makeindex{}
@@ -104,7 +107,7 @@
 \newcommand*{\thesis@volume}{}
 \if@edeposit
   \gdef\@committee{%
-    \PackageError{uiucthesis2009}{A committee must be specified for e-deposit dissertations.}%
+    \ClassError{uiucthesis2009}{A committee must be specified for e-deposit dissertations.}%
     {Use \protect\committee\space with members separated by \protect\\'s.}}
 \fi
 \def\copyrightnotice{\copyright~\@degreeyear~by \@author. All rights reserved.}
@@ -241,7 +244,7 @@
 \if@proquest
  \def\maketitle{}
  \def\@advisor{%
-    \PackageError{uiucthesis2009}{An advisor must be specified for the ProQuest abstract}%
+    \ClassError{uiucthesis2009}{An advisor must be specified for the ProQuest abstract}%
     {Use \protect\advisor\space to specify a name}}
  \newenvironment{abstract}{%
     \newpage
@@ -454,7 +457,7 @@
     \newcommand{\note}[1]{}
     \let\thesis@marginpar\marginpar
     \def\marginpar{%
-        \PackageWarning{uiucthesis2009}{Margin paragraphs fall outside the allowed margins\MessageBreak
+        \ClassWarning{uiucthesis2009}{Margin paragraphs fall outside the allowed margins\MessageBreak
             for UIUC Theses, use \protect\note\space instead of \protect\marginpar.}%
         \thesis@marginpar}
 \fi
@@ -565,4 +568,4 @@
 \let\endthesis=\relax
 \endinput
 %%
-%% End of file `uiucthesis2009.sty'.
+%% End of file `uiucthesis2009.cls'.
