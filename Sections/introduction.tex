@@ -1,9 +1,35 @@
 \chapter{An Introduction}
 
-\section{Why Are We Here?}
+If you are reading this thesis, then I have either applied for or have  already received my PhD in Physics from UIUC. If it's the former, thanks for coming to my thesis defense.
 
-If you are reading this thesis, then I have either applied for or have  (hopefully) already received my PhD in Physics from the University of Illinois at Urbana-Champaign. If it's the former, thanks for coming to my thesis defense.
+I'm going to try to convince you that I know some things about particle physics, and that I've done some things worthy of a doctorate. Hopefully I'll even teach you something new along the way.
 
-Over the last few years I've 
+Here's a short summary of my thesis, in case you're skimming over it ten minutes before my defense:
 
-\section{What Did I Do?}
+\begin{itemize}
+
+    \item Like many particle physicists over the years, I've applied my analytic skills towards combing through terabytes of collision data in search of subatomic interactions which are better described by hypothetical models than by the Standard Model of Physics. My thesis begins by describing the Standard Model, the supersymmetric (SUSY) models which we were hoping to find evidence for\footnote{Spoiler: we found no such evidence.}, and the detector with which our precious PhD-sustaining data was collected. Sprinkled throughout the detector section will be mentions of some upgrade-related work that I have done, including:
+    
+    \begin{itemize}
+        \item improvements to vertex reconstruction,
+        \item work on the Fast TracKer (FTk),
+        \item and pixel detector assembly and beam testing work which I did during a one-year residency at Argonne National Lab.
+    \end{itemize}
+
+    \item My particular specialty is in machine learning, which in recent years has come to dominate the field of artificial intelligence to such a degree that the terms might as well be interchangeable. I describe how machine learning works, including the general classes of techniques which I used. After that I go through details of two studies which I led.
+    
+    \begin{itemize}
+    
+        \item The first study was on the identification and generation of particle showers in calorimeters. This means that we wrote an algorithm which is able to look at a calorimeter shower after a collision event and both determine what type of particle produced the shower and how much energy the particle had. We could also artificially generate showers for different particles at various energies, a technique which may allow us to circumvent computationally-intensive Monte Carlo (MC) simulations in the future. I mainly contributed the particle classification section, though I worked on all parts of the project.
+
+        \item The second study was on the identification of heavy-flavor-decay leptons, which form the largest background in a number of searches. This study used recurrent neural nets (RNN's) to perform lepton classification based on track information.
+
+    \end{itemize}
+    
+    \item Next up is a description of the SUSY search which my lepton-classification tool was used for. This is the section which proves that I am actually a physicist as opposed to a computer scientist.
+    
+    \item And of course, no thesis is complete without a conclusion, in which I'll basically tell you all of this information again, except now you'll understand what I'm talking about.
+
+\end{itemize}
+
+Thanks for reading my thesis. Let's begin.
