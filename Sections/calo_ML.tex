@@ -17,3 +17,52 @@
 \section{GAN}
 
 \section{Conclusion}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The next generation of detectors currently under development often feature an increase in granularity of the electromagnetic and hadronic calorimeters. This is true of the ATLAS Phase-II upgrade, and also of the highly granular CALICE sampling calorimeter proposed for the ILC, which was used for the initial studies presented in this section. These improved detector designs provide an excellent opportunity for applying machine learning algorithms for identifying particles and measuring their energies.
+
+Our purpose in this experiment is to create a neural-net classifier using calorimeter data, which can demonstrably perform better on object identification than traditional feature-based analysis techniques can. Specifically, we have chosen to build two classifiers - one to distinguish between electrons and charged pions, and one for photons and neutral pions. In order to create a more challenging classification task, we have chosen only pion events which are likely to be confused with either electrons or photons. For charged pions, this meant taking events where the total energy deposited in the ECAL was at least 40 times greater than the energy deposited in HCAL. For neutral pions, this meant taking events where pions decayed into two photons with an opening angle of less than 0.01 radians.
+
+The study is based on pseudo-data simulated with GEANT4 in the proposed Linear Collider Detector (LCD) for the CLIC accelerator~\cite{Lebrun}. Though we intend to extend our studies to the ATLAS detector for use in Higgsino searches, the complicated non-uniform accordion-shaped calorimeters in ATLAS add some difficulties to the task. In contrast, the LCD has uniform calorimeter cell sizes, which makes it a good starting point. The calorimeter in this detector consists of a regular grid of 3D cells with cell sizes of 5.1 mm$^3$ and an inner calorimeter radius of 1.5 m. In this dataset, individual electron, photon, charged pion, and neutral pion particles are shot orthogonally into the calorimeter surface. The particle energy is set to a fixed value of 60 GeV. For each event, a 25x25x25 cell slice of the electromagnetic calorimeter (ECAL) and the corresponding 5x5x60 cell slice of the hadronic calorimeter (HCAL) are stored as two 3D arrays of deposited energy in each cell.
+
+We use BDT's as a proxy for traditional feature-based analysis on calorimeter data. This provides a baseline against which to compare the results of neural net performance. All features used in the BDT are calculated using traditional methods, where the complete list of features we use is as follows: total energy deposited in ECAL, total number of hits registered in ECAL, the ratio of energy deposited in ECAL first layer over energy deposited in second layer, the ratio of energy deposited in ECAL first layer over all ECAL energy, 2nd through 6th moments in the x, y, and z dimensions for ECAL energy deposits, all equivalent features for HCAL, ratio of HCAL to ECAL energy, and ratio of number of hits in HCAL to ECAL. We also examined the effect of several n-subjettiness measures, mostly to help distinguish between photons and neutral pions. Specifically, by measuring how well energy depositions were described as belonging to either one, two, or three jets, we hoped to distinguish between single photons and pions which had decayed into two photons. However, n-subjettiness was computationally expensive to calculate and did not result in much classification improvement, so its usage was dropped.
+
+Initial studies on different net architectures showed no significant differences in performance between convolutional neural nets (CNN's) and simply-connected dense neural nets (DNN's). Therefore, we chose to focus only on DNN's, due to the smaller number of hyperparameters we would have to scan over. In the nets we trained, the ECAL and HCAL inputs were separately flattened and fed into two cell-based DNN's with identical architectures, and the outputs were merged before applying a softmax layer and computing categorical cross-entropy loss. We used two different types of nets - one based on raw cell energy inputs, and one based on the same input features that we had calculated for the BDT. This was to investigate whether differences in performance between the BDT and DNN could be attributable simply to a difference in architecture, without any actual additional information processing. Because neural nets are sensitive to the scale of input data, for the feature-based neural net we first normalized each feature by calculating the z-score for each event (i.e. $\frac{x-\bar{x}}{std(x)}$).
+
+Each two-object classification dataset was divided into 400,000 training and 100,000 test events. After performing hyperparameter scans on Blue Waters, we decided on a DNN architecture consisting of 4 hidden layers with 256 neurons each, ReLU activation, and dropout of 0.5, trained with Adam optimization with a learning rate of 0.001. A BDT hyperparameter scan yielded best performance with 400 estimators, maximum depth of 5, and learning rate of 0.5. In our studies, we found that the most powerful feature-based discriminators are the second $x$ and $y$ moments, which measure the lateral shower width. Performance curves for the BDT's and DNN's are shown in Figure~\ref{ROCs}, and performance values are shown in Table~\ref{AUCs}.
+
+\begin{figure}[!t]
+    \centering
+    \includegraphics[width=0.33\linewidth]{images/photon_pi0.pdf}
+    \includegraphics[width=0.33\linewidth]{images/electron_chpi.pdf}
+    \caption{Signal vs. background efficiency ROC curves for the (left) $\gamma$ vs. $\pi^0$ and (right) $e$ vs. $\pi$ classifier. The red dots mark the chosen BDT working point.}
+    \label{ROCs}
+\end{figure}
+
+\begin{table}[!ht]
+    \centering
+    \begin{tabular}[!t]{l|cccc|cccc}
+        \hline
+        & \multicolumn{4}{c}{\textbf{$\gamma$ vs. $\pi^0$}} & \multicolumn{4}{c}{\textbf{$e$ vs. $\pi$}}\\
+        \hline
+        \textbf{Model} & \textbf{acc.} &  \textbf{AUC} & \textbf{$\Delta \epsilon_{\mathrm{sig}}$} & \textbf{$\Delta R_{\mathrm{bkg}}$} & \textbf{acc.} &  \textbf{AUC} & \textbf{$\Delta \epsilon_{\mathrm{sig}}$} & \textbf{$\Delta R_{\mathrm{bkg}}$} \\
+        \hline
+        \centering
+        BDT & 83.1\% & 89.8\% & - & - & 93.8\% & 98.0\% & - & - \\
+        DNN (features) & 82.8\% & 90.2\% & 0.9\% & 0.95 & 93.6\% & 98.0\% & -0.1\% & 0.95 \\
+        DNN (cells) & 87.2\% & 93.5\% & 9.4\% & 1.63 & 99.4\% & 99.9\% & 4.9\% & 151 \\
+        \hline
+        \hline
+    \end{tabular}
+    \vspace{5pt}
+    \caption{Performance parameters for BDT and DNN classifiers.} 
+    \label{AUCs}
+\end{table}
+
+The areas under curve (AUC) and accuracies (acc.)
+for the cell-based DNNs are significantly better than for the feature-based DNNs and BDTs (which both have similar performance). This demonstrates that the DNN is able to extract additional information from the calorimeter data which is not captured via traditional measures. Choosing the working point on the BDT ROC curve indicated in Figure~\ref{ROCs}, we obtain the following improvement metrics for the cell-based DNN. For the $\gamma$ vs. $\pi^0$ ($e$ vs. $\pi^\pm$) classifier, the cell-based DNN may be used to either increase the signal efficiency by $\Delta \epsilon_{\mathrm{sig}} = \epsilon_{\mathrm{sig}}^{\mathrm{DNN}} - \epsilon_{\mathrm{sig}}^{\mathrm{BDT}}=9.4$\% (4.9\%) for fixed background efficiency, or decrease the background efficiency by a factor $\Delta R_{\mathrm{bkg}} = \epsilon_{\mathrm{bkg}}^{\mathrm{BDT}} / \epsilon_{\mathrm{bkg}}^{\mathrm{DNN}}= 1.6$ (151) for fixed signal efficiency.
+
+\section*{FUTURE WORK}
+
+We have shown that neural nets are capable of outperforming traditional feature-based analyses on lepton identification tasks. Our colleagues working with us have also shown good machine-learning results for particle energy identification, and for generative adversarial network (GAN) based approaches for rapid simulation of lepton showers in simulation. Going forward, our next steps are to perform classification on a range of particle energies, rather than simply at a fixed 60 GeV, especially focusing on lower energy scales. We would also like to implement clustering and attention algorithms, which would allow us to zoom in and perform classification on individual particles in a multi-particle event. After that, the next step is to translate this work into the ATLAS detector geometry. We may do this via the use of deep belief nets. The ultimate goal is then to use the resulting tool to help identify leptons in a Higgsino search for new physics beyond the standard model.

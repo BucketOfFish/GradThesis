@@ -1,0 +1,92 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Previously, I participated in a search for SUSY, targeting the events shown in Figure~\ref{SUSY_2l2j}. In these events, an initial gluon decays into a $\tilde{\chi}^0_2$ (second-lightest neutralino) and two quarks. The $\tilde{\chi}^0_2$ further decays into $\tilde{\chi}^0_1$ (lightest neutralino) via either a Z boson decay or an intermediate slepton decay. The Z may be either on or off shell. To target these decays, we looked for events with final states containing a same-flavour opposite-sign lepton (electron or muon) pair, two or more jets, and large missing transverse momentum ($E_T^{miss}$). To differentiate between the different models (on-shell Z, off-shell Z, and slepton decay), we looked at the final dilepton mass distribution, as seen in Figure~\ref{mll}. These searches used $\sqrt{s}$ = 13 TeV collision data with an integrated luminosity of $14.7 fb^{-1}$, gathered by the ATLAS detector during 2015 and 2016.
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.7\linewidth]{images/SUSY_2l2j.png}
+    \caption{SUSY models involving final states with two leptons, two jets, and large transverse missing energy. Note that though these diagrams show two gluino decay branches, the final state we searched for only required one.}
+    \label{SUSY_2l2j}
+\end{figure}
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.5\linewidth]{images/mll.png}
+    \caption{Different dilepton mass ($m_{ll}$) distributions. On-shell Z bosons have an $m_{ll}$ peak around the Z mass at 91 GeV, but off-shell Z's would see a sharp cutoff in the $m_{ll}$ distribution at an energy equal to $m_{\tilde{\chi}^0_2} - m_{\tilde{\chi}^0_1}$. Events which went through the slepton decay process would see an entirely different $m_{ll}$ distribution shape.}
+    \label{mll}
+    
+	\centering
+    \includegraphics[width=0.45\linewidth]{images/slepton_signal_regions.png}
+    \includegraphics[width=0.45\linewidth]{images/Z_signal_regions.png}
+    \caption{Signal regions chosen to maximize signal-over-background ratios given various sparticle masses. The signal regions on the left are for slepton and off-shell Z models, and correspond to low, medium, and high values of $m_{\tilde{\chi}^0_2} - m_{\tilde{\chi}^0_1}$. The signal region on the right is for the on-shell Z model. $H_T$ refers to the total transverse momentum of jets.}
+    \label{signal_regions}
+\end{figure}
+
+When selecting objects for this analysis, we decided to use signal leptons with transverse momentum ($p_T$) above 25 GeV, and jets with $p_T$ above 30 GeV. For the purposes of performing jet overlap removal and calculating $E_T^{miss}$, we also allowed baseline leptons above 10 GeV and baseline jets above 20 GeV. In the interest of keeping this paper at a reasonable length, the complete set of object selection and triggering criteria will not be included, but can be found in the complete SUSY analysis paper at \cite{SUSY_2l2j}.
+
+As with most high-energy physics searches, there were a variety of standard-model processes which mimicked the final state we were looking for. Of these, the $t\bar{t}$ process was the largest, followed by diboson (WZ/ZZ) processes. Events with a single Z and two or more jets from initial-state radiation could also mimic our signal, provided that mismeasurement of the jet momentum resulted in a large $E_T^{miss}$ for the event. Events from single-top-quark processes and from lepton misidentification also contributed to the background. To accurately model these backgrounds, we used flavor-symmetry, Z/$\gamma^*$, Monte Carlo, and fake estimation methods, all of which will be described below.
+
+As we had several unknown masses in our models, we needed to find multiple signal regions which could optimize the signal-to-background ratio for a variety of different $\tilde{\chi}^0_1$, $\tilde{\chi}^0_2$, and $\tilde{g}$ masses. In Figure~\ref{signal_regions}, we show the four signal regions we chose, along with their associated validation and control regions, which were used to implement and test various background-rejection methods.
+
+\subsection*{Flavor Symmetry}
+
+Flavor symmetry (FS) was an important background rejection method, and removed contributions from processes such as $Z\rightarrow\tau\tau$, $t\tilde{t}$, WW, and tW. Unlike our signal models, which produced only pairs of same-flavor leptons, these processes could produce same-flavor and opposite-flavor lepton pairs with equal probability. The basic idea was to take the opposite-flavor $e\mu$ events from data in each signal region, and to use them to estimate the number of same-flavor events from FS sources in each of those regions. Due to differences in detection and triggering efficiencies for electrons and muons, we had to apply the scaling factor shown in the following equation, where $\epsilon_{e/\mu}$ was the offline selection efficiency for each lepton and $\epsilon_{e\mu/ee}^{trigger}$ was the dilepton trigger efficiency for each channel. The equation for the $\mu\mu$ channel followed the same logic.
+
+\begin{gather}
+%n_{ee}^{measured} = n_{ee}^{truth}\epsilon_e^2\epsilon_{ee}^{trigger} \\
+%n_{e\mu}^{measured} = n_{e\mu}^{truth}\epsilon_e\epsilon_{\mu}\epsilon_{e\mu}^{trigger} \\
+n_{ee}^{measured} = \frac{1}{2}\frac{\epsilon_e}{\epsilon_{\mu}}\frac{\epsilon_{ee}^{trigger}}{\epsilon_{e\mu}^{trigger}}n_{e\mu}^{measured}
+\end{gather}
+
+\subsection*{Z/$\gamma^*$ + Jets}
+
+Another important background was single-Z events with two additional jets from initial state radiation. There was no real missing energy in these events, but they could appear to have $E_T^{miss}$ due to mismeasurement of jet momentum. Jets were difficult to model accurately in Monte Carlo simulation due to the complexity of hadronic showering, so to estimate Z + jets, we used a data-driven method where we selected for a similar background ($\gamma$ + jets), and applied reweighting and momentum smearing. Since in this case both $\gamma$ and $Z\rightarrow ll$ were well-measured particles recoiling against two jets, the kinematics of both processes were very similar. One difference came from the fact that $\gamma$ is massless, which caused its $p_T$ distribution to be different from that of Z. We had to correct for this by reweighting $\gamma$ events in bins of $p_T$. Photon $p_T$ also had to be smeared to match the resolution of muon $p_T$ in the $Z\rightarrow\mu\mu$ channel.
+
+%There were also differences in resolution, since photons and electrons were measured quite accurately, but muons had worse resolution, especially at high $p_T$. Thus, to account for the fact that $Z\rightarrow\mu\mu$ events had worse resolution, photon $p_T$ had to be smeared to match the resolution of Z $p_T$ in the $\mu\mu$ channel.
+
+%\begin{figure}[t]
+%    \centering
+%    \includegraphics[width=0.8\linewidth]{images/gamma_jets.png}
+%    \caption{We selected events in data with $\gamma$ + jets and no leptons (left), and used them to estimate the background contribution from Z + jets (right).}
+%    \label{gamma_jets}
+%\end{figure}
+
+\subsection*{Fake Leptons}
+
+Another contribution to background came from events where one or more non-leptonic objects were incorrectly identified as leptons. Semileptonic $t\bar{t}$, W + jets, and single top events were included in this category. We estimated the number of fake leptons in each region using a matrix method described in detail in \cite{fake_method}. The general idea was that in each signal region, we would apply both loose and tight lepton selections. We labeled the number of baseline (loose) leptons which passed the signal (tight) cut as $N_{pass}$, and called the ones which failed $N_{fail}$. Given two further numbers, $\epsilon^{real}$ and $\epsilon^{fake}$ (fractions which pass the signal cut), we could then estimate the number of fake signal leptons using the following equation. $\epsilon^{real}$ and $\epsilon^{fake}$ were calculated via a tag-and-probe approach. Expanding this method to a dilepton system (where either or both leptons could be fake) required only that we extend this logic to a 4x4 matrix.
+
+\begin{equation}
+N_{pass}^{fake} = \frac{N_{fail}-(1/\epsilon^{real}-1)\times N_{pass}}{1/\epsilon^{fake}-1/\epsilon^{real}}.
+\end{equation}
+
+%Using this equation required that we obtain good estimates for $\epsilon^{real}$ and $\epsilon^{fake}$. We could find $\epsilon^{real}$ by looking in a signal region which selected for a high concentration of likely $Z\rightarrow ll$ events, and by performing a tag-and-probe method with the leading lepton as the tag. We estimated $\epsilon^{fake}$ in a similar way, by looking in a region with high likelihood of fake leptons (requiring exactly two same-sign leptons), and using the lower-$p_T$ lepton to calculate $\epsilon^{fake}$. For the fake-lepton region, we made sure to disregard same-sign dilepton events which came about as a result of prompt lepton production. These processes were simulated in Monte Carlo, and subtracted from the data. Expanding this method to a dilepton system (where either or both leptons could be fake) required only that we extend this logic to a 4x4 matrix. Fake lepton rates were calculated in $p_T$ bins for each region.
+
+\subsection*{Monte Carlo}
+
+Finally, we come to the section that I was responsible for, the Monte Carlo simulation of diboson events, mainly $WZ\rightarrow lll\nu$ and $ZZ\rightarrow ll\nu\nu$, as well as the simulation of smaller diboson processes and other rare events such as ttZ, ttW, ttWWW, etc. Modeling for the two major diboson components (which make up about $20-30\%$ of the background in each region) was validated in three regions, VR-WZ, VR-ZZ, and VR-3L. VR-WZ and VR-3L were both intended to validate the WZ process, just in different regions of phase space. VR-ZZ was a four-lepton region meant to validate the $ZZ\rightarrow llll$ process, taking advantage of similarities in the MC simulation process for $ZZ\rightarrow ll\nu\nu$ and $ZZ\rightarrow llll$. These regions were all chosen to be above $90\%$ pure in diboson processes. Data-MC comparisons of $E_T^{miss}$, $H_T$, jet multiplicity, and boson $p_T$ in these regions showed good agreement, demonstrating that there were no difficulties with QCD modeling. Particular attention was paid to MC simulation of jet parameters, and differences between Powheg and Sherpa-generated samples for each region were included in the systematic errors.
+
+The Powheg generator had better jet-modeling properties overall. However, due to the way Powheg produced $ll\nu\nu$ samples, the $WW\rightarrow ll\nu\nu$ and $ZZ\rightarrow ll\nu\nu$ processes could not be separated at the truth level. Since the WW process was already included in the flavor-symmetry method, we had to remove it in order to avoid double-counting. To do this, we estimated the ZZ component in each region by subtracting the DF component of $VV\rightarrow ll\nu\nu$ from the SF component. Since the ZZ process is expected to be much greater than the WW component only in the on-Z $m_{ll}$ region, we calculated systematics for this method by taking the off-Z $m_{ll}$ component of each region and checking the exactness of SF and DF cancellation.
+
+\subsection*{Results}
+
+Results for each signal region are shown in Figure~\ref{results}. The on-Z region shows a significance of $0.47\sigma$, and the largest local significance in any slepton region is $1.7\sigma$. Based on these results, we obtain the exclusion contours in Figure~\ref{exclusion}. In conclusion, this search found only results consistent with the standard model. As seen from the exclusion plots, we have two possible avenues to consider if we wish to extend this search. We can either go towards the higher-mass region, or we could look at the compressed-mass region where mass differences between SUSY particles are very small.
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.4\linewidth]{images/slepton_results.png}
+    \includegraphics[width=0.45\linewidth]{images/on-Z_results.png}
+    \caption{(left) Data-MC comparisons for slepton models. (right) Data-MC comparisons for on-Z model.}
+    \label{results}
+\end{figure}
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.45\linewidth]{images/slepton_exclusion.png}
+    \includegraphics[width=0.45\linewidth]{images/on-Z_exclusion.png}
+    \caption{(left) Exclusion contours in $m_{\tilde{\chi}_1^0}$, $m_{\tilde{g}}$ space for slepton models where $m_{\tilde{\chi}_2^0} = \frac{1}{2}(m_{\tilde{g}} + m_{\tilde{\chi}_1^0})$. (right) Exclusion contours for on-Z models where $m_{\tilde{\chi}_2^0} = m_{\tilde{\chi}_1^0} + 100$ GeV.}
+    \label{exclusion}
+\end{figure}
+
+There are good theoretical reasons to look at the compressed-mass region. As mentioned previously, the SUSY gauge particles combine into mass eigenstates called the neutralinos ($\tilde{\chi}^0_{1,2,3,4}$) and charginos ($\tilde{\chi}^\pm_{1,2}$). Together, all these particles are collectively known as electroweakinos. The neutralinos are formed from the photino, zino, and neutral Higgsinos, where the photino and zino are themselves mixtures of the bino and neutral wino. The charginos are formed from the charged winos and charged Higgsinos. If we consider a situation (motivated by naturalness arguments) where the Higgsino mass is close to the weak scale, but the masses of the bino and wino are much higher \cite{Higgsino}, then the lightest electroweakinos ($\tilde{\chi}^0_1, \tilde{\chi}^0_2, \tilde{\chi}^\pm_1$) would be dominated by Higgsino contributions, and in this case their masses would be separated in the range of hundreds of MeV to tens of GeV, putting the model outside the exclusion limits of our previous search.
+
+A previous search using the Higgsino model excluded (with $95\%$ confidence) next-to-lightest neutralino masses of up to 130 GeV, and down to mass splittings of 3 GeV \cite{Higgsino}. Since this model involves very soft (low-pT) leptons, we can improve the sensitivity of the search if we created a more accurate method of identifying and measuring particles at low energy. One way we can improve upon traditional particle identification techniques is to make use of new methods in machine learning and image recognition on raw detector data. An approach for developing such a tool will be described in the following sections. After building the tool, we aim to enhance the search using ATLAS data gathered through the end of LHC Run II (about 100 $fb^{-1}$).
