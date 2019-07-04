@@ -1,6 +1,8 @@
 \documentclass[draftthesis,fancy,edeposit]{uiuc_thesis_template}
 
-\usepackage{epigraph}
+\usepackage{epigraph, url}
+\usepackage[backend=bibtex]{biblatex}
+\bibliography{bibliography}
 
 \begin{document}
 
@@ -33,6 +35,7 @@
 %\input{Appendices/blah.tex}
 
 \backmatter
-%\bibliography{thesisbib}
+
+\printbibliography
 
 \end{document}
