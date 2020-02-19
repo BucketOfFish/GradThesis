@@ -8,27 +8,33 @@ Here's a short summary of my thesis, in case you're skimming over it ten minutes
 
 \begin{itemize}
 
-    \item Like many particle physicists over the years, I've applied my analytic skills towards combing through terabytes of collision data in search of subatomic interactions which are better described by hypothetical models than by the Standard Model of Physics. My thesis begins by describing the Standard Model, the supersymmetric (SUSY) models which we were hoping to find evidence for\footnote{Spoiler: we found no such evidence.}, and the detector with which our precious PhD-sustaining data was collected. Sprinkled throughout the detector section will be mentions of some upgrade-related work that I have done, including:
+    \item Like many particle physicists over the years, I've spent my graduate career searching for evidence of extensions to the Standard Model. My thesis begins by describing the Standard Model and the supersymmetric (SUSY) models which we were hoping to find evidence for\footnote{Spoiler: we found no such evidence.}.
     
-    \begin{itemize}
-        \item improvements to vertex reconstruction,
-        \item work on the Fast TracKer (FTk),
-        \item and pixel detector assembly and beam testing work which I did during a one-year residency at Argonne National Lab.
-    \end{itemize}
+    \item After this, I briefly describe the relevant components of the detector with which our precious PhD-sustaining data was collected, and walk through the basic steps and terminology of a particle physics search.
 
-    \item My particular specialty is in machine learning, which in recent years has come to dominate the field of artificial intelligence to such a degree that the terms might as well be interchangeable. I describe how machine learning works, including the general classes of techniques which I used. After that I go through details of two studies which I led.
+    \item My particular specialty is in machine learning, which in recent years has come to dominate the field of artificial intelligence to such a degree that the terms might as well be interchangeable. I describe how machine learning works, including the general classes of techniques which I used in my various studies.
+    
+    \item After that I go through details of two machine learning studies which I led.
     
     \begin{itemize}
     
-        \item The first study was on the identification and generation of particle showers in calorimeters. This means that we wrote an algorithm which is able to look at a calorimeter shower after a collision event and both determine what type of particle produced the shower and how much energy the particle had. We could also artificially generate showers for different particles at various energies, a technique which may allow us to circumvent computationally-intensive Monte Carlo (MC) simulations in the future. I mainly contributed the particle classification section, though I worked on all parts of the project.
+        \item The first study was on the identification and generation of particle showers in calorimeters. This means that we wrote an algorithm which is able to look at a calorimeter shower after a collision event and both determine what type of particle produced the shower and how much energy the particle had. We could also artificially generate showers for different particles at various energies, a technique which may allow us to circumvent computationally-intensive Monte Carlo (MC) simulations in the future. My main focus was the particle classification section, though I contributed to all parts of the project.
 
         \item The second study was on the identification of heavy-flavor-decay leptons, which form the largest background in a number of searches. This study used recurrent neural nets (RNN's) to perform lepton classification based on track information.
 
     \end{itemize}
     
-    \item Next up is a description of the SUSY search which my lepton-classification tool was used for. This is the section which proves that I am actually a physicist as opposed to a computer scientist.
+    \item Next up is a description of the SUSY search which forms the bulk of my thesis work. This is the section which proves that I am actually a physicist as opposed to a computer scientist.
     
-    \item And of course, no thesis is complete without a conclusion, in which I'll basically tell you all of this information again, except now you'll understand what I'm talking about.
+    \item And of course, no thesis is complete without a conclusion, in which I'll basically tell you all of this information again, except now you'll understand what I'm talking about. I'll also describe methods of applying the machine learning tools I have built to future physics searches.
+    
+    \item In the appendices I have included descriptions of some detector upgrade related work that I have done, including:
+    
+    \begin{itemize}
+        \item work on the Fast TracKer upgrade (FTk)
+        \item pixel detector assembly and beam testing work which I did during a one-year residency at Argonne National Lab
+        \item improvements to vertex reconstruction algorithms
+    \end{itemize}
 
 \end{itemize}
 

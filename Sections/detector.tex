@@ -1,11 +1,28 @@
-\chapter{The Hardware}
+\chapter{The Detector}
 
 \section{The Layout of CERN}
 
-\setlength{\epigraphwidth}{3in}
-\epigraph{Later for the date than the Hadron Collider}{MF Doom, Gazzillion Ear}
+The Large Hadron Collider (LHC) is a 27-kilometer long proton-proton circular collider located underneath the border area of France and Switzerland, outside the city of Geneva. After accelerating protons to extremely high kinetic energies, the collider smashes two proton beams head-on at a center-of-mass energy of 13 TeV, converting the energy into mass and producing a spray of new particles. These collision events take place at four beam-crossing points located around the circumference of the accelerator ring, and the resulting data is captured by seven detectors. One of these detectors, ATLAS, is the focus of this study.
 
 \section{An Anatomy of ATLAS}
+
+The ATLAS detector (Figure~\ref{ATLAS}), built around one of the LHC beam crossing points, acts as a eight-story-tall recording device for measuring and digitizing the results of collisions. The detector contains multiple types of detection technology, each specialized to perform a specific type of measurement \cite{ATLAS_website}. The first major component of ATLAS is the inner detector. Composed of silicon pixel and strip detectors and transition radiation trackers, this portion of the detector is used to reconstruct the flight paths and momentums of charged particles. After this we have the electron calorimeter (ECAL), which captures and records the energies of electrons and photons through EM interactions. The hadronic calorimeter (HCAL) is after that, and being composed of heavy elements, it forces hadronic particles to deposit their energies through strong interactions. Finally, the detector is ringed by muon spectrometers, which detect the penetrating muons that pass unstopped through the rest of the detector. Neutrinos pass through ATLAS undetected, and their effects are seen in missing transverse momentum when the transverse momentums of all other decay products in the reaction are summed vectorially. These particle interactions are summed up in Figure~\ref{ATLAS}. Based on the hits recorded in a single collision, algorithms then reconstruct tracks, determine what particles were involved in the event, and figure out what happened in their brief lifetimes.
+%A typical reconstructed event is shown in Figure~\ref{Higgs_2e2mu}. Here we see a Higgs boson decaying into two electrons and two muons. The muons, shown in red, pass through the detector, while the electrons shown in green deposit their energies in the ECAL. In this event, based on the energies of decay products, the original Higgs has been measured to have a mass of 122.6 GeV.
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.49\linewidth]{images/ATLAS.png}
+    \includegraphics[width=0.41\linewidth]{images/ATLASinteractions.jpg}
+    \caption{(left) A labeled diagram of the ATLAS detector. (right) Interactions of different types of particles in ATLAS.}
+    \label{ATLAS}
+\end{figure}
+
+%\begin{figure}[t]
+%    \centering
+%    \includegraphics[width=0.5\linewidth]{images/Higgs_2e2mu.png}
+%    \caption{A typical reconstructed event display, showing a Higgs boson decaying into two electrons and two muons \cite{Higgs_2e2mu}.}
+%    \label{Higgs_2e2mu}
+%\end{figure}
 
 \subsection{Calorimeters}
 

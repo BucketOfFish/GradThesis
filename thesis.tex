@@ -1,26 +1,30 @@
 \documentclass[draftthesis,fancy,edeposit]{uiuc_thesis_template}
 
-\usepackage{epigraph, url}
-\usepackage[backend=bibtex]{biblatex}
-\bibliography{bibliography}
+\usepackage{epigraph,hyperref}
+\usepackage[backend=bibtex,style=numeric-comp]{biblatex}
+\usepackage{graphicx}
+
+\bibliography{Bibliography/bibliography}
+\bibliography{Bibliography/ATLAS}
+\bibliography{Bibliography/CMS}
+\bibliography{Bibliography/ConfNotes}
+\bibliography{Bibliography/PubNotes}
 
 \begin{document}
 
 \input{Sections/front_matter.tex}
 
-\part{A Brief Introduction to the Theory}
+\part{A Brief Introduction to Particle Physics}
 \input{Sections/history.tex}
 \input{Sections/standard_model.tex}
-\input{Sections/supersymmetry.tex}
+\input{Sections/SUSY.tex}
 
 \part{How CERN Conducts Experiments}
-\input{Sections/hardware.tex}
-\input{Sections/software.tex}
+\input{Sections/detector.tex}
 \input{Sections/how_to_search.tex}
 
 \part{Machine Learning}
 \input{Sections/machine_learning.tex}
-\input{Sections/ml_architectures.tex}
 
 \part{Particle Identification and Generation Using Calorimeter Information}
 \input{Sections/calo_ML.tex}
@@ -31,8 +35,20 @@
 \part{Another Search for Supersymmetry}
 \input{Sections/SUSY_analysis.tex}
 
+\part{Conclusion}
+\input{Sections/conclusion.tex}
+
+\clearpage
 \appendix
-%\input{Appendices/blah.tex}
+
+\input{Appendices/FTk.tex}
+\input{Appendices/pixel_detectors.tex}
+\input{Appendices/vertex_reconstruction.tex}
+\input{Appendices/windowsize.tex}
+\input{Appendices/BDT.tex}
+\input{Appendices/GoogLeNet.tex}
+\input{Appendices/classificationHCAL.tex}
+%\cite{ATLAS-CONF-2017-065}
 
 \backmatter
 

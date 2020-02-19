@@ -1,24 +1,6 @@
 \chapter{Particle Identification and Generation Using Calorimeter Information}
 
-\section{What Are We Doing?}
-
 \subsection{The Problem}
-
-\subsection{The Tools}
-
-\subsection{The People}
-
-\section{Data Preparation}
-
-\section{Classification}
-
-\section{Regression}
-
-\section{GAN}
-
-\section{Conclusion}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 The next generation of detectors currently under development often feature an increase in granularity of the electromagnetic and hadronic calorimeters. This is true of the ATLAS Phase-II upgrade, and also of the highly granular CALICE sampling calorimeter proposed for the ILC, which was used for the initial studies presented in this section. These improved detector designs provide an excellent opportunity for applying machine learning algorithms for identifying particles and measuring their energies.
 
@@ -60,9 +42,436 @@ Each two-object classification dataset was divided into 400,000 training and 100
     \label{AUCs}
 \end{table}
 
-The areas under curve (AUC) and accuracies (acc.)
-for the cell-based DNNs are significantly better than for the feature-based DNNs and BDTs (which both have similar performance). This demonstrates that the DNN is able to extract additional information from the calorimeter data which is not captured via traditional measures. Choosing the working point on the BDT ROC curve indicated in Figure~\ref{ROCs}, we obtain the following improvement metrics for the cell-based DNN. For the $\gamma$ vs. $\pi^0$ ($e$ vs. $\pi^\pm$) classifier, the cell-based DNN may be used to either increase the signal efficiency by $\Delta \epsilon_{\mathrm{sig}} = \epsilon_{\mathrm{sig}}^{\mathrm{DNN}} - \epsilon_{\mathrm{sig}}^{\mathrm{BDT}}=9.4$\% (4.9\%) for fixed background efficiency, or decrease the background efficiency by a factor $\Delta R_{\mathrm{bkg}} = \epsilon_{\mathrm{bkg}}^{\mathrm{BDT}} / \epsilon_{\mathrm{bkg}}^{\mathrm{DNN}}= 1.6$ (151) for fixed signal efficiency.
+The areas under curve (AUC) and accuracies (acc.) for the cell-based DNNs are significantly better than for the feature-based DNNs and BDTs (which both have similar performance). This demonstrates that the DNN is able to extract additional information from the calorimeter data which is not captured via traditional measures. Choosing the working point on the BDT ROC curve indicated in Figure~\ref{ROCs}, we obtain the following improvement metrics for the cell-based DNN. For the $\gamma$ vs. $\pi^0$ ($e$ vs. $\pi^\pm$) classifier, the cell-based DNN may be used to either increase the signal efficiency by $\Delta \epsilon_{\mathrm{sig}} = \epsilon_{\mathrm{sig}}^{\mathrm{DNN}} - \epsilon_{\mathrm{sig}}^{\mathrm{BDT}}=9.4$\% (4.9\%) for fixed background efficiency, or decrease the background efficiency by a factor $\Delta R_{\mathrm{bkg}} = \epsilon_{\mathrm{bkg}}^{\mathrm{BDT}} / \epsilon_{\mathrm{bkg}}^{\mathrm{DNN}}= 1.6$ (151) for fixed signal efficiency.
 
-\section*{FUTURE WORK}
+\section{Overview}
 
-We have shown that neural nets are capable of outperforming traditional feature-based analyses on lepton identification tasks. Our colleagues working with us have also shown good machine-learning results for particle energy identification, and for generative adversarial network (GAN) based approaches for rapid simulation of lepton showers in simulation. Going forward, our next steps are to perform classification on a range of particle energies, rather than simply at a fixed 60 GeV, especially focusing on lower energy scales. We would also like to implement clustering and attention algorithms, which would allow us to zoom in and perform classification on individual particles in a multi-particle event. After that, the next step is to translate this work into the ATLAS detector geometry. We may do this via the use of deep belief nets. The ultimate goal is then to use the resulting tool to help identify leptons in a Higgsino search for new physics beyond the standard model.
+In high energy physics (HEP) experiments, detectors act as imaging devices, allowing physicists to take snapshots of decay products from particle collision "events". Calorimeters are key components of such detectors. When a high-energy primary particle travels through dense calorimeter material, it deposits its energy and produces a shower of secondary particles. Detector "cells" within the calorimeter then capture these energy depositions, forming a set of voxelized images which are characteristic of the type and energy of the primary particle. %Examples of these images can be seen in Appendix~\ref{app:samples}.
+
+The starting point of any physics analysis is the identification of the types of particles produced in each collision and the measurement of the momentum carried by each of these particles. These tasks have traditionally used manually-designed algorithms, producing measurements of physical features such as shower width and rate of energy loss for particles traversing calorimeter layers.
+%In order to discover new physics or to study interesting phenomena, physicists must apply reconstruction algorithms to identify and estimate the energies of all particles produced in each event.
+In the last few years, researchers have started realizing that machine learning (ML) techniques are well suited for such tasks, 
+%and have recently seen application, 
+e.g. using boosted decision trees (BDTs) on calculated features for doing particle classification. Indeed, ML has long been applied to various other tasks in HEP~\cite{Denby:1987rk,Peterson:1988gs,Abreu:1992jp}, including the 2012 discovery of the Higgs boson~\cite{HiggsATLAS,HiggsCMS} at the ATLAS~\cite{Aad:2008zzm} and CMS~\cite{Chatrchyan:2008aa} experiments at the Large Hadron Collider (LHC). 
+
+In the next decade, the planned High Luminosity Large Hadron Collider (HL-LHC) upgrade~\cite{Apollinari:2284929} will enhance
+the experimental sensitivity to rare phenomena by increasing the number of collected proton-proton collisions by a factor of ten. In addition, many next-generation detector components, such as the sampling calorimeters proposed for the ILC~\cite{ILC}, CLIC~\cite{CLIC}, and CMS~\cite{CMSCollaboration:2015zni} detectors, will improve physicists' ability to identify and measure particles by using much finer 3D arrays of voxels. These and future accelerator upgrades will lead to higher data volumes and pose a variety of technological and computational challenges in tasks, such as real-time particle reconstruction.
+
+In addition to actual collision data, physics analyses typically require extremely detailed and precise simulations of detector data, generated using software packages such as GEANT4\cite{GEANT4}. These simulations are used to develop and test analysis techniques. They rely on calculations of the micro-physics governing the interaction of particles with matter, and are generally very CPU intensive. In some cases, such as the ATLAS experiment, simulation currently requires roughly half of the experiment's computing resources\cite{GEANT_usage}. This fraction is expected to increase significantly for the HL-LHC. These challenges require novel computational and algorithmic techniques, which has prompted recent efforts in HEP to apply modern ML to calorimetry~\cite{ML1,ML2,ML3,ML4}.
+
+With this work, we aim to demonstrate the applicability of neural-network based approaches to reconstruction and simulation tasks, looking at a real use case. To do this, we use fully simulated calorimeter data for a typical collider detector to train two models: (i) a network for end-to-end particle reconstruction, receiving as input a particle shower and acting both as a particle identification algorithm and as a regression algorithm for the particle's energy; (ii) a generative adversarial network (GAN)~\cite{Goodfellow} for simulating particle showers, designed to return calorimeter-cell voxelized images like those generated by GEANT4.
+Both models aim to preserve the accuracy of more traditional approaches while drastically reducing the required computing resources and time, thanks partly to a built-in portability to heterogeneous CPU+GPU computing environments.
+
+%This paper aims to demonstrate the improvement in performance for calorimetric classification and regression tasks gained from applying various neural network architectures to calorimeter cell-level energy deposition data when compared to previously investigated ML techniques, such as boosted decision trees (BDTs) and neural networks with calculated features as inputs. We train separate networks to discriminate electrons ($e$) from charged pions ($\pi^\pm$) and to discriminate photons ($\gamma$) from neutral pions ($\pi^0$), as well as to estimate their energies and incident angles. We observe significant improvement when using neural networks with cell-level inputs, as opposed to using boosted decision trees (BDTs) or networks with high-level features. We also demonstrate an application of generative adversarial networks (GANs)~\cite{Goodfellow} for simulating particle showers, which would be computationally intensive using traditional techniques.
+
+This paper is a legacy document summarizing two years of work. It builds upon initial simulation, classification, and regression results which we presented at the 2017 Workshop on Deep Learning for Physical Sciences at the NeurIPS conference. Those results were derived using simplified problem formulations~\cite{Mau2017}.  For instance, we only used particles of a single fixed energy for classification, and had only considered showers produced by particles traveling perpendicularly to the calorimeter surface. The results presented in this paper deal with a more realistic use case and supersede the results in Ref.~\cite{Mau2017}. 
+
+For the studies presented in this paper, we used two computing clusters: at the University of Texas at Arlington (UTA), and at the Blue Waters supercomputing network, located at the University of Illinois at Urbana Champaign (UIUC). The UTA cluster has 10 NVIDIA GTX Titan GPUs with 6 GB of memory each. Blue Waters uses NVDIA Kepler GPUs, also with 6 GB of memory each. 
+
+GAN models were implemented and trained using Keras~\cite{keras} and  Tensorflow~\cite{tensorflow2015-whitepaper}. Reconstruction models were implemented and trained using PyTorch~\cite{PyTorch}. The sample generation and training frameworks were both written in Python, with the sample generation codebase at \url{https://github.com/UTA-HEP-Computing/CaloSampleGeneration} and the TriForce reconstruction training framework at \url{https://github.com/BucketOfFish/Triforce_CaloML}.
+
+This document is structured as follows: In Section~\ref{sec:data}, we describe how we created and prepared the data used in these studies. Section~\ref{sec:problems} introduces the two physics problems, particle simulation and reconstruction. Sections~\ref{sec:GAN}~and~\ref{sec:reco} describe the corresponding models, how they were trained, and the performances they reached. In particular, Section~\ref{sec:reco} compares our results to those of more traditional approaches, and also extends those comparisons to simulated performances on detector geometries similar to those of the ATLAS and CMS calorimeters. Conclusions are given in Section~\ref{sec:conclusion}.
+
+\section{Data Preparation}
+
+\section{Dataset}\label{sec:data}
+
+This study is based on simulated data produced with GEANT4~\cite{GEANT4}, using the geometric layout of the proposed Linear Collider Detector (LCD) for the CLIC accelerator~\cite{Lebrun:2012hj}. We limit the study to the central region (barrel) of the LCD detector, where the electromagnetic calorimeter (ECAL) consists of a cylinder with inner radius of 1.5 m, structured as a set of 25 silicon sensor planes, segmented in $5.1~\times~5.1$ mm$^2$ square cells, alternated with tungsten absorber planes. In the barrel region, the hadronic calorimeter (HCAL) sits behind the ECAL, at an inner radius of 1.7 m. The HCAL 
+consists of 60 layers of polystyrene scintillators, segmented in cells with  $3~\times~3$ cm$^2$ area and alternated with layers of steel absorbers. 
+
+The event simulation considers the full detector layout, including the material in front of the calorimeter and the effect of the solenoidal magnetic field. From the full data we take slices centered around the barycenter of each ECAL energy deposit and we represent the ECAL and HCAL slices as 3D arrays of energy deposits in the cells. 
+
+We consider four kinds of particles (electrons $e$, photons $\gamma$, charged pions $\pi$, and neutral pions $\pi^0$) with energies uniformly distributed between 10 and 510 GeV, and with incident angles uniformly distributed between a polar angle $\theta$ between 1.047 and 2.094 radians with respect to the beam direction.
+
+We get the barycenter of a shower by taking the 2D projection of its energy deposit on the ECAL inner surface. Then, knowing the point of origin of the incoming particle, we use the barycenter to estimate the particle's polar and azimuthal angles $\theta$ and $\phi$. The estimated pseudorapidity $\eta$ is then computed as $\eta=-\log[\tan\frac{\theta}{2}]$. Each single-shower event is prepared by taking a slice of the ECAL in a window around the shower barycenter, as well as the corresponding HCAL slice behind. Depending on the task (generation or reconstruction), we take:
+\begin{itemize}
+  \item {\bf GEN dataset}: A $51 \times 51 \times 25$ cell window in the
+    ECAL, for electrons in the energy range $100-200$ GeV. Used in the shower generation task.
+  \item {\bf REC dataset}: A $25 \times
+    25 \times 25$ cell slice of the electromagnetic calorimeter (ECAL)
+    and a corresponding $11 \times 11 \times 60$ cell slice of the
+    hadronic calorimeter (HCAL), for $e,~\gamma,~\pi,$~or~$\pi^0$ in the energy range $10-510$ GeV and with $\eta$ from $-0.524-0.524$. Used in the particle reconstruction task.
+\end{itemize}
+
+%%%%%%%%%%%%%%%%
+
+Examples of an electron shower and a charged-pion shower can be seen in Figure~\ref{fig:sample}. The incoming particles enter from the top ($z=0$), at the center of the $(x,y)$ transverse plane ($x=y=25)$. The electron event has left more hits in both the ECAL and HCAL. We can also see the presence of two subtracks in the neutral pion event. % These features are characteristic of events from these two classes.
+
+The window size for the GEN dataset has been defined in order to contain as much of the shower information as practically possible.  
+Motivated by the need of reducing the memory footprint for some of the models, we used a smaller window size for the REC dataset. When training classification models on these data, a negligible accuracy increase was observed when moving to larger windows, as described in Appendix~\ref{app:window_size}.
+
+\begin{figure*}[htbp]
+\centering
+\includegraphics[width=0.45\textwidth]{images/Gamma_ECAL.pdf}
+\includegraphics[width=0.45\textwidth]{images/Gamma_HCAL.pdf} \\
+\includegraphics[width=0.45\textwidth]{images/Pi0_ECAL.pdf}
+\includegraphics[width=0.45\textwidth]{images/Pi0_HCAL.pdf}
+\caption{3D image of a photon (top) and neutral pion (bottom) shower in ECAL (left) and HCAL (right).}
+\label{fig:sample}
+\end{figure*}
+
+%%%%%%%%%%%%%%%%%
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.3\textwidth]{images/ratios.png}
+\includegraphics[width=0.3\textwidth]{images/zoom_ratios.png}
+\caption{HCAL/ECAL energy ratios for electrons and charged pions. The bottom plot is a zoomed-in version of the top plot.}
+\label{fig:HE_ratio}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.3\textwidth]{images/ratio_cut_vs_energy.png}
+\includegraphics[width=0.3\textwidth]{images/mean_energy_vs_ratio.png}
+\caption{Fractions of electrons and charged pions passing a HCAL/ECAL energy selection at various particle energies (top). The mean charged pion energy at each energy ratio (bottom).}
+\label{fig:HE_ratio_energy}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.3\textwidth]{images/zoom_opening_angles.png}
+\caption{Opening angle distribution for neutral pions decaying into two photons.}
+\label{fig:opening_angle}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.3\textwidth]{images/opening_angle_cut_vs_energy.png}
+\includegraphics[width=0.3\textwidth]{images/mean_energy_vs_opening_angle.png}
+\caption{The fraction of photons and neutral pions passing an opening angle < 0.01 radian selection at various particle energies (top). The mean neutral pion energy at each opening angle (bottom).}
+\label{fig:opening_angle_energy}
+\end{figure}
+
+We apply a task-dependent filtering of the REC dataset, in order to select the subset of examples for which the task at hand is not trivial. For instance, distinguishing a generic pion from a generic electron is an easy task, and can be accomplished with high accuracy by looking at the HCAL/ECAL energy ratio. On the other hand, it is difficult to distinguish a generic electron from a pion that has a small HCAL/ECAL energy ratio. Thus, we ignore charged-pion showers with a large HCAL/ECAL energy ratio. To be more specific, we see in Figure~\ref{fig:HE_ratio} that the ratio of total ECAL energy to total HCAL energy is very different for electrons and charged pions, with the heavier charged pions tending to leave little energy in the ECAL. In order to make the particle-identification task more challenging, we only consider showers with HCAL/ECAL < 0.1 cut. The results of this selection are shown in Figure~\ref{fig:HE_ratio_energy}. We can see that this selection favors mostly low-energy charged pions, which tend to leave more of their energy in the ECAL rather than punching through to the HCAL. Discriminating accurately between electrons and charged pions in this range is thus crucial for compressed-mass physics analyses, where we search for decay products with low energy.
+
+Photons and neutral pions are more similar to each other. The easily distinguishable events are mostly due to the fact that neutral pions decay into two photons which are separated by a small angle. If the pion has a low energy, the opening angle between the two photons is larger and the shower is easily identified as originating from a neutral pion. High-energy neutral pions produce more collimated photon pairs, which are more easily mistaken as a single high-energy photon. The opening angle distribution for neutral pions is shown in Figure~\ref{fig:opening_angle}. In order to limit the study to the most challenging case, we filter the neutral-pion dataset by requiring the opening angle between the two photons to be smaller than 0.01 radian.  The effect of  this requirement on the otherwise uniform energy distribution is shown in Figure~\ref{fig:opening_angle_energy}. As expected, the selection mostly removes low-energy neutral pions. 
+
+%Generating events with these filters applied turned out to be a significant use of computing resources, especially when it came to the charged pion samples. Applying the HCAL/ECAL < 0.1 selection meant that we needed to generate several hundred times as many charged pion events as we would have needed without the filter.
+
+The ECAL and HCAL 3D arrays are passed directly to our neural networks. We also compute a set of expert features, as described in Ref.~\cite{NIPS}. These features are used to train alternative benchmark algorithms (see Appendices~\ref{app:BDT}~and~\ref{app:regression_baseline}), representing currently-used ML algorithms in HEP.
+
+\section{Classification and Regression}
+
+\section{End-to-End Particle Reconstruction}
+\label{sec:reco}
+
+This section describes the use of a deep neural network to accomplish an end-to-end particle reconstruction task. The model consists of a neural architecture which simultaneously performs both particle classification and energy regression. This combined network is trained using the ECAL and HCAL cell arrays as well as the total ECAL energy and total HCAL energy as inputs. The training loss function is written as the sum of a binary cross entropy for particle identification and a mean-square error loss for energy regression. Through experimentation, we found that multiplying the energy loss by a factor of 200 gave the best results, as it was easier to quickly achieve low loss values for energy regression.
+
+We compare three different architectures for our reconstruction model, each trained using calorimeter cell-level information as inputs:
+\begin{itemize}
+\item A dense (i.e, fully connected) neural network (DNN).
+\item A 3D convolutional network (CNN).
+\item A network based on GoogLeNet (GN)~\cite{GoogLeNet}, using layers of inception modules.
+\end{itemize}
+
+In order to compare the model performance to a typical state-of-the-art particle reconstruction algorithm, we also consider the following alternatives:
+\begin{itemize}
+    \item A feature-based BDT (see Appendix~\ref{app:BDT}) for the classification task.
+    \item A linear regression for the regression task.
+    \item A BDT for the regression task (for more info on regression baselines see Appendix~\ref{app:regression_baseline}).
+\end{itemize}
+
+In a previous study~\cite{NIPS}, we compared the classification accuracy obtained with a neural model taking as input the energy cells, a feature-based neural models, and a feature-based BDTs. In that context, we demonstrated that feature-based BDTs and neural networks perform equally well, and are both equally capable of correctly classify particles from a small set of calculated features. 
+%Increases in classification accuracy are mostly due to the neural architecture's ability to extract meaning from a much larger input dataset, the calorimeter cell-level energy information. For this reason, w
+We do not compare feature-based neural networks in this paper, and use feature-based BDTs to represent the current state-of-the-art classification algorithms.
+
+\subsection{Deep Network Models}
+
+The three ML models take as input the ECAL and HCAL 3D energy arrays of the REC dataset (see Section~\ref{sec:data}), together with the total energies recorded in ECAL and in HCAL (i.e., the sum of the values stored in the 3D arrays), as well as the estimated $\phi$ and $\eta$ angles of the incoming particle, calculated using the collision origin and the barycenter of the event. The architecture of each model is defined with a number of floating parameters (e.g. number of hidden layers), which are refined through a hyperparameter optimization, as described in Section~\ref{sec:hpscan}. Each model returns three numbers. After applying a softmax activation, two of these elements are interpreted as the classification probabilities of the current two-class problem. The third output is interpreted as the energy of the particle.
+
+Here we describe in detail the three model architectures:
+
+\begin{itemize}
+    \item In the DNN model we first flatten our ECAL and HCAL inputs into 1D arrays. We then concatenate these array along with the total ECAL energy, total HCAL energy, estimated $\phi$, and estimated $\eta$, for an array of total size $25 \times 25 \times 25 + 11 \times 11 \times 60 + 4 = 22889$ inputs. This array is fed as input to the first layer of the DNN, followed by a number of hidden layers each followed by a ReLU activation function and a dropout layer. The number of neurons per hidden layer and the dropout probability are identical for each relevant layer. The number of hidden layers, number of hidden neurons per layer, and dropout rate are hyperparameters, tuned as described in the next session.  Finally, we take the output from the last dropout layer, append the total energies and estimated angles again, and feed the concatenated array into a final hidden layer, which results in a three-element output. 
+    \item The CNN architecture consists of one 3D convolutional layer for each of the ECAL and HCAL inputs, each followed by a ReLU activation function and a max pooling layer of kernel size $2 \times 2 \times 2$. The number of filters and the kernel size in the ECAL convolutional layer are treated as optimized hyperparameter (see next session). The HCAL layer is fixed at 3 filters with a kernel size of $2 \times 2 \times 6$. The two outputs are then flattened and concatenated along with the total ECAL and HCAL energies, as well as the estimated $\phi$ and $\eta$ coordinates of the incoming particle. The resulting 1D array is passed to a sequence of dense layers each followed by a ReLU activation function and dropout layer, as in the DNN model. The number of hidden layers and the number of neurons on each layer are considered as hyperparameters to be optimized. The output layer consists of three numbers, as for the DNN model. We found that adding additional convolutional layers to this model beyond the first had little impact on performance. This may be because a single layer is already able to capture important information about localized shower structure, and reduces the dimensionality of the event enough where a densely connected net is able to do the rest.
+    \item The third model uses elements of the GoogLeNet~\cite{GoogLeNet} architecture. This network processes the ECAL input array with a 3D convolutional layer with 192 filters, a kernel size of 3 in all directions, and a stride size of 1. The result is batch-normalized and sent through a ReLU activation function. This is followed by a series of inception and MaxPool layers of various sizes, with the full architecture described in Appendix~\ref{app:GoogLeNet}. The output of this sequence is concatenated to the total ECAL energy, the total HCAL energy, the estimated $\phi$ and $\eta$ coordinates, and passed to a series of dense layers like in the DNN architecture, to return the final three outputs. The number of neurons in the final dense hidden layer is the only architecture-related hyperparameter for the GN model. Due to practical limitations imposed by memory constraints, this model does not take the HCAL 3D array as input. This limitation has a small impact on the model performance, since the ECAL array carries the majority of the relevant information for the problems at hand (see Appendix~\ref{app:classification_HCAL}).
+\end{itemize}
+
+On all models, the regression task is facilitated by using skip connections to directly append the input total ECAL and HCAL energies to the last layer. The impact of this architecture choice on regression performance is described in Appendix~\ref{app:skip_connections}. In addition to using total energies, we also tested the possibility of using 2D projections of the input energy arrays, summing along the $z$ dimension (detector depth). This choice resulted in worse performance (see Appendix~\ref{app:z_sum_regression}) and was discarded.
+
+\subsection{Hyperparameter Scans}
+\label{sec:hpscan}
+
+In order to determine the best architectures for the end-to-end reconstruction models, we scanned over a hyperparameter space for each architecture. Learning rate and decay rate were additional hyperparameters for each architecture. For simplicity, we used classification accuracy for the $\gamma$ vs. $\pi^0$ problem as a metric to determine the overall best hyperparameter set for each architecture. This is because a model optimized for this task was found to generate good results for the other three tasks as well, and because $\gamma$ vs. $\pi^0$ classification was found to be the most difficult problem.
+
+Each hyperparameter point was scanned ten times, in order to obtain an estimate of the uncertainty associated with each quoted performance value. For each scan point, the DNN and CNN architectures trained on 400,000 events, using another sample of 400,000 events for testing. DNN and CNN scan points trained for three epochs each, taking about seven hours each. GN trained on 100,000 events and tested on another 100,000. Due to a higher training time, each GN scan point only trained for a single epoch, taking about twenty hours.
+
+For CNN and DNN training, we used batches of 1,000 events when training. However, due to GPU memory limitations, we could not do the same with GN. Instead, we split each batch into 100 minibatches of ten events each. A single minibatch was loaded on the GPU at a time, and gradients were added up after back-propagation. Only after the entire batch was calculated did we update network weights using the combined gradients.
+
+The best settings were found to be as follows:
+\begin{itemize}
+    \item For DNN, 4 hidden layers, 512 neurons per hidden layer, a learning rate of 0.0002, decay rate of 0, and a dropout probability of 0.04.
+    \item For CNN, 4 hidden layers and 512 neurons per hidden layer, a learning rate of 0.0004, decay rate of 0, a dropout probability of 0.12, 6 ECAL filters with a kernel size of $6 \times 6 \times 6$.
+    \item For GN, 1024 neurons in the hidden layer, 0.0001 learning rate, and 0.01 decay rate. 
+\end{itemize}
+%For CNN and GN, a very mild dependence on the number of neurons per hidden layer is observed. 
+
+\begin{figure*}[htbp]
+\centering
+\includegraphics[width=0.45\textwidth]{images/DNN_hl_nhl}
+\includegraphics[width=0.45\textwidth]{images/DNN_lr_dp} \\
+\includegraphics[width=0.45\textwidth]{images/CNN_lr_dp}
+\includegraphics[width=0.45\textwidth]{images/CNN_nECALfilt_nECALkern} \\
+\includegraphics[width=0.45\textwidth]{images/GN_nhl_lr}
+\includegraphics[width=0.45\textwidth]{images/GN_lr_dr}
+\caption{Selected hyperparameter scan results for DNN (top), CNN (center), and GN (bottom). In each figure, the classification accuracy is displayed as a function of the hyperparameters reported on the two axes.}
+\label{fig:scan_hyperparameter}
+\end{figure*}
+
+Selected hyperparameter scan slices are shown in Figure~\ref{fig:scan_hyperparameter}. 
+These 2D scans were obtained setting all values besides the two under consideration (i.e., those on the axes) to be fixed at default values: a dropout rate of 0.08, a learning rate of 0.0004, a decay rate of 0.04, three dense layers for CNN and DNN, and 512 neurons per hidden layer. For GN, the default number of ECAL filters was 3, with a kernel size of 4.
+%An ECAL window size of 25 was used in all instances, to allow fair comparison between DNN, CNN, and GN, as larger ECAL sizes posed a memory problem when training GN.
+
+After performing the hyperparameter scan, we trained each architecture using its optimal hyperparameters for a greater number of epochs. The evolution of the training and validation accuracy as a function of the batch number for these extended trainings is shown in Figure~\ref{fig:training_curves_comparison_gamma_pi0}.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.42\textwidth]{images/DNN_accuracy_batches_long}
+\includegraphics[width=0.42\textwidth]{images/CNN_accuracy_batches_long}
+\includegraphics[width=0.42\textwidth]{images/GN_accuracy_batches_long}
+\caption{Training curves for best DNN (top), CNN (middle), and GN (bottom) hyperparameters, trained on variable-angle $\gamma$/$\pi^0$ samples. We see that the DNN over-trains quickly and saturates at a relatively low accuracy, while the CNN takes longer to over-train and reaches a higher accuracy, and GN performs best of all. Each 400 batches corresponds to a single epoch.}
+\label{fig:training_curves_comparison_gamma_pi0}
+\end{figure}
+
+\subsection{Results}
+
+We apply the best architectures described in the previous section separately to our electron vs. charged pion and photon vs. neutral pion reconstruction problems.
+
+\subsubsection{Classification Performance}
+\label{sec:classification}
+
+Figure~\ref{fig:architectures_ROC_comparisons} shows ROC curve comparisons for the two classification tasks. As expected, the electron vs. charged pion classification problem was found to be a simple task, resulting in an area under the curve (AUC) close to $100\%$. For a baseline comparison, the curve obtained for a BDT (see Appendix~\ref{app:BDT}) is also shown. This BDT was optimized using the {\it scikit-optimize} package~\cite{skopt}, and was trained using high-level features computed from the raw 3D arrays. It represents the performance of current ML approaches on these problems.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.45\textwidth]{images/architectures_ROC_comparison_gamma_pi0_long}
+\includegraphics[width=0.45\textwidth]{images/architectures_ROC_comparison_ele_chpi_xlog}
+\caption{ROC curve comparisons for $\gamma$ vs. $\pi^0$ (top) and $e$ vs. $\pi^\pm$ (bottom) classification using different neural network architectures. Samples include particle energies from 10 to 510 GeV, and an inclusive $\eta$ range.}
+\label{fig:architectures_ROC_comparisons}
+\end{figure}
+
+The ML models outperform the BDT, with the GN reaching the best classification performance on both problems. Figure~\ref{fig:accuracy_bins} shows the best-model performance as a function of the energy and $\eta$ of the incoming particle, for the photon vs. neutral pion and the electron vs. charged pion problems. These figures show that classification accuracy is maintained over a wide range of particle energies and angles. The models appear to perform a bit worse at higher energies for the photon vs. neutral pion case, due to the fact that the pion to two photon decay becomes increasingly collimated at higher energies. Similarly, the performance is slightly worse when particles impact the detector perpendicularly than when they enter at a wide angle, because the shower cross section on the calorimeter inner surface is reduced at $90^{\mathrm o}$, making it harder to distinguish shower features.
+
+\begin{figure*}[htbp]
+\centering
+\includegraphics[width=0.45\textwidth]{images/gamma_pi0_accuracy_energy_bins.pdf}
+\includegraphics[width=0.45\textwidth]{images/gamma_pi0_accuracy_eta_bins.pdf} \\
+\includegraphics[width=0.45\textwidth]{images/ele_chpi_accuracy_energy_bins.pdf}
+\includegraphics[width=0.45\textwidth]{images/ele_chpi_accuracy_eta_bins.pdf}
+\caption{Classification accuracy of best performing network for $\gamma$ vs. $\pi^0$ (top) and $e$ vs. $\pi^\pm$ (bottom), in bins of energy (left) and $\eta$ (right).}
+\label{fig:accuracy_bins}
+\end{figure*}
+
+
+%%%% REGRESSION
+\subsubsection{Regression Performance}
+\label{sec:regression}
+
+Figure~\ref{fig:reg_dnn_vs_cnn_variable} shows the energy regression performance for each particle type, obtained from the end-to-end reconstruction architectures. In this case, we compare against a linear regression algorithm and a BDT (labelled as "XGBoost") representing the current state-of-the-art, as described in Appendix~\ref{app:regression_baseline}. 
+
+\begin{figure*}[htbp]
+\centering
+\includegraphics[width=0.38\textwidth]{images/bias_vs_E_Ele_variable}
+\includegraphics[width=0.38\textwidth]{images/res_vs_E_Ele_variable} \\
+\includegraphics[width=0.38\textwidth]{images/bias_vs_E_ChPi_variable}
+\includegraphics[width=0.38\textwidth]{images/res_vs_E_ChPi_variable}\\
+\includegraphics[width=0.38\textwidth]{images/bias_vs_E_Gamma_variable}
+\includegraphics[width=0.38\textwidth]{images/res_vs_E_Gamma_variable}\\
+\includegraphics[width=0.38\textwidth]{images/bias_vs_E_Pi0_variable}
+\includegraphics[width=0.38\textwidth]{images/res_vs_E_Pi0_variable}
+\caption{Regression bias (top) and resolution (bottom) as a function
+  of true energy for energy predictions on the REC dataset with
+  variable-angle incident angle. From top to bottom: electrons,
+  charged pions, photons, and neutral
+  pions.\label{fig:reg_dnn_vs_cnn_variable}}
+\end{figure*}
+
+Since the energy regression problem is not as complex as the classification problem, the three architectures (DNN, CNN, GN) perform fairly similarly, with the exception of the GN performance on \chpi, which is a bit worse.
+%(and possibly slightly over-trained). 
+The performance is overall worse for \chpi, both with the networks and with the benchmark baselines (linear regression and XGBoost).
+
+A closer look at the performance boost given by each network can be obtained examining the case of particles entering the calorimeter inner surface at $90^{\mathrm o}$, i.e. with $\eta=0$~\footnote{For these additional fixed-angle regression plots, we did not train GoogLeNet architectures.}. In this case, the problem is more constrained and both the networks and the baseline algorithms are able to perform accurately. The results for fixed angle samples are shown in Appendix~\ref{app:regression_fixed_angle}.
+
+We have also tested the result of training on one class of particle and performing regression on another. These results can be seen in Appendix~\ref{app:xtrain_regression}. In addition, we have looked at the effect on energy regression of increasing the ECAL and HCAL window sizes. This can be seen in Appendix~\ref{app:large_window_regression}.
+
+\subsection{Resampling to ATLAS and CMS Geometries}\label{sec:resampling}
+
+In addition to the results presented so far, we show in this section how the end-to-end reconstruction would perform on calorimeters with granularity and geometry similar to those of the ATLAS and CMS calorimeters. Since the REC dataset (see Section~\ref{sec:data}) is generated using the geometry of the proposed LCD detector, it has a much higher granularity than the current-generation ATLAS and CMS detectors. To visualize how our calorimeter data would look with a coarser detector, we linearly extrapolate the contents of each event to a different calorimeter geometry, using a process we have termed "resampling". To keep the resampling procedure simple, we discard the HCAL information and consider only the ECAL 3D array.
+
+\begin{table*}[tbp]
+\centering
+\caption{Detailed description of the three detector geometries used in this study: the baseline CLIC ECAL detector and the ATLAS and CMS calorimeters.\label{tab:resampling_geometry}}
+\begin{tabular}{c|c|ccc|c}
+\hline
+\multirow{2}{*}{Parameter} & \multirow{2}{*}{\textbf{CLIC}} & \multicolumn{3}{c|}{\textbf{ATLAS}} & \multirow{2}{*}{\textbf{CMS}} \\
+            &               & 1st layer & 2nd layer & 3rd layer & \\
+\hline
+$\Delta \eta$         & 0.003  & 0.025 /8 & 0.025 & 0.5   & 0.0175 \\
+$\Delta \phi$         & 0.003  & 0.1      & 0.025 & 0.025 & 0.0175 \\
+Radiation Length [cm] & 0.3504 & 14       & 14    & 14    & 0.8903 \\
+Moliere radios [cm]   & 0.9327 & 9.043    & 9.043 & 9.043 & 1.959  \\
+\hline 
+\end{tabular}
+\end{table*}
+
+A not-to-scale example of the full procedure is shown in Figure~\ref{fig:resampling}. In this example, we resample the input to a regular square grid with lower granularity than the input data. The operation is simplified in the figure, in order to make the explanation easy to visualize. The actual ATLAS and CMS calorimeter geometries are more complex than a regular array, as described in Table~\ref{tab:resampling_geometry}.
+
+In the resampling process, we first extrapolate each energy value from the grid of CLIC cells to a different geometry. To do so, we scale the content of each CLIC cell to the fraction of overlap area between the CLIC cell and the cell of the target geometry. When computing the overlap fraction, we take into account the fact that different materials have different properties (Moliere radius, interaction length, and radiation length). For instance, CLIC is more fine-grained than CMS or ATLAS detectors, but the Moliere radius of the CLIC ECAL is much smaller than in either of those detectors. This difference determines an offset in the fine binning. Thus, when applying our resampling procedure we normalize the cell size by the detector properties. The Moliere radius is used for $x$ and $y$ re-binning, and radiation length is used for the $z$ direction. At this point we have a good approximation for how the event would look in a calorimeter with the target geometry.
+
+To complete the resampling process, we invert the procedure to go back to our original high-granularity geometry. This last step allows us to keep using the model architectures that we have already optimized. It adds no additional information that would not be present in the low-granularity geometry. This up-sampling also allows us to deal with the irregular geometry of the ATLAS calorimeter by turning it into a neat grid. With no up-sampling, it would not be possible to apply the CNN and GN models.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[scale=0.3, clip]{images/resampling.png}
+    \caption{Example of the resampling procedure used to emulate CLIC data on a different detector geometry (the example shown here is simply a larger grid). First, we extrapolate hit information from one geometry to another (top). Next, we extrapolate back to the original geometry (bottom). This allows us to emulate the rougher granularity of the second geometry, while keeping data array sizes constant and enabling us to use the models we have already developed for the CLIC dataset. Note that some information is lost at the edges.}
+    \label{fig:resampling}
+\end{figure}
+
+%\begin{center}
+%\begin{tabular}{ l | c c c c c }
+% Detector & Cell Size ($\Delta\eta\times\Delta\phi$) & Image Size & Material & $\Chi_0$ [cm] & $R_M$ [cm] \\ 
+%\hline
+%CLIC          & $0.003\times0.003$     & $25\times25\times25$ & tungsten & 0.35 & 0.92       \\
+%CMS           & $0.0175\times0.0175$   & $5\times5\times1$    & lead tungstate & 0.89 & 1.96 \\  
+%ATLAS layer 1 & $0.003\times0.1$       & & & & \\
+%\caption{Calorimeter properties for the three detector geometries considered. UPDATE FORMAT TO FIT IN ONE COLUMN AND ADD ATLAS 3 LAYERS}
+%\end{tabular}
+%\end{center}
+
+The resampling procedure comes with a substantial simplification of the underlying physics process. First of all, the information at the edge of the grid is imperfectly translated during the resampling process, leading to worse performance than what could theoretically be achieved in the actual CMS and ATLAS detectors. Also, this simple geometrical rescaling doesn't capture many other detector characteristics. For example, the CMS ECAL detector has no depth information, but being homogeneous it provides a very precise energy measurement. Our resampling method only captures geometric effects, and would not be able to model the improvement in energy resolution. Furthermore, we are unable to include second-order effects such as gaps in the detector geometries. Despite these limitations, one can still extract useful information from the resampled datasets, comparing the classification and regression performances of the end-to-end models defined in Sections~\ref{sec:classification} and~\ref{sec:regression} on different detector geometries.
+
+Comparisons of classification ROC curves between network architectures and our BDT baseline are shown in Figure~\ref{fig:class_ROC_ATLAS_CMS} for ATLAS-like and CMS-like geometries. Here we can see that the previously observed performance ranking still holds true. The GN
+model performs best, followed by the CNN, then the DNN. All three networks outperform the BDT baseline. The effect is less pronounced after the CMS-like resampling, due to the low granularity and the single detector layer in the z direction.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[scale=0.5, clip]{images/classification_ROC_ATLAS}
+    \includegraphics[scale=0.5, clip]{images/classification_ROC_CMS}
+    \caption{ROC curve comparisons for variable-angle $\gamma$/$\pi^0$ classification on data resampled to ATLAS-like (top) and CMS-like (bottom) geometries.}
+    \label{fig:class_ROC_ATLAS_CMS}
+\end{figure}
+
+Regression results are shown in Figure~\ref{fig:reg_resampled_gamma_ATLAS_CMS} and~\ref{fig:reg_resampled_pi0_ATLAS_CMS}, for photons and neutral pions (we did not train electrons or charged pions for this comparison). Here we have included the regression baselines, DNN networks, and CNN networks, but not GN (which we did not train on resampled data). The results obtained for the ATLAS-like resampling match those on the REC dataset, with DNN and CNN matching the BDT outcome in terms of bias and surpassing it in resolution. With the CMS-like resampling the neural networks match but do not improves over the BDT energy regression resolution. Once again, this is due to the low spatial resolution in the CMS-like geometry, especially due to the lack of $z$ segmentation. We are unable to model the improved energy resolution from the actual CMS detector, so these energy regression results are based on geometry only.
+
+\begin{figure*}[htbp]
+\centering
+\includegraphics[width=0.38\textwidth]{images/bias_vs_E_Gamma_variable_ATLAS}
+\includegraphics[width=0.38\textwidth]{images/res_vs_E_Gamma_variable_ATLAS} \\
+\includegraphics[width=0.38\textwidth]{images/bias_vs_E_Gamma_variable_CMS}
+\includegraphics[width=0.38\textwidth]{images/res_vs_E_Gamma_variable_CMS}
+\caption{Bias (left) and resolution (right) as a function of true energy for energy predictions for photons, on variable-angle samples resampled to ATLAS-like (top) and CMS-like (bottom) geometries.\label{fig:reg_resampled_gamma_ATLAS_CMS}}
+\end{figure*}
+
+\begin{figure*}[htbp]
+\centering
+\includegraphics[width=0.38\textwidth]{images/bias_vs_E_Pi0_variable_ATLAS}
+\includegraphics[width=0.38\textwidth]{images/res_vs_E_Pi0_variable_ATLAS} \\
+\includegraphics[width=0.38\textwidth]{images/bias_vs_E_Pi0_variable_CMS}
+\includegraphics[width=0.38\textwidth]{images/res_vs_E_Pi0_variable_CMS}
+\caption{Bias (left) and resolution (right) as a function of true energy for energy predictions for \pizero, on variable-angle samples resampled to  ATLAS-like (top) and CMS-like (bottom) geometries.\label{fig:reg_resampled_pi0_ATLAS_CMS}}
+\end{figure*}
+
+\section{GAN}
+
+\section{Generative Model}\label{sec:GAN}
+
+Generative Adversarial Networks are composed of two networks, a discriminator and a generator. Our model, 3DGAN, implements an architecture inspired by the auxiliary classifier GAN~\cite{acgan}. The generator takes as input a specific particle type, flight direction, and energy, and generates the 3D image of an energy deposit using an auxiliary input vector of random quantities (latent vector). 
+The output has the same format as the 3D array of ECAL hits in the GEN sample (see Section~\ref{sec:data}). The discriminator network receives as input an ECAL 3D array and classifies it as {\it real} (coming from the GEANT4-generated GEN dataset) or {\it fake} (produced by the generator).
+
+ Our initial 3DGAN prototype~\cite{NIPS} successfully simulated detector outputs for electrons which were orthogonally incident to the calorimeter surface. In addition, the discriminator performed an auxiliary regression task on the input particle energy. This task was used to cross check the quality of the generation process. 
+ 
+ In this study, we consider a more complex dataset, e.g., due to the variable incident angle of the incoming electron on the inner ECAL surface. To monitor this additional complexity, we add additional components to the loss function, related to the regression of the particle direction and the pixel intensity distribution (energy deposition in cells). This will be described in more detail below.
+
+Before training our GAN, we pre-processed the GEN dataset by replacing each cell energy content $E$ with $E^\alpha$, where $\alpha<1$ is a fixed hyperparameter. This pre-processing compensates for the large energy range (about 7 orders of magnitude) covered by individual cell energies, and mitigates some performance degradation we previously observed at low energies. After testing for different values of $\alpha$, we observed optimal performance for $\alpha=0.85$.
+
+\begin{figure*}[htbp]
+\centering
+    \includegraphics[scale=0.65, trim={0cm 6cm 3.5cm 1.8cm}]{images/gan_model_alt_upsampling.pdf}
+    \caption{3DGAN generator and discriminator network architectures}
+    \label{fig:GAN_arch}
+\end{figure*}
+
+\subsection{GAN Architecture}
+\label{sec:GANarch}
+
+The 3DGAN architecture is based on 3-dimensional convolutional layers, as shown in Figure~\ref{fig:GAN_arch}. The generator takes as input a vector with a desired particle energy and angle, and concatenates a latent vector of 254 normally distributed random numbers. This goes through a set of alternating upsampling and convolutional layers. The first convolution layer has $64$ filters with $6 \times 6 \times 8$ kernels. The next two convolutional layers have $6$ filters of $5 \times 8 \times 8$ and $3 \times 5 \times 8$ kernels, respectively. The last convolutional layer has a single filter with a $2 \times 2 \times 2$ kernel. The first three layers are activated by leaky ReLU functions, while ReLU functions are used for the last layer. Batch normalization and upscaling layers were added after the first and second convolutional layers.
+
+The discriminator takes as input a $51  \times 51  \times 25$ array and consists of four 3D convolutional layers. The first layer has $16$ filters with $5 \times 6 \times 6$ kernels. The second, third, and fourth convolutional layers each have $8$ filters with $5 \times 6 \times 6$ kernels. There are leaky ReLU activation functions in each convolutional layer. Batch normalization and dropout layers are added after the second, third, and fourth convolutional layers. The output of the final convolution layer is flattened and connected to two output nodes: a classification node, activated by a sigmoid and returning the probability of a given input to be true or fake; and a regression node, activated by a linear function and returning the input particle energy.
+The 3DGAN model is implemented in KERAS~\cite{keras} and Tensorflow~\cite{tensorflow2015-whitepaper}. 
+
+\subsection{Training and Results}
+The 3DGAN loss function
+\begin{equation}
+   L_{Tot}  = W_{G}L_{G} + W_{P}L_{P} + W_{A}L_{A} + W_{E}L_{E} + W_{B}L_{B} 
+\label{eq:loss}
+\end{equation}
+is built as a weighted sum of several terms: a binary cross entropy ($L_{G}$) function of the real/fake probability returned by the discriminator, mean absolute percentage error terms (MAPE) related to the regression of the primary-particle energy ($L_{P}$) , the total deposited energy ($L_{E}$) and the binned pixel intensity distribution ($L_{B}$), and a mean absolute error (MAE) for the incident angles measurement ($L_{A}$). The binary cross entropy term, percentage errors and absolute error are weighted by $3.0$, $0.1$ and $25$ respectively. The weights $W$ are tuned to balance the relative importance of each contribution. The predicted energy and incident angle provide a feedback on the conditioning of the image. The binned pixel intensity distribution loss compares the counts in different bins of pixel intensities. 
+
+The model training is done using the RMSprop \cite{rmsProp} optimiser. We alternately train the discriminator on a batch of real images and a batch of generated images, applying label switching. We then train the generator while freezing the discriminator weights.
+
+Figure~\ref{fig:GEANT4_events} shows a few events from the GEN data set. The events were selected to cover both ends of the primary-particle energy and angle spectrum. Figure~\ref{fig:GAN_events} presents the corresponding generated events with the same primary particle energy and angle as the GEN events in Figure~\ref{fig:GEANT4_events}. Initial visual inspection shows no obvious difference between the original and GAN generated images. A detailed validation based on several energy-shape related features confirms these results. We discuss a few examples below.
+
+\begin{figure}[htbp]
+    \includegraphics[width=0.48\textwidth]{images/GAN_g4_events.pdf}
+    \caption{GEN sample: electrons with different primary particle energies and angles.}
+    \label{fig:GEANT4_events}
+\end{figure}
+
+\begin{figure}[htbp]
+    \includegraphics[width=0.48\textwidth]{images/GAN_gan_events.pdf}
+    \caption{GAN generated electrons with primary energies and angles corresponding to the electrons showed in Figure~\ref{fig:GEANT4_events}.}
+    \label{fig:GAN_events}
+\end{figure}
+
+The top row in Figure~\ref{fig:GAN_features1} shows the ratio between the total energy deposited in the calorimeter and the primary particle energy as a function of the primary particle energy (we refer to it as "sampling fraction") for different angle values. 3DGAN can nicely reproduce the expected behaviour over the whole energy spectrum. The second row in Figure~\ref{fig:GAN_features1} shows the number of hits above a $3 \times 10^{-4}$ MeV threshold. Figure~\ref{fig:GAN_features1} also shows the x, y, z "energy shapes", i.e. the amount of energy deposited along different axes (x and y on the transverse plane and z along the calorimeter depth). The agreement is very good, and in particular 3DGAN is able to mimic the way the energy distributions changes with incident angle. 
+Figure~\ref{fig:GAN_features2} shows some additional features aimed at defining the shape of the deposited energy distribution. In particular the second moments along the x,y and z axes are shown on the first column, measuring the width of the deposited energy distribution along those axes. The second column shows the way the energy is deposited along the depth of the calorimeter, by splitting the calorimeter in three parts along the longitudinal direction and measuring the ratios between the energy deposited in each third  and the total deposited energy. Finally, the third column in Figure~\ref{fig:GAN_features2} highlights the tails of the "energy shapes". It can be seen that, while the core of the distribution is perfectly described by 3DGAN, the network tends to overestimate the amount of energy deposited at the edges of the volume. It should be noted however that energy depositions in those cells are very sparse. 
+\iffalse
+\begin{figure}
+    \centering
+    \includegraphics[scale=0.3]{images/GAN_feature_ECAL_E.png}
+    \includegraphics[scale=0.3]{images/GAN_feature_ECAL_nHits.png}
+    \includegraphics[scale=0.3]{images/GAN_feature_ECAL_ratioFirstLayerToSecondLayerE.png}
+    \includegraphics[scale=0.3]{images/GAN_feature_ECAL_ratioFirstLayerToTotalE.png}
+    \includegraphics[scale=0.3]{images/GAN_feature_ECALmomentX1.png}
+    \includegraphics[scale=0.3]{images/GAN_feature_ECALmomentX2.png}
+    \includegraphics[scale=0.3]{images/GAN_feature_ECALmomentX3.png}
+    \includegraphics[scale=0.3]{images/GAN_feature_ECALmomentY1.png}
+    \includegraphics[scale=0.3]{images/GAN_feature_ECALmomentZ1.png}
+    \includegraphics[scale=0.3]{images/GAN_feature_R9.png}
+    \caption{GAN vs. GEANT comparisons for various features. {\bf theta should be $\theta$.}
+    \label{fig:GAN_features}}
+\end{figure}
+\fi
+\begin{figure}
+    \centering
+    \includegraphics[width=0.48\textwidth]{images/features_1.pdf}
+    \caption{GEANT4 vs. GAN comparison for sampling fraction, number
+      of hits and shower shapes along x,y,z axis for different angle
+      bins with 100-200 GeV primary particle energies.
+      \label{fig:GAN_features1}}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.48\textwidth]{images/features_2.pdf}
+    \caption{GEANT4 vs. GAN comparison for shower width (second
+      moment) in x,y,z, ratio of energy deposited in parts along
+      direction of particle traversal to total energy and shower
+      shapes along x,y,z axis in log scale for 100-200 GeV primary
+      particle energies and 60-120 degrees $\theta$.
+      \label{fig:GAN_features2}}
+\end{figure}
+
+The 3DGAN training runs in around $1.5$ hours per epoch on a single NVIDIA GeForce GTX 1080 card for $60$ epochs. The simulation  time  on a Intel  Xeon 8180  is about $13$ ms/particle  and it goes down to about $4$ ms/particle on a NVIDIA  GeForce  GTX  1080. For  comparison  GEANT4  simulation takes  about $17$ seconds  per  particle on  a  Intel  Xeon  8180 (currently  it  is  not  possible  to  run a full  GEANT4-based  simulation  on  GPUs). Thus our GAN represents a potential simulation speedup of over 4,000 times for this specific aspect of the event simulation.
+
+When given as input to a particle regression and reconstruction model (see section~\ref{sec:reco}), this dataset produces the same output as the original GEANT4 sample, as described in Appendix~\ref{appendix:RECO_on_GAN}.
+
+\section{Conclusion}
+
+This paper shows how deep learning techniques could outperform traditional and resource-consuming techniques in  tasks typical of physics experiments at particle colliders, such as particle shower simulation and reconstruction in a calorimeter.
+We consider several model architectures, notably 3D convolutional neural networks, and we show competitive performance, matched to short execution time. In addition, this strategy comes with a GPU-friendly computing solution and would fit the current trends in particle physics towards heterogeneous computing platforms. 
+
+We confirm findings from previous studies of this kind. On the other hand, we do so utilizing a fully accurate detector simulation, based on a complete GEANT4 simulation of a full particle detector, including several detector components, magnetic field, etc. In addition, we design the network so that different tasks are performed by a single architecture, optimized through an hyperparameter scan. 
+
+We look forward to the development of similar solutions for current and future particle detectors, for which this kind of end-to-end solution could be extremely helpful. 

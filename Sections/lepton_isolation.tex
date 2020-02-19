@@ -1,15 +1,102 @@
 \chapter{Identifying Heavy-Flavor Leptons Using Recurrent Neural Nets}
 
-\section{What Are We Doing?}
+\section{The Problem}
 
-\subsection{The Problem}
+% why lepton isolation is important, what analyses it's used in etc
+
+In high energy physics experiments at the Large Hadron Collider (LHC), we shoot protons at each other at nearly the speed of light, and each resulting collision causes a spray of particles to be produced. By analyzing a large number of these collisions with specialized detectors, we can work out the physics of what happened in these events.
+
+These collisions often produce particles called leptons, which include electrons, muons, and their antimatter partners. For many physics analyses, we're interested in knowing whether each lepton was produced during the initial collision (prompt lepton), or whether it came into being slightly afterwards, when a heavier particle such as a b-quark decayed into lighter particles (heavy-flavor lepton).
+
+When leptons come from quark decay, they are often surrounded by a shower of other particles when they reach the detector. Thus, we often use lepton-isolation algorithms to determine whether leptons are prompt or heavy-flavor.
+
+% existing techniques - PLT, ptcone etc.
+
+Common algorithms for determining lepton isolation include ptcone and its variants such as ptvarcone. This algorithm simply draws a cone around each lepton - with the collision point as the vertex of the cone - and adds up the energy of all the other stuff inside that cone. If the ratio of lepton energy vs. non-lepton energy inside that cone is below a certain threshold, the lepton is marked as non-isolated (and thus as having come from a heavy decay). The size of the cone and cutoff threshold may vary with lepton energy and other factors, but for the most part the ptcone class of algorithms describe a simple sum and ratio.
+
+There have also been investigations into other sorts of algorithms, such as the Prompt Lepton Tagger tool (PLT). The PLT algorithm calculates a set of features for each lepton, and uses these features to train a boosted decision tree (BDT). The results have been shown to outperform ptcone.
+
+% why RNN would be useful
+
+In this paper we demonstrate a further improvement upon lepton isolation algorithms, with the use of a recurrent neural net (RNN) evaluated on full track and calorimeter information for all particles surrounding a lepton. Rather than using a simple sum-and-ratio technique, or performing cut-based analysis on a small number of calculated features, we use a machine-learning algorithm to analyze all available information in an event in order to perform the best classification possible.
+
+% paper outline
+
+In Section~\ref{sec:dataprep}, we explain how we prepared training and test data to use with our RNN, including what filtering and cleaning steps samples had to pass, and technical details on data formatting. Section~\ref{sec:dataexamination} contains preliminary examinations, where we perform brief sanity checks concerning the contents of the data. Section~\ref{sec:architecture} shows our investigations into the best architecture for our problem, and demonstrates how we decided on our final RNN architecture. Finally, results are shown in Section~\ref{sec:results}, comparing RNN results with ptcone and PLT.
+
+The codebase used in this project can be found on GitHub at github.com/ BucketOfFish/LeptonIsolation. All training is performed with PyTorch.
 
 \subsection{Previous Approaches}
 
-\section{Data Preparation}
+\section{Data Preparation}\label{sec:dataprep}
 
-\section{Neural Architectures}
+\subsection{Event Generation}
 
-\section{Classification}
+The data used in this project was extracted from collision events generated via Monte Carlo algorithms at CERN. These generated events contain all the same information as real events gathered via detectors, and are stored in the same format.
+
+% ttbar events
+
+For this project we decided to generate 100,000 ttbar-process events. In these events, a proton-proton collision creates a very energetic gluon, which decays into a top quark and an antitop quark. The top quark then quickly decays, almost always into a W boson and a bottom quark. In about one-third of cases, the W boson then decays into an antilepton and its associated neutrino. The antitop quark goes through the corresponding antimatter decay chain. Thus, the final product of the ttbar process contains either zero, one, or two heavy-flavor leptons (or antileptons) along with a shower of other particles. Any bottom quarks coming from the ttbar decay may further decay into more leptons, but these are identifiable by their displaced point of origin, since the bottom quark is long-lived, and moves a bit away from the collision point before decaying.
+
+Prompt leptons are produced via short-lived processes at the point of collision. Production of these leptons are not specific to the ttbar process~\cite{bodek}, and they may be present in an event along with heavy-flavor leptons.
+
+It must be noted here that in this analysis, leptons and their antipartners are treated identically. That is, an electron and positron are classified identically, and a muon is classified identically to an antimuon.
+
+% To be specific, we used the sample $mc16_13TeV.410470.PhPy8EG_A14_ttbar_hdamp258p75_nonallhad.deriv.DAOD_MUON5.e6337_e5984_s3126_r10201_r10210_p3584$.
+
+\subsection{Lepton-Track Association}
+
+% lepton and associated track extraction and selection
+
+Each collision event could thus contain numerous leptons, along with many thousands of particle tracks left in the detector. Each particle in the event can also leave energy deposits in the two calorimeters present in the detector. For our training and test data, we wanted to look at one lepton at a time, along with all the track and calorimeter data in some region around it.
+
+To do this, we first began with ROOT-format data, which contained all data from a collision. Going event by event, we saved information for the top 20 most energetic electrons per event, and the top 20 most energetic muons. For these leptons, we stored pdgID and truthType, which are truth information (lepton flavor - electron vs. muon - and lepton isolation - heavy flavor vs. prompt - respectively). We also stored pT, eta, phi, d0, and z0, which are energy and geometric variables assigned to the lepton by a particle reconstruction algorithm. Furthermore, we stored information for the 3000 most energetic tracks in each event. For tracks, we saved charge, eta, pT, theta, d0, z0, and chiSquared information. At the end, all this information was dumped into an H5-format file.
+
+Next, for each lepton we made a list of all tracks in that lepton's event which were within an eta-phi cone of 0.5. Using these tracks, for each lepton we calculated and stored ptcone, ptvarcone, and PLT values, in order to compare the performance of these algorithms against our RNN. For each track we also calculated dPhi, dEta, dR, dd0, and dz0. dEta is the difference in phi between the track and its associated lepton etc. These lepton-track groups were then stored in a pickle file, since the H5 format has difficulties with handling variable-sized lists.
+
+Leptons and tracks also had to pass quality cuts. Lepton objects were reconstructed by various algorithms from detector data, and tagged by the algorithms with reconstruction likelihoods. We chose electrons which contained the “DFCommonElectronsLHMedium” decorator, and muons which passed the MuonSelectionTool set at medium. Tracks were required to pass the same cuts used when calculating ptcone and ptvarcone~\cite{run2isolation},~\cite{trackingcp}. Furthermore, we only kept leptons which had at least one associated good track in the surrounding region.
+
+% electron selection
+% SG::AuxElement::ConstAccessor<char> cacc_lhmedium("DFCommonElectronsLHMedium");
+% if (!cacc_lhmedium(*electron)) continue;
+% muon selection
+% CP::MuonSelectionTool* m_muonSelectionTool;
+% xAOD::Muon::Quality muonQuality = m_muonSelectionTool->getQuality(*muon);
+% if (muonQuality < xAOD::Muon::Medium) continue;
+
+% good_track_pt = tracks['pT'] > 500  # 500 MeV
+% good_track_eta = abs(tracks['eta']) < 2.5
+% good_track_hits = [i + j >= 7 for i, j in zip(
+% tracks['nSCTHits'], tracks['nPixHits'])] and\
+% (tracks['nIBLHits'] > 0)
+% good_track_holes = [i + j <= 2 for i, j in zip(
+% tracks['nPixHoles'], tracks['nSCTHoles'])] and\
+% (tracks['nPixHoles'] <= 1)
+% good_tracks = tracks[good_track_pt & good_track_eta &
+% good_track_hits & good_track_holes]
+
+Finally, we balanced prompt and heavy-flavor classes, keeping an equal number of samples for each. After all selections were applied, we ended up extracting 8241 heavy flavor and 8241 isolated leptons, with their associated tracks.
+
+% From 100k events? Check if samples need to be remade.
+
+\subection{Data Examination}\label{sec:dataexamination}
+
+[FEATURE COMPARISONS]
+
+[HOW PTCONE IS CALCULATED]
+
+[COMPARISON PLOTS]
+
+\section{Neural Architecture}\label{sec:architecture}
+
+[ORDERING INVESTIGATION (PT, DR, ETA, ETC.)]
+
+[HYPERPARAMETER OPTIMIZATION]
+
+[RNN VS GRU VS LSTM]
+
+[RNN VS POINT CLOUD]
+
+\section{Results}
 
 \section{Conclusion}
