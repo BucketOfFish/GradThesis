@@ -1,6 +1,4 @@
-\chapter{Identifying Heavy-Flavor Leptons Using Recurrent Neural Nets}
-
-\section{The Problem}
+\chapter{The Problem}
 
 % why lepton isolation is important, what analyses it's used in etc
 
@@ -26,11 +24,11 @@ In Section~\ref{sec:dataprep}, we explain how we prepared training and test data
 
 The codebase used in this project can be found on GitHub at github.com/ BucketOfFish/LeptonIsolation. All training is performed with PyTorch.
 
-\subsection{Previous Approaches}
+\section{Previous Approaches}
 
-\section{Data Preparation}\label{sec:dataprep}
+\chapter{Data Preparation}\label{sec:dataprep}
 
-\subsection{Event Generation}
+\section{Event Generation}
 
 The data used in this project was extracted from collision events generated via Monte Carlo algorithms at CERN. These generated events contain all the same information as real events gathered via detectors, and are stored in the same format.
 
@@ -44,7 +42,7 @@ It must be noted here that in this analysis, leptons and their antipartners are 
 
 % To be specific, we used the sample $mc16_13TeV.410470.PhPy8EG_A14_ttbar_hdamp258p75_nonallhad.deriv.DAOD_MUON5.e6337_e5984_s3126_r10201_r10210_p3584$.
 
-\subsection{Lepton-Track Association}
+\section{Lepton-Track Association}
 
 % lepton and associated track extraction and selection
 
@@ -79,7 +77,7 @@ Finally, we balanced prompt and heavy-flavor classes, keeping an equal number of
 
 % From 100k events? Check if samples need to be remade.
 
-\subection{Data Examination}\label{sec:dataexamination}
+\section{Data Examination}\label{sec:dataexamination}
 
 [FEATURE COMPARISONS]
 
@@ -87,7 +85,7 @@ Finally, we balanced prompt and heavy-flavor classes, keeping an equal number of
 
 [COMPARISON PLOTS]
 
-\section{Neural Architecture}\label{sec:architecture}
+\chapter{Neural Architectures}\label{sec:architecture}
 
 [ORDERING INVESTIGATION (PT, DR, ETA, ETC.)]
 
@@ -97,6 +95,6 @@ Finally, we balanced prompt and heavy-flavor classes, keeping an equal number of
 
 [RNN VS POINT CLOUD]
 
-\section{Results}
+\chapter{Results}
 
 \section{Conclusion}

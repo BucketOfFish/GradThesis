@@ -1,0 +1,33 @@
+\chapter{Analysis Details}
+
+Previously, I participated in a search for SUSY, targeting the events shown in Figure~\ref{SUSY_2l2j}. In these events, an initial gluon decays into a $\tilde{\chi}^0_2$ (second-lightest neutralino) and two quarks. The $\tilde{\chi}^0_2$ further decays into $\tilde{\chi}^0_1$ (lightest neutralino) via either a Z boson decay or an intermediate slepton decay. The Z may be either on or off shell. To target these decays, we looked for events with final states containing a same-flavour opposite-sign lepton (electron or muon) pair, two or more jets, and large missing transverse momentum ($E_T^{miss}$). To differentiate between the different models (on-shell Z, off-shell Z, and slepton decay), we looked at the final dilepton mass distribution, as seen in Figure~\ref{mll}. These searches used $\sqrt{s}$ = 13 TeV collision data with an integrated luminosity of $14.7 fb^{-1}$, gathered by the ATLAS detector during 2015 and 2016.
+
+\section{The Model}
+
+\section{Objects and Regions}
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.7\linewidth]{images/SUSY_2l2j.png}
+    \caption{SUSY models involving final states with two leptons, two jets, and large transverse missing energy. Note that though these diagrams show two gluino decay branches, the final state we searched for only required one.}
+    \label{SUSY_2l2j}
+\end{figure}
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.5\linewidth]{images/mll.png}
+    \caption{Different dilepton mass ($m_{ll}$) distributions. On-shell Z bosons have an $m_{ll}$ peak around the Z mass at 91 GeV, but off-shell Z's would see a sharp cutoff in the $m_{ll}$ distribution at an energy equal to $m_{\tilde{\chi}^0_2} - m_{\tilde{\chi}^0_1}$. Events which went through the slepton decay process would see an entirely different $m_{ll}$ distribution shape.}
+    \label{mll}
+    
+	\centering
+    \includegraphics[width=0.45\linewidth]{images/slepton_signal_regions.png}
+    \includegraphics[width=0.45\linewidth]{images/Z_signal_regions.png}
+    \caption{Signal regions chosen to maximize signal-over-background ratios given various sparticle masses. The signal regions on the left are for slepton and off-shell Z models, and correspond to low, medium, and high values of $m_{\tilde{\chi}^0_2} - m_{\tilde{\chi}^0_1}$. The signal region on the right is for the on-shell Z model. $H_T$ refers to the total transverse momentum of jets.}
+    \label{signal_regions}
+\end{figure}
+
+When selecting objects for this analysis, we decided to use signal leptons with transverse momentum ($p_T$) above 25 GeV, and jets with $p_T$ above 30 GeV. For the purposes of performing jet overlap removal and calculating $E_T^{miss}$, we also allowed baseline leptons above 10 GeV and baseline jets above 20 GeV. In the interest of keeping this paper at a reasonable length, the complete set of object selection and triggering criteria will not be included, but can be found in the complete SUSY analysis paper at \cite{SUSY_2l2j}.
+
+As with most high-energy physics searches, there were a variety of standard-model processes which mimicked the final state we were looking for. Of these, the $t\bar{t}$ process was the largest, followed by diboson (WZ/ZZ) processes. Events with a single Z and two or more jets from initial-state radiation could also mimic our signal, provided that mismeasurement of the jet momentum resulted in a large $E_T^{miss}$ for the event. Events from single-top-quark processes and from lepton misidentification also contributed to the background. To accurately model these backgrounds, we used flavor-symmetry, Z/$\gamma^*$, Monte Carlo, and fake estimation methods, all of which will be described below.
+
+As we had several unknown masses in our models, we needed to find multiple signal regions which could optimize the signal-to-background ratio for a variety of different $\tilde{\chi}^0_1$, $\tilde{\chi}^0_2$, and $\tilde{g}$ masses. In Figure~\ref{signal_regions}, we show the four signal regions we chose, along with their associated validation and control regions, which were used to implement and test various background-rejection methods.

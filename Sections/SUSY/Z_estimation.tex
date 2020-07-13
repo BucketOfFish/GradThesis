@@ -1,0 +1,126 @@
+\chapter{Z Background Estimation}
+
+We describe here two methods of estimating $Z\rightarrow\ell\ell$ backgrounds in our Strong SUSY regions. The first method relies on the statistical manipulation of data-driven photon+jets backgrounds, and has been used in our previous analyses. We describe this method, and show that it is inapplicable to our current analysis due to violation of several underlying method assumptions. The second method we describe, based on the scaling of Z Monte Carlo samples to a \dPhi control region for each signal and validation region, is the one we use for our current analysis. We show that this method replicates important features accurately, and is robust to theory systematic variations.
+
+\section{Photon Method}
+
+In our Z+jets backgrounds, the majority of our missing energy comes from jet mismeasurements. We first investigated a data-driven method to estimate this component of the background, as it has been used before in physics searches in both CMS and ATLAS ~\cite{blah}, including in one of our previous analyses ~\cite{blah}.
+
+This method involves selecting photon+jets events from data, and applying corrections in order to simulate Z+jets events (Figure~\ref{fig:photon_to_Z}). The method works because the two types of processes have very similar jet behavior, allowing us to use a data-driven method for estimating jets, rather than relying on tricky QCD-based simulation in Monte Carlo.
+
+\begin{figure}
+    \centering
+    \includegraphics{}
+    \caption{Caption}
+    \label{fig:photon_to_Z}
+\end{figure}
+
+The major differences between Z+jets and photon+jets events come from the presence of leptonic components, which can be simulated by pseudo-splitting the photon into two leptons. From looking at photon and Z events in MC, we apply corrections to each photon event to produce a lepton splitting similar to what is seen in an equivalent Z event of the same transverse momentum. To be more specific, we first split the photon into two leptons according to a uniform angle sampling on the unit sphere in the rest frame of the photon. We then boost the daughter leptons back to the lab frame. This lepton splitting causes our first problem, as will be described in the next section.
+
+After splitting the photon into leptons, we must then perform a resolution smearing procedure to account for the fact that photons and leptons have different measurement resolutions within our detector. [describe how method works, and how we then smear the pT of the photon based on resulting lepton pT]. [In particular, there is significant mismeasurement of muons at high pT. This leads to differences in MET distibutions. To simplify calculations, we treat lepton propagation as mostly being in the direction of Z propagation. Thus our smearing method only affects MET in the direction parallel to the direction of Z propagation (METl), and not in the transverse direction (METt). To apply smearing, we look at METl in slices of pT for both photon and Z events in MC. The differences in mean and standard deviation for the photon and Z distributions for MC16e mm samples can be seen in Table <>. For electrons we apply a shift in mean METl for each event, and for muons we apply both a shift in mean and an additional smearing in resolution based on sampling from a Gaussian of the given standard deviation. Comparisons of photon and Z METl distributions in various pT slices can be seen in Fig. <>.] [this causes problem, described in next section].
+
+Next, we take into account the fact that photon and Z processes are produced with different pT distributions in our backgrounds. We correct for this by reweighting photon events in pT bins in order to match the distribution seen in Z events. To do this, we look at an inclusive region <> and apply a scaling factor for each photon event based on yields in the pT slices. Comparisons of photon vs. Z pT (Ptll) distributions both before and after reweighting are shown in Figure~\ref{fig:reweighting}. [however, this leads to our third problem].
+
+\begin{figure}
+    \centering
+    \includegraphics{}
+    \caption{Caption}
+    \label{fig:reweighting}
+\end{figure}
+
+Finally, for each plotting region we look at the total photon and Z yield in a control region with \MET$<100$. We then apply an overall scaling factor to the photon component so that the photon yield matches the Z yield in the control region. This last step does not change the shapes of any photon-method distributions.
+
+\section{Problems with the Photon Method}
+
+[problem due to photon and lepton detection etas]
+
+[problem with muon resolution being too good]
+
+[problem with photon pT range]
+
+Final MC closure comparisons of various features between Z+jets and processed photon+jets events are shown in Figure~\ref{}, demonstrating some of the problems we have discussed.
+
+\section{Z MC Method}
+
+\section{Z Background Systematics}
+
+Here we compare two methods for obtaining theory systematic uncertainties for the Z background. First we have the \mindphijm method, as described in the body of the paper, and for which the Strong region systematics uncertainties are reproduced in Table~\ref{tab:ZMC_ratio_systematics_rep}. Second, we have the uncertainties in yield which we would obtain just from taking the differences in Z MC yield for each region. This is shown in Table~\ref{tab:ZMC_yield_systematics}.
+
+The yield systematics are quoted by using the maximum \mll bin yield difference in each region, using the binning scheme as described in the body of our paper. If the highest bin yield difference is an outlier (at least $10\%$ higher than the second-highest difference), then we quote the second-highest difference instead. We see that this method produces theory systematic uncertainties which are much higher than those obtained for the \mindphijm method. We demonstrate this difference by looking at the \mindphijm shapes in three regions, SRC (Figure~\ref{fig:mindphijm_SRC}), SRLow (Figure~\ref{fig:mindphijm_SRLow}), and SRHigh (Figure~\ref{fig:mindphijm_SRMed}). In these plots we show the nominal \mindphijm distribution against the scale and PDF variations with the largest differences in yield uncertainty. These plots demonstrate that though total Z MC yield is strongly influenced by systematic variations, the \mindphijm distribution shape is relatively unaffected. Thus our \mindphijm ratio method is robust to these systematic changes.
+
+\begin{table}
+\caption{Z MC dPhi Ratio Systematic Uncertainties}
+\begin{center}
+\begin{tabular}{c|c|c}
+region & scale uncertainty & PDF uncertainty \\
+\hline
+SRC & 0.410 & 0.068 \\
+SRLow & 0.058 & 0.001 \\
+SRMed & 0.014 & 0.010 \\
+SRHigh & 0.042 & 0.019 \\
+SRLowZ & 0.035 & 0.007 \\
+SRMedZ & 0.017 & 0.008 \\
+SRHighZ & 0.006 & 0.014 \\
+VRC & 0.124 & 0.088 \\
+VRLow & 0.044 & 0.011 \\
+VRMed & 0.038 & 0.003 \\
+VRHigh & 0.013 & 0.006 \\
+VRLowZ & 0.015 & 0.010 \\
+VRMedZ & 0.010 & 0.003 \\
+VRHighZ & 0.026 & 0.017 \\
+\end{tabular}
+\end{center}
+\label{tab:ZMC_ratio_systematics_rep} 
+\end{table}
+
+\begin{table}
+\caption{Z MC Yield Systematic Uncertainties}
+\begin{center}
+\begin{tabular}{c|c|c}
+region & scale uncertainty & PDF uncertainty \\
+\hline
+SRC & 0.545 & 0.078 \\
+SRLow & 0.542 & 0.048 \\
+SRMed & 0.464 & 0.046 \\
+SRHigh & 0.473 & 0.136 \\
+SRLowZ & 0.527 & 0.035 \\
+SRMedZ & 0.492 & 0.037 \\
+SRHighZ & 0.471 & 0.046 \\
+VRC & 0.651 & 0.052 \\
+VRLow & 0.597 & 0.083 \\
+VRMed & 0.475 & 0.026 \\
+VRHigh & 0.438 & 0.026 \\
+VRLowZ & 0.480 & 0.029 \\
+VRMedZ & 0.471 & 0.019 \\
+VRHighZ & 0.449 & 0.020 \\
+\end{tabular}
+\end{center}
+\label{tab:ZMC_yield_systematics} 
+\end{table}
+
+\begin{figure}[tbhp]
+\centering
+\includegraphics[width=0.8\textwidth]{figures/ZMC/systematics/SRC.png}
+\caption{
+\mindphijm shape for nominal Z MC in the SRC region, compared with shapes for scale and PDF systematics with the largest differences in yield.
+}
+\label{fig:mindphijm_SRC} 
+\end{figure} 
+
+\begin{figure}[tbhp]
+\centering
+\includegraphics[width=0.8\textwidth]{figures/ZMC/systematics/SRLow.png}
+\caption{
+\mindphijm shape for nominal Z MC in the SRLow region, compared with shapes for scale and PDF systematics with the largest differences in yield.
+}
+\label{fig:mindphijm_SRLow} 
+\end{figure} 
+
+\begin{figure}[tbhp]
+\centering
+\includegraphics[width=0.8\textwidth]{figures/ZMC/systematics/SRMed.png}
+\caption{
+\mindphijm shape for nominal Z MC in the SRMed region, compared with shapes for scale and PDF systematics with the largest differences in yield.
+}
+\label{fig:mindphijm_SRMed} 
+\end{figure} 

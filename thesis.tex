@@ -5,38 +5,46 @@
 \usepackage{graphicx}
 
 \bibliography{Bibliography/bibliography}
-\bibliography{Bibliography/ATLAS}
-\bibliography{Bibliography/CMS}
-\bibliography{Bibliography/ConfNotes}
-\bibliography{Bibliography/PubNotes}
 
 \begin{document}
 
-\input{Sections/front_matter.tex}
+\input{Sections/Structure/macros.tex}
+\input{Sections/Structure/front_matter.tex}
+\input{Sections/Structure/introduction.tex}
+
+\tableofcontents
+\listoftables
+\listoffigures
+\input{Sections/Structure/abbrev_and_def.tex}
+
+\mainmatter
 
 \part{A Brief Introduction to Particle Physics}
-\input{Sections/history.tex}
-\input{Sections/standard_model.tex}
-\input{Sections/SUSY.tex}
+\input{Sections/ParticlePhysics/history.tex}
+\input{Sections/ParticlePhysics/standard_model.tex}
+\input{Sections/ParticlePhysics/SUSY.tex}
 
-\part{How CERN Conducts Experiments}
-\input{Sections/detector.tex}
-\input{Sections/how_to_search.tex}
+\part{How to Conduct a Particle Physics Experiment}
+\input{Sections/ATLAS/detector.tex}
+\input{Sections/ATLAS/how_to_search.tex}
 
-\part{Machine Learning}
-\input{Sections/machine_learning.tex}
+\part{A Search for Supersymmetry}
+\input{Sections/SUSY/model.tex}
+\input{Sections/SUSY/backgrounds.tex}
+\input{Sections/SUSY/Z_estimation.tex}
+\input{Sections/SUSY/results.tex}
 
-\part{Particle Identification and Generation Using Calorimeter Information}
-\input{Sections/calo_ML.tex}
+\part{An Introduction to Machine Learning}
+\input{Sections/ML/machine_learning.tex}
+
+\part{Calorimeter Shower Identification and Generation Using Neural Nets}
+\input{Sections/ML/calo_ML.tex}
 
 \part{Identifying  Heavy-Flavor  Leptons  Using  Recurrent  Neural Nets}
-\input{Sections/lepton_isolation.tex}
-
-\part{Another Search for Supersymmetry}
-\input{Sections/SUSY_analysis.tex}
+\input{Sections/ML/lepton_isolation.tex}
 
 \part{Conclusion}
-\input{Sections/conclusion.tex}
+\input{Sections/Structure/conclusion.tex}
 
 \clearpage
 \appendix
