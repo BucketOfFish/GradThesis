@@ -3,63 +3,64 @@
 \usepackage{epigraph,hyperref}
 \usepackage[backend=bibtex,style=numeric-comp]{biblatex}
 \usepackage{graphicx}
+\usepackage{multirow}
 
 \bibliography{Bibliography/bibliography}
 
 \begin{document}
 
-\input{Sections/Structure/macros.tex}
-\input{Sections/Structure/front_matter.tex}
-\input{Sections/Structure/introduction.tex}
+\input{Sections/Structure/macros.tex} %[text/images/citations]
+\input{Sections/Structure/front_matter.tex} %[text/images/citations]
+\input{Sections/Structure/introduction.tex} %[text/images/citations]
 
 \tableofcontents
 \listoftables
 \listoffigures
-\input{Sections/Structure/abbrev_and_def.tex}
+\input{Sections/Structure/abbrev_and_def.tex} %[text/images/citations]
 
 \mainmatter
 
 \part{A Brief Introduction to Particle Physics}
-\input{Sections/ParticlePhysics/history.tex}
-\input{Sections/ParticlePhysics/standard_model.tex}
-\input{Sections/ParticlePhysics/SUSY.tex}
+\input{Sections/ParticlePhysics/history.tex} %[text/images/citations]
+\input{Sections/ParticlePhysics/standard_model.tex} %[text/images/citations]
+\input{Sections/ParticlePhysics/SUSY.tex} %[text/images/citations]
 
 \part{How to Conduct a Particle Physics Experiment}
-\input{Sections/ATLAS/detector.tex}
-\input{Sections/ATLAS/how_to_search.tex}
+\input{Sections/ATLAS/detector.tex} %[text/images/citations]
+\input{Sections/ATLAS/how_to_search.tex} %[text/images/citations]
 
 \part{A Search for Supersymmetry}
-\input{Sections/SUSY/model.tex}
-\input{Sections/SUSY/backgrounds.tex}
-\input{Sections/SUSY/Z_estimation.tex}
-\input{Sections/SUSY/results.tex}
+\input{Sections/SUSY/model.tex} %[text/images/citations]
+\input{Sections/SUSY/backgrounds.tex} %[text/images/citations]
+\input{Sections/SUSY/Z_estimation.tex} %[text/images/citations]
+\input{Sections/SUSY/results.tex} %[text/images/citations]
 
-\part{An Introduction to Machine Learning}
-\input{Sections/ML/machine_learning.tex}
+\part{A Brief Introduction to Machine Learning}
+\input{Sections/ML/machine_learning.tex} %[text/images/citations]
+\input{Sections/ML/basic_algorithms.tex} %[text/images/citations]
+\input{Sections/ML/advanced_architectures.tex} %[text/images/citations]
 
 \part{Calorimeter Shower Identification and Generation Using Neural Nets}
-\input{Sections/ML/calo_ML.tex}
-
-\part{Identifying  Heavy-Flavor  Leptons  Using  Recurrent  Neural Nets}
-\input{Sections/ML/lepton_isolation.tex}
-
-\part{Conclusion}
-\input{Sections/Structure/conclusion.tex}
-
-\clearpage
-\appendix
-
-\input{Appendices/FTk.tex}
-\input{Appendices/pixel_detectors.tex}
-\input{Appendices/vertex_reconstruction.tex}
-\input{Appendices/windowsize.tex}
-\input{Appendices/BDT.tex}
-\input{Appendices/GoogLeNet.tex}
-\input{Appendices/classificationHCAL.tex}
+\input{Sections/Calo/calo_ML.tex} %[text/images/citations]
+\input{Sections/Calo/data_prep.tex} %[text/images/citations]
+\input{Sections/Calo/classification_regression.tex} %[text/images/citations]
+\input{Sections/Calo/GAN.tex} %[text/images/citations]
+\input{Sections/Calo/conclusion.tex} %[text/images/citations]
 %\cite{ATLAS-CONF-2017-065}
 
-\backmatter
+\part{Identifying  Heavy-Flavor  Leptons  Using  Recurrent  Neural Nets}
+\input{Sections/LepIso/lepton_isolation.tex} %[text/images/citations]
 
+\part{Other Projects}
+\input{Sections/OtherProjects/FTk.tex} %[text/images/citations]
+\input{Sections/OtherProjects/pixel_detectors.tex} %[text/images/citations]
+\input{Sections/OtherProjects/vertex_reconstruction.tex} %[text/images/citations]
+
+\part{Conclusion}
+\input{Sections/Structure/conclusion.tex} %[text/images/citations]
+
+\clearpage
+\backmatter
 \printbibliography
 
 \end{document}
