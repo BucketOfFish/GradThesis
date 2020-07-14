@@ -22,20 +22,27 @@ Each two-object classification dataset was divided into 400,000 training and 100
 
 \begin{table}[!ht]
     \centering
-    \begin{tabular}[!t]{l|cccc|cccc}
+    \begin{tabular}[!t]{l|cccc}
         \hline
-        & \multicolumn{4}{c}{\textbf{$\gamma$ vs. $\pi^0$}} & \multicolumn{4}{c}{\textbf{$e$ vs. $\pi$}}\\
+        & \multicolumn{4}{c}{\textbf{$\gamma$ vs. $\pi^0$}}\\
         \hline
-        \textbf{Model} & \textbf{acc.} &  \textbf{AUC} & \textbf{$\Delta \epsilon_{\mathrm{sig}}$} & \textbf{$\Delta R_{\mathrm{bkg}}$} & \textbf{acc.} &  \textbf{AUC} & \textbf{$\Delta \epsilon_{\mathrm{sig}}$} & \textbf{$\Delta R_{\mathrm{bkg}}$} \\
+        \textbf{Model} & \textbf{acc.} &  \textbf{AUC} & \textbf{$\Delta \epsilon_{\mathrm{sig}}$} & \textbf{$\Delta R_{\mathrm{bkg}}$} \\
         \hline
         \centering
-        BDT & 83.1\% & 89.8\% & - & - & 93.8\% & 98.0\% & - & - \\
-        DNN (features) & 82.8\% & 90.2\% & 0.9\% & 0.95 & 93.6\% & 98.0\% & -0.1\% & 0.95 \\
-        DNN (cells) & 87.2\% & 93.5\% & 9.4\% & 1.63 & 99.4\% & 99.9\% & 4.9\% & 151 \\
+        BDT & 83.1\% & 89.8\% & - & - \\
+        DNN (features) & 82.8\% & 90.2\% & 0.9\% & 0.95 \\
+        DNN (cells) & 87.2\% & 93.5\% & 9.4\% & 1.63 \\
         \hline
+        & \multicolumn{4}{c}{\textbf{$e$ vs. $\pi$}}\\
+        \hline
+        \textbf{Model} & \textbf{acc.} &  \textbf{AUC} & \textbf{$\Delta \epsilon_{\mathrm{sig}}$} & \textbf{$\Delta R_{\mathrm{bkg}}$} \\
+        \hline
+        \centering
+        BDT & 93.8\% & 98.0\% & - & - \\
+        DNN (features) & 93.6\% & 98.0\% & -0.1\% & 0.95 \\
+        DNN (cells) & 99.4\% & 99.9\% & 4.9\% & 151 \\
         \hline
     \end{tabular}
-    \vspace{5pt}
     \caption{Performance parameters for BDT and DNN classifiers.} 
     \label{AUCs}
 \end{table}
