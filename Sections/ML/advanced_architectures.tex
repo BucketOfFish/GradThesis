@@ -1,8 +1,10 @@
-\chapter{Advanced Architectures}
+\chapter{Advanced Architectures}\label{sec:advanced_architectures}
 
 \section{Convolutional Nets}
 
 \section{GoogLeNet}
+
+\section{Autoencoders}
 
 \section{Generative Adversarial Nets}
 
@@ -17,10 +19,10 @@ Up until now we have described typical feedforward neural nets, where connection
     \label{fig:RNN}
 \end{figure}
 
-The actual body of the RNN can be a neural net of any architecture, but in a standard RNN we typically use a simple few-layer densely connected net. The hidden state and output also typically pass through a $\tanh$ layer, with the output passing through an additional softmax layer. In this case, if we write the $\tanh$ function as $\sigma$, the concatenation of $x_t$ and $h_{t-1}$ as $x_t \oplus h_{t-1}$, and the neural net weight matrix as $W$, we can represent the RNN via the following equations:
+The actual body of the RNN can be a neural net of any architecture, but in a standard RNN we typically use a simple few-layer densely connected net. The hidden state and output also typically pass through a $\tanh$ layer, with the output passing through an additional softmax layer. In this case, if we write the concatenation of $x_t$ and $h_{t-1}$ as $x_t \oplus h_{t-1}$ and the neural net weight matrix as $W$, we can represent the RNN via the following equations:
 
 \begin{align}
-    o_t\oplus h_t&=\sigma(W(x_t\oplus h_{t-1})) \\
+    o_t\oplus h_t&=\tanh(W(x_t\oplus h_{t-1})) \\
     y_t&=\text{softmax}(o_t)
 \end{align}
 
@@ -38,18 +40,50 @@ If we examine this equation, we can see a problem which commonly comes up when t
 We then see that for all $t$:
 
 \begin{align}
-    \frac{\partial h_t}{\partial h_{t-1}} &= \sigma'(W(x_t\oplus h_{t-1}))W \\
-    \frac{\partial h_t}{\partial W} &= \sigma'(W(x_t\oplus h_{t-1}))(x_t\oplus h_{t-1}) \\
-    \frac{dy_n}{dW} &\approx \sum_{t=1}^{n} [\sigma'(W(x_t\oplus h_{t-1}))]^{n+1-t}W^{n-t}(x_t\oplus h_{t-1})
+    \frac{\partial h_t}{\partial h_{t-1}} &= \tanh'(W(x_t\oplus h_{t-1}))W \\
+    \frac{\partial h_t}{\partial W} &= \tanh'(W(x_t\oplus h_{t-1}))(x_t\oplus h_{t-1}) \\
+    \frac{dy_n}{dW} &\approx \sum_{t=1}^{n} [\tanh'(W(x_t\oplus h_{t-1}))]^{n+1-t}W^{n-t}(x_t\oplus h_{t-1})
 \end{align}
 
-Since the derivative of $\sigma(x)$ quickly approaches zero as $x$ becomes non-zero, we see that terms with low values of $t$ essentially become irrelevant to training. In other words, the basic RNN has trouble learning long-range dependencies, and will in a sense "forget" the beginning of a sequence by the time it has calculated the final output. This behavior is called the vanishing gradient problem. In the case that W is large enough to overcome $\sigma'(x)$, we have the exploding gradient problem instead, but this issue is less common.
+The powers of $W$ and the powers of the derivative of $\tanh(x)$ are both problematic here, since they quickly approach zero, causing terms with low values of $t$ to essentially become irrelevant to training. In other words, the basic RNN has trouble learning long-range dependencies, and will in a sense "forget" the beginning of a sequence by the time it has calculated the final output. This behavior is called the vanishing gradient problem. In the case that W is large enough, we have the exploding gradient problem instead, but this issue is less common and is easily fixed by clipping gradients at a set maximum.
 
 \section{LSTM and GRU}
 
-<LSTM>
+One method of dealing with the vanishing gradient problem is the use of long short-term memory (LSTM) nets, first proposed in 1997. This type of net, shown in Figure~\ref{fig:LSTM_diagram}, has an internal structure in each recurrent cell which is more complex than a simple neural net. Each cell contains a forget gate, an input gate, and an output gate, which determine how much the cell state should update to accommodate new information, and how much information it should output. We have two internal states in an LSTM, $c_t$ and $h_t$. $c_t$ is similar to the hidden cell state in the basic RNN, and $h_t$ acts as the cell output at each step, but is also carried over to the input of the next step.
 
-<GRU>
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\linewidth]{Images/ML/LSTM.png}
+    \caption{LSTM architecture, showing the forget gate ($F_t$), input gate ($I_t$), and output gate ($O_t$) present in each cell. Taken from~\cite{LSTMDiagram}.}
+    \label{fig:LSTM_diagram}
+\end{figure}
+
+The LSTM works as follows. At each time step $t$, we feed the input $x_t$, the previous output $h_{t-1}$, and the previous cell state $c_{t-1}$ into the net. $x_t$ and $h_{t-1}$ are used to determine the forget factor $F_t$, the input factor $I_t$, and the output factor $O_t$, all of which are vectors with components that lie between 0 and 1. The forget factor is multiplied onto $c_{t-1}$, allowing the cell to "forget" some of its previous state. The input factor is used to determine how much of the current input then gets added to the cell state. Finally, the output factor is multiplied by the new cell state to give $h_t$, the cell output. All together, the equations for an LSTM are as follows:
+
+\begin{align}
+    F_t &= \sigma(W_f (x_t \oplus h_{t-1})) \\
+    I_t &= \sigma(W_i (x_t \oplus h_{t-1})) \\
+    c_t &= c_{t-1} \cdot F_t + I_t \cdot\tanh(W_c (x_t \oplus h_{t-1})) \\
+    O_t &= \sigma(W_o (x_t \oplus h_{t-1})) \\
+    h_t &= O_t \cdot\tanh(W_h c_t)
+\end{align}
+
+The derivation is beyond the scope of this overview, but the gradient of the loss in this case will not have an exponential dependence on any weight matrix $W$, nor on the derivative of the sigmoid or tanh. Essentially, the $c_t$ state ensures that all inputs have non-zero contribution to the loss term. Thus, the LSTM is much less prone to the vanishing gradient problem.
+
+The gated recurrent unit (GRU) net, introduced in 2014 and shown in Figure~\ref{fig:GRU_diagram}, further improves on the LSTM by reducing its complexity while maintaining its avoidance of the vanishing gradient problem. A GRU only has two gates, an update gate and a reset gate. In this architecture the reset gate controls how much information from the hidden state gets added to the input. The update gate conversely controls how much input information gets mixed back into the hidden state. The hidden state $h_t$ also acts as the output at each step, making the structure of the GRU somewhat less effective for multi-output data.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\linewidth]{Images/ML/GRU.png}
+    \caption{GRU architecture, showing the update gate ($Z_t$) and reset gate ($R_t$) present in each cell. Taken from~\cite{GRUDiagram}.}
+    \label{fig:GRU_diagram}
+\end{figure}
+
+\begin{align}
+    R_t &= \sigma(W_r (x_t \oplus h_{t-1})) \\
+    Z_t &= \sigma(W_z (x_t \oplus h_{t-1})) \\
+    h_t &= Z_t h_{t-1} + (1-Z_t)\tanh(R_t h_{t-1} + x_t)
+\end{align}
 
 \section{Deep Sets}
 
