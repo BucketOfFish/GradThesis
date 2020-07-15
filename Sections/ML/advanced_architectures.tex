@@ -6,7 +6,36 @@
 
 \section{Autoencoders}
 
+An autoencoder, shown in Figure~\ref{fig:autoencoder}, is an architecture which has the same number of neurons in its input and output layers, but which contains at least one hidden layer which has fewer neurons. These nets are trained in a semi-unsupervised manner, by simply trying to get the outputs to replicate the inputs. If we take $\hat{x}$ to be the input vector and $\hat{y}$ to be the output vector, a simple loss function for training an autoencoder is:
+
+\begin{align}
+    \mathcal{L} &= (\hat{y}-\hat{x})^2
+\end{align}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\linewidth]{Images/ML/autoencoder.png}
+    \caption{Autoencoder architecture, from~\cite{autoencoderDiagram}.}
+    \label{fig:autoencoder}
+\end{figure}
+
+The purpose of an autoencoder is to perform dimensionality reduction. In Figure~\ref{fig:autoencoder}, our net has learned a compressed encoding of its data space, as represented by the neurons on the $\hat{z}$ layer. The trained structure can then be used for many purposes, such as for data compression or for image generation with generative adversarial nets.
+
+The layers of the autoencoder may be simply connected, or they can be more complex structures, such as convolutional layers.
+
 \section{Generative Adversarial Nets}
+
+A generative adversarial network (GAN) can be used to create simulated samples in some data space. A GAN can be used to generate images, speech, video, or any other kind of data. Two famous examples of this type of network are StyleGAN, which can be used to generate faces and other images, and Google DeepDream, which can be used to generate surreal pictures and videos.
+
+In a GAN we have two nets, the generator and the discriminator, competing against each other. To explain the process we will consider the case of a GAN which can generate images of a requested class.
+
+The generator begins as the decoder half of a trained autoencoder, as seen in Figure~\ref{fig:autoencoder}. This autoencoder has been trained not only to replicate input data, but also to perform classification on it, as represented by a subset of the neurons on the $\hat{z}$ layer. Thus, layer $\hat{z}$ is a compressed representation of the image space, with a subset of neurons indicating image class and the rest of the neurons representing other salient features about the image.
+
+In order to generate a new image with the generator, we feed to layer $\hat{z}$ the desired classification, along with a vector of randomized noise for the other neurons. Propagating through the generator creates an output of the desired class.
+
+The discriminator half of the network is a trained classifier which is able to determine the class of an image. We tweak this architecture by adding an output which also classifies the image as "real" or "generated".
+
+This is where the "adversarial" part of a GAN comes into play. The two nets are now trained against each other. First we request an image of a random class from the generator, and feed that image to the discriminator. The generator loss function is based on the image classification accuracy of the discriminator and on whether or not the discriminator was fooled into thinking the image was real. Next we train the discriminator by feeding it a mix of real and generated images, and grading it by discrimination accuracy. This process is repeated back and forth until convergence.
 
 \section{Recurrent Neural Nets}
 
