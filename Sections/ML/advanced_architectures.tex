@@ -114,6 +114,48 @@ The gated recurrent unit (GRU) net, introduced in 2014 and shown in Figure~\ref{
     h_t &= Z_t h_{t-1} + (1-Z_t)\tanh(R_t h_{t-1} + x_t)
 \end{align}
 
-\section{Deep Sets}
+\section{Seq2Seq}
+
+A seq2seq architecture consists of an encoder recurrent net and a decoder recurrent net, as seen in Figure~\ref{fig:seq2seq}. This type of net takes an input sequence and processes it with the encoder. This processed vector, which contains information about the entire sequence, is then passed to the decoder and used to output a different sequence, not necessarily of the same length as the input.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.55\linewidth]{Images/ML/seq2seq.png}
+    \caption{Seq2Seq architecture. The encoder takes words in a sentence, embeds them in a word vector space, and passes the embedded vectors into an RNN. The final output of the encoder is sent to the decoder as its initial hidden state. The decoder begins with SOS as its initial input, and loops until it outputs EOS. The entire decoder sequence is the output sentence.}
+    \label{fig:seq2seq}
+\end{figure}
+
+Seq2Seq is commonly used for language translation, so inputs in these cases are first transformed into a "word vector" in some embedding space before they go through the encoder. Describing word embeddings is outside the scope of this thesis, but the idea is that similar words are close together in this vector space, and pairs of words with the same relations have similar vector differences. In other words, the embedding captures some semantic structure between words. Common embeddings include word2vec and GloVe.
+
+In more detail, the encoder takes a sequence of inputs $\hat{x}$ and runs it through an RNN to produce a sequence of outputs $\hat{s}$. In a simple seq2seq architecture, we take only the final output, which we denote as $s$, to pass to the decoder. The decoder takes $s$ as an initial hidden state, and the start-of-string (SOS) signal as an initial input, and performs a typical recurrent architecture loop to generate an output sequence. The sequence ends when the decoder outputs an end-of-string (EOS) signal.
+
+A seq2seq architecture may also include an attention mechanism, as shown in Figure~\ref{fig:seq2seq_with_attention}. In this case the decoder has an additional step where it uses its input and hidden state to obtain an attention vector. We take the dot product of this attention vector with the entire encoder output sequence $\hat{s}$ to get a sort of weighted vector. Essentially, the attention vector allows us to focus on different parts of the input sequence as we're producing the output.
+
+Details about the training of seq2seq are outside the scope of this thesis.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.55\linewidth]{Images/ML/seq2seq_with_attention.png}
+    \caption{Seq2Seq architecture with an attention mechanism added. Now the entire encoder output is used by the decoder. The final output of the encoder is still used as the decoder's initial hidden state, but now the hidden state and decoder input are used to calculate an attention vector, which passes through a softmax layer to add up to 1. The dot product of this attention vector with the entire encoder output sequence then produces a weighted encoder output which is sent to the decoder RNN.}
+    \label{fig:seq2seq_with_attention}
+\end{figure}
 
 \section{Transformers}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.7\linewidth]{Images/ML/transformer.png}
+    \caption{<transformer>. Taken from~\cite{transformer}.}
+    \label{fig:transformer}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\linewidth]{Images/ML/transformer_dot_product_attention.png}
+    \caption{<self attention dot product>. Taken from~\cite{transformer}.}
+    \label{fig:transformer_dot_product_attention}
+\end{figure}
+
+\section{Deep Sets}
+
+\section {Set Transformers}
