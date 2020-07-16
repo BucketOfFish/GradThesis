@@ -125,13 +125,13 @@ A seq2seq architecture consists of an encoder recurrent net and a decoder recurr
     \label{fig:seq2seq}
 \end{figure}
 
-Seq2Seq is commonly used for language translation, so inputs in these cases are first transformed into a "word vector" in some embedding space before they go through the encoder. Describing word embeddings is outside the scope of this thesis, but the idea is that similar words are close together in this vector space, and pairs of words with the same relations have similar vector differences. In other words, the embedding captures some semantic structure between words. Common embeddings include word2vec and GloVe.
+Seq2Seq is commonly used for language translation, so inputs in these cases are first transformed into a "word vector" in some embedding space before they go through the encoder. Describing word embeddings is outside the scope of this review, but the idea is that similar words are close together in this vector space, and pairs of words with the same relations have similar vector differences. In other words, the embedding captures some semantic structure between words. Common embeddings include word2vec and GloVe.
 
 In more detail, the encoder takes a sequence of inputs $\hat{x}$ and runs it through an RNN to produce a sequence of outputs $\hat{s}$. In a simple seq2seq architecture, we take only the final output, which we denote as $s$, to pass to the decoder. The decoder takes $s$ as an initial hidden state, and the start-of-string (SOS) signal as an initial input, and performs a typical recurrent architecture loop to generate an output sequence. The sequence ends when the decoder outputs an end-of-string (EOS) signal.
 
 A seq2seq architecture may also include an attention mechanism, as shown in Figure~\ref{fig:seq2seq_with_attention}. In this case the decoder has an additional step where it uses its input and hidden state to obtain an attention vector. We take the dot product of this attention vector with the entire encoder output sequence $\hat{s}$ to get a sort of weighted vector. Essentially, the attention vector allows us to focus on different parts of the input sequence as we're producing the output.
 
-Details about the training of seq2seq are outside the scope of this thesis.
+Details about the training of seq2seq are outside the scope of this review.
 
 \begin{figure}[htbp]
     \centering
@@ -142,19 +142,33 @@ Details about the training of seq2seq are outside the scope of this thesis.
 
 \section{Transformers}
 
+Transformers build on the idea of using attention, but take the concept further by removing the recurrent neural net from the encoder altogether and relying solely on attention to encode positional and relational information~\cite{transformer}. The transformer thus relies on attention to figure out which parts of the input are important for the decoder at each step of the output.
+
+The transformer architecture is shown in Figure~\ref{fig:transformer}. Once again the input is embedded in some word space before being fed to the encoder. However, now we also add an additional positional encoding vector onto each word to represent its location in the input sequence, to make up for the lack of an RNN. A detailed description of the positional encoding is beyond the scope of this review. The encoder itself is then made up of a series of sequential modules each composed of a multi-head attention mechanism (described below) and a feedforward net. A skip connection is used to add the input of each sublayer to its output.
+
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.7\linewidth]{Images/ML/transformer.png}
-    \caption{<transformer>. Taken from~\cite{transformer}.}
+    \caption{Transformer architecture. Taken from~\cite{transformer}.}
     \label{fig:transformer}
 \end{figure}
+
+The multi-head attention mechanism in shown in Figure~\ref{fig:transformer_dot_product_attention}. Here, $Q$, $K$, and $V$ stand for query, key, and value. The $Q$ and $K$ vectors are used as in a content retrieval system, where the dot product of two vectors indicates their similarity. $V$ is the representation of a word in whatever relevant space we're using, and may or may not be equivalent to $K$. $Q$ and $K$ are of dimension $d_k$, and $V$ is of dimension $d_v$. In the simplest example, the vector embeddings of the input words are used for $Q$, $K$, and $V$, with all three matrices being equivalent. Using each word in an input this way to calculate an attention vector for the other words in the input is a concept called self-attention. The total self-attention matrix is then calculated as follows, where we have used a scaling factor to normalize the matrix product:
+
+\begin{align}
+    Attention(Q,K,V)&=\text{softmax}(\frac{QK^T}{\sqrt{d_k}})V
+\end{align}
 
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=\linewidth]{Images/ML/transformer_dot_product_attention.png}
-    \caption{<self attention dot product>. Taken from~\cite{transformer}.}
+    \caption{Mutli-head self attention mechanism. Taken from~\cite{transformer}.}
     \label{fig:transformer_dot_product_attention}
 \end{figure}
+
+In a more general multi-head attention mechanism, we don't simply use the word vector embeddings for $Q$, $K$, and $V$. Rather, we learn $h$ different sets of vectors $v_Q$, $v_K$, and $v_V$, which we project our word embeddings upon in order to obtain $h$ sets of $Q$, $K$, and $V$. The end result is that we get $h$ sets of attention matrices, where each attention matrix is some attention-weighted encoding of the relevant self-context for each input word. The $h$ matrices are then concatenated and sent through a linear layer to provide a single input-sequence encoding.
+
+The decoder uses the same multi-headed attention idea, but the attention layer is masked, so that during training the decoder can only see words which have been outputted so far, rather than the entire output sequence. There is also a second multi-headed attention layer, which uses the output of the encoder for the keys and values.
 
 \section{Deep Sets}
 
