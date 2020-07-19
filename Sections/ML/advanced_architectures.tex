@@ -2,7 +2,48 @@
 
 \section{Convolutional Nets}
 
+A convolutional neural net (CNN), seen in Figure~\ref{fig:CNN_architecture}, mimics the neural architecture seen in the visual cortex of animals. In fact, CNN simulations compared against neural imaging results in the visual pathways of salamanders and cats have yielded remarkably good results, showing that the CNN is a good descriptor of the kind of processing that actually happens in a living brain.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\linewidth]{Images/ML/CNN_architecture.png}
+    \caption{The structure of a typical CNN, taken from~\cite{CNN_architecture}. The alternating use of convolutional and downsampling layers is typical, as is the use of unfolding, concatenation, and a final fully connected layer at the end.}
+    \label{fig:CNN_architecture}
+\end{figure}
+
+A CNN works by exploiting pattern finding filters at multiple scales. That is, first we look at small regions on an image, and look for simple patterns such as straight lines and curves of various shapes. Then we zoom out to a slightly larger scale and look for characteristic combinations of patterns. Then we zoom out more, and put together small features to make larger features.
+
+This architecture can be seen in Figure~\ref{fig:CNN_architecture}. On the first layer we have slid four small windows with different weights around on the input image. Each window-sliding operation has created a smaller output called a feature map, and since we had four windows, we created four feature maps. We then use a pooling operation to downsample the resolution of each image map (an operation also known as subsampling). Despite what is shown in the image, a subsampling operation should not change the number of feature maps. After this, another convolutional layer slides another set of windows over all feature maps simultaneously, producing another set of smaller feature maps. This continues until our feature maps are small enough to unwrap completely, concatenate, and use as the input to a fully connected layer.
+
+We can take a look at what a CNN actually sees in Figure~\ref{fig:CNN_features}. Here we can see the actual weights in different windows on each layer. In the first layer, each window looks for a simple feature such as a line or circle. On the next layer, features are combined together, such that the net is now sensitive to things like grids, donut shapes, and other patterns. As we continue through the net, features are combined in increasing complexity, such that the net learns to recognize quite complicated patterns.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\linewidth]{Images/ML/CNN_features.png}
+    \caption{Feature-finding at increasing size scales, from~\cite{CNN_features}.}
+    \label{fig:CNN_features}
+\end{figure}
+
+This type of architecture has several advantages over a simple DNN. For one, the CNN's successive feature finding makes it more robust than a DNN. Since a DNN must analyze an entire input image at once, it may end up learning how to recognize an object in a particular situation, but e.g. might not recognize the object when it is standing in front of a different background. On the other hand, since the CNN learns to recognize simple lines and shapes first, and then learns to recognize how they come together to form objects, these nets are less susceptible to irrelevant details in the image.
+
+Furthermore, the CNN has far fewer trainable parameters than an equivalently sized DNN. Since we are only looking at small sections of the image at a time, we could have e.g. a 3x3 window sliding around on the image, which ends up containing only 10 trainable parameters (including a bias value). Typically for a single CNN layer we may have about 100 or so different filter windows, but the number of weights for all of these windows combined is still much smaller than what we would typically if we had used a dense neural layer.
+
 \section{GoogLeNet}
+
+Over the years there have been many improvements in image classification nets, often created in the context of competitions such as the ImageNet Recognition Challenge. One particular competition winner, GoogLeNet, introduced a couple of ideas which are still widely used in state-of-the-art image recognition nets today.
+
+In particular, GoogLeNet introduced the idea of Inception modules (Figure~\ref{fig:inception}), which are able to combine feature information from multiple scales on the same layer. The Inception modules also introduced some training tricks which are able to vastly decrease the number of trainable connections in a deep net.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.7\linewidth]{Images/ML/inception.png}
+    \caption{Inception module architecture, taken from~\cite{GoogLeNet}.}
+    \label{fig:inception}
+\end{figure}
+
+These Inception modules are able to keep training parameters reduced to a reasonable number through the use of 1x1 dimensionality-reducing convolution layers. For example, if the output of our previous layer was a set of 256 feature maps, each of size 32x32, then our 1x1 layer may be a sliding window of size 1x1x256x64, which brings the number of filter maps down to 64 (still each of size 32x32). Performing this operation before 3x3 and 5x5 filters is especially useful for keeping the number of trainable parameters low.
+
+The GoogLeNet architecture also included intermediate loss function terms, so that weights in the middle of the net could be more effectively trained. However, the authors of the GoogLeNet paper stated that these intermediate terms were later found to have only about $.5\%$ effect on classification accuracy.
 
 \section{Autoencoders}
 

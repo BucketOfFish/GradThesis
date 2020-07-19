@@ -100,12 +100,16 @@ Another commonly used method is to include dropout layers within the net. What t
 
 \section{ML Software}
 
-\subsection*{TensorFlow}
+There are multiple machine learning software packages for Python. Some of the best-known ones are scikit-learn, TensorFlow, and PyTorch.
 
-\subsection*{PyTorch}
+Scikit-learn contains non-neural algorithms, such as boosted decision trees, support vector machines, and unsupervised algorithms such as k-nearest neighbor and k-means. It also contains basic functionality for calculating things like accuracy, area-under-curve for a ROC curve, etc. It's a very useful general toolkit.
+
+PyTorch and TensorFlow are two competing packages specialized for dealing with neural nets. PyTorch was created by Facebook, and TensorFlow was created by Google. A big chunk of what makes these packages great are their support for automatic differentiation. In other words, you can build up your models in these frameworks by defining neural layers and the connections between them. You then specify which parameters need to be trained, and which should be held fixed. Then you can pass in an input, calculate a loss value, and automatically differentiate the loss with respect to every trainable parameter in the model. Many common neural architectures are built into the packages, and you can even load pre-trained nets for some common types of problems. Both packages also offer support for many types of gradient descent and learning rate optimization algorithms. The GPU support is also very good and easy to use for both packages.
+
+For the machine learning projects described in this thesis, we first began by using TensorFlow, but due to PyTorch's improved support for non-static graphs at the time, we soon began using PyTorch exclusively. By non-static graphs, I mean that with PyTorch you could pause computation in the middle of a net and look at net states, and even change the architecture if you wanted to, which made PyTorch very useful for development and debugging. This difference has since disappeared with the introduction of TensorFlow 2.0, which now includes support for dynamic graphs.
 
 \section{Other Topics}
 
-Different arrangements of neurons and connections are referred to as "architectures", and different architectures will be discussed in the next chapter. A basic net composed of layers of neurons, where every neuron in one layer is connected to every neuron in the following layer, is called a dense neural net or a fully-connected net.
+Different arrangements of neurons and connections are referred to as "architectures". A basic net composed of layers of neurons, where every neuron in one layer is connected to every neuron in the following layer, is called a dense neural net (DNN) or a fully-connected net, but we will discuss more complex architectures in the next chapter.
 
 Many other important topics, such as weight initialization, learning rate optimization and methods of gradient descent, pooling and batch normalization, hyperparameter optimization algorithms etc. will not be discussed in this review due to space and scope constraints.
