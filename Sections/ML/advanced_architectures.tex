@@ -55,7 +55,7 @@ An autoencoder, shown in Figure~\ref{fig:autoencoder}, is an architecture which 
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=\linewidth]{Images/ML/autoencoder.png}
+    \includegraphics[width=0.8\linewidth]{Images/ML/autoencoder.png}
     \caption{Autoencoder architecture, from~\cite{autoencoderDiagram}.}
     \label{fig:autoencoder}
 \end{figure}
@@ -213,4 +213,24 @@ The decoder uses the same multi-headed attention idea, but the attention layer i
 
 \section{Deep Sets}
 
+Sometimes we want to use a variable-sized input where there is some sort of structure among components, but no necessary ordering. This may be the case in e.g. point-cloud data, where multiple data points are part of the same event, but the ordering of points should make no difference to event classification. In this case we could use a deep set~\cite{deep_sets}, which is a type of architecture built on a map operation $\phi$ and a pool operation $\rho$.
+
+In this type of architecture, we use the map operator on each input $x_i$, sending $\phi(x_i)$ to some feature space. These remapped inputs are then combined via the pool operation, as follows:
+
+\begin{align}
+    y = \rho\left(\phi(x_i)\right)
+\end{align}
+
+In the simplest case, $\phi$ could be a single-layer neural net, and $\rho$ could be a mean. The pooled feature vector could then be sent through a neural net as usual.
+
 \section {Set Transformers}
+
+A more complex way to deal with variable-size, permutation-invariant inputs is to use a set transformer~\cite{set_transformer}. Like with the ordinary transformer, the set transformer uses an encoder and a decoder, both with attention mechanisms.
+
+One benefit of using a set transformer is that relations between inputs are more easily captured, as opposed to in deep sets, where inputs are sent through the map operation individually, and relationships must be captured in the pool operation.
+
+The set transformer uses the same type of multi-headed attention seen in the ordinary transformer~\cite{transformer}. The attention mechanism used is self-attention with multiple different $Q$, $K$, and $V$ projections, and serves as the map operator $\phi$.
+
+The pool operator involves the generation of $k$ learnable seed vectors $S_i$. These seed vectors are used in another multi-headed self-attention block, with the outputs of the previous block used as the $V$ vectors.
+
+The results of the encoder are then sent to the decoder to get final outputs, as in the case of an ordinary transformer.
