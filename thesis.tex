@@ -6,7 +6,9 @@
 \usepackage{multirow}
 \usepackage{amsmath}
 
-\bibliography{Bibliography/bibliography}
+\bibliography{Bibliography/ML}
+\bibliography{Bibliography/calo_ML}
+\bibliography{Bibliography/calo_ML_2}
 
 \begin{document}
 
@@ -39,14 +41,21 @@
 \input{Sections/SUSY/results.tex} %[text/images/citations]
 
 \part{A Brief Introduction to Machine Learning}
-\input{Sections/ML/machine_learning.tex} %[citations]
+\input{Sections/ML/machine_learning.tex} %[text/citations]
 \input{Sections/ML/basic_algorithms.tex} %[citations]
 \input{Sections/ML/advanced_architectures.tex} %[citations]
 
-\part{Calorimeter Shower Identification and Generation Using Neural Nets}
-\input{Sections/Calo/calo_ML.tex} %[text/images/citations]
+\part{Calorimeter Shower Reconstruction and Generation Using Neural Nets}
+\input{Sections/Calo/intro.tex} %[text/images/citations]
 \input{Sections/Calo/data_prep.tex} %[text/images/citations]
+
+\input{Sections/Calo/reconstruction.tex} %[text/images/citations]
+\input{Sections/Calo/GoogLeNet.tex} %[text/images/citations]
+\input{Sections/Calo/classification_HCAL.tex} %[text/images/citations]
+\input{Sections/Calo/large_window.tex} %[text/images/citations]
+\input{Sections/Calo/zsum.tex} %[text/images/citations]
 \input{Sections/Calo/classification_regression.tex} %[text/images/citations]
+\input{Sections/Calo/regression_xtrain.tex} %[text/images/citations]
 \input{Sections/Calo/GAN.tex} %[text/images/citations]
 \input{Sections/Calo/conclusion.tex} %[text/images/citations]
 %\cite{ATLAS-CONF-2017-065}
