@@ -4,7 +4,7 @@
 
 We have seen that calorimeters are key components of particle detectors, capturing important information about particle energy and type, and we have seen that one of the first steps of any high-energy physics analysis is to use these raw calorimeter recordings along with other information from the detector to reconstruct our initial physics objects.
 
-Particle reconstruction has traditionally relied on calculating features such as shower width and rate of energy loss, and then using these features in cut-based analyses. Here we try to apply some image-based ML techniques instead. To approach this problem, we can take a snapshot of a calorimeter deposition pattern, and treat it as a voxelized image. This image could form the input layer of a neural net, with important information about the particle then spit out on the last layer.
+Particle reconstruction has traditionally relied on calculating features such as shower width and rate of energy loss, and then using these features in cut-based analyses. Here we try to apply some image-based ML techniques instead. To approach this problem, we can take a snapshot of a calorimeter deposition pattern, and treat it as a 3D voxelized image. This image could form the input layer of a neural net, with important information about the particle then spit out on the last layer.
 
 Using neural nets with calorimeter cell-level information would allow us to more accurately determine particle type and energy compared to traditional feature-based techniques. We can even use this technology to produce simulated calorimeter showers, as we will discuss later.
 
@@ -28,3 +28,7 @@ The work presented here extends upon previous ML investigations, including prior
 Originally we envisioned a code to perform classification, energy regression, and shower simulation together. The GAN later split off into mostly its own codebase, but TriForce was still used for final evaluation of generated GAN images. This framework is available~\cite{TriForce}, along with our sample generation code~\cite{CaloSampleGeneration}. Both these tools were written in Python, with reconstruction models implemented and trained using PyTorch~\cite{PyTorch}. GAN models were implemented and trained using Keras~\cite{keras} and  Tensorflow~\cite{tensorflow2015-whitepaper}.
 
 For the studies presented in this paper, we used two computing clusters: one at the University of Texas at Arlington (UTA), and one at the Blue Waters supercomputing network, located at the University of Illinois at Urbana Champaign (UIUC). The UTA cluster had 10 NVIDIA GTX Titan GPUs with 6 GB of memory each. Blue Waters used NVDIA Kepler GPUs, also with 6 GB of memory each.
+
+\section{My Contribution}
+
+For this project I was the lead developer for TriForce, and was mainly responsible for classification results and hyperparameter optimization, though I played a role in the other tasks as well. I was the primary author for our paper submitted in European Physical Journal C (EPJC), and some of the passages in this part of the thesis will be partially replicated from our EPJC paper.

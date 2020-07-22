@@ -13,22 +13,22 @@ The features we use for our baseline BDT classification model, introduced in Ref
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[trim={0 0 0 1cm},clip,width=0.4\textwidth]{images/R9_ratios.png}
+\includegraphics[trim={0 0 0 1cm},clip,width=0.4\textwidth]{Images/Calo/R9_ratios.png}
 \caption{Comparison of R9 distributions between photon and neutral pion events. Photons tend to have more centralized energy deposition.
 \label{fig:R9}}
 \end{figure}
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[trim={0 0 0 1cm},clip,width=0.4\textwidth]{images/R9_0p42.png}
-\includegraphics[trim={0 0 0 1cm},clip,width=0.4\textwidth]{images/R9_0p75.png}
+\includegraphics[trim={0 0 0 1cm},clip,width=0.4\textwidth]{Images/Calo/R9_0p42.png}
+\includegraphics[trim={0 0 0 1cm},clip,width=0.4\textwidth]{Images/Calo/R9_0p75.png}
 \caption{(Top) (x,y) projection of an event with R9=0.42. (Bottom) (x,y) projection of an event with R9=0.75.}
 \label{fig:R9_examples}
 \end{figure}
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=0.43\textwidth]{images/BDT_ranking_fixed.png}
+\includegraphics[width=0.43\textwidth]{Images/Calo/BDT_ranking_fixed.png}
 \caption{Feature importances for inputs used in BDT training. Values shown are gini importances~\cite{Breiman}.\label{fig:BDT_ranking}}
 \end{figure}
 
@@ -92,22 +92,22 @@ One drawback of using a BDT algorithm in a real-world setting is that it can not
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=0.38\textwidth]{images/bias_vs_E_allparts_linreg.pdf}
-\includegraphics[width=0.38\textwidth]{images/res_vs_E_allparts_linreg_fits.pdf}
+\includegraphics[width=0.38\textwidth]{Images/Calo/bias_vs_E_allparts_linreg.pdf}
+\includegraphics[width=0.38\textwidth]{Images/Calo/res_vs_E_allparts_linreg_fits.pdf}
 \caption{Bias (top) and resolution (bottom) as a function of true energy for linear regression predictions of particle energy for the different particle types, trained on fixed-angle samples. \label{fig:reg_linreg}}
 \end{figure}
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=0.38\textwidth]{images/bias_vs_E_EleFixed_xgb_ecalmoms_zoom.pdf}
-\includegraphics[width=0.38\textwidth]{images/res_vs_E_EleFixed_xgb_ecalmoms_fits.pdf}
+\includegraphics[width=0.38\textwidth]{Images/Calo/bias_vs_E_EleFixed_xgb_ecalmoms_zoom.pdf}
+\includegraphics[width=0.38\textwidth]{Images/Calo/res_vs_E_EleFixed_xgb_ecalmoms_fits.pdf}
 \caption{Bias (top) and resolution (bottom) as a function of true energy for the XGBoost regression predictions of particle energy, using different input features for electrons.\label{fig:reg_xgb_ecalmoms}}
 \end{figure}
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=0.38\textwidth]{images/bias_vs_E_allparts_linreg_xgb.pdf}
-\includegraphics[width=0.38\textwidth]{images/res_vs_E_allparts_linreg_xgb_fits.pdf}
+\includegraphics[width=0.38\textwidth]{Images/Calo/bias_vs_E_allparts_linreg_xgb.pdf}
+\includegraphics[width=0.38\textwidth]{Images/Calo/res_vs_E_allparts_linreg_xgb_fits.pdf}
 \caption{Bias (top) and resolution (bottom) as a function of true energy for linear regression and XGBoost  predictions of particle energy for the different particle types.\label{fig:reg_xgb_linreg}}
 \end{figure}
 
@@ -166,12 +166,12 @@ The best settings were found to be as follows:
 
 \begin{figure*}[htbp]
 \centering
-\includegraphics[width=0.45\textwidth]{images/DNN_hl_nhl}
-\includegraphics[width=0.45\textwidth]{images/DNN_lr_dp} \\
-\includegraphics[width=0.45\textwidth]{images/CNN_lr_dp}
-\includegraphics[width=0.45\textwidth]{images/CNN_nECALfilt_nECALkern} \\
-\includegraphics[width=0.45\textwidth]{images/GN_nhl_lr}
-\includegraphics[width=0.45\textwidth]{images/GN_lr_dr}
+\includegraphics[width=0.45\textwidth]{Images/Calo/DNN_hl_nhl.pdf}
+\includegraphics[width=0.45\textwidth]{Images/Calo/DNN_lr_dp.pdf} \\
+\includegraphics[width=0.45\textwidth]{Images/Calo/CNN_lr_dp.pdf}
+\includegraphics[width=0.45\textwidth]{Images/Calo/CNN_nECALfilt_nECALkern.pdf} \\
+\includegraphics[width=0.45\textwidth]{Images/Calo/GN_nhl_lr.pdf}
+\includegraphics[width=0.45\textwidth]{Images/Calo/GN_lr_dr.pdf}
 \caption{Selected hyperparameter scan results for DNN (top), CNN (center), and the GoogLeNet-based architecture (bottom). In each figure, the classification accuracy is displayed as a function of the hyperparameters reported on the two axes.}
 \label{fig:scan_hyperparameter}
 \end{figure*}
@@ -186,9 +186,9 @@ After performing the hyperparameter scan, we trained each architecture using its
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=0.42\textwidth]{images/DNN_accuracy_batches_long}
-\includegraphics[width=0.42\textwidth]{images/CNN_accuracy_batches_long}
-\includegraphics[width=0.42\textwidth]{images/GN_accuracy_batches_long}
+\includegraphics[width=0.42\textwidth]{Images/Calo/DNN_accuracy_batches_long.png}
+\includegraphics[width=0.42\textwidth]{Images/Calo/CNN_accuracy_batches_long.png}
+\includegraphics[width=0.42\textwidth]{Images/Calo/GN_accuracy_batches_long.png}
 \caption{Training curves for best DNN (top), CNN (middle), and GoogLeNet (bottom) hyperparameters, trained on variable-angle $\gamma$/$\pi^0$ samples. We see that the DNN over-trains quickly and saturates at a relatively low accuracy, while the CNN takes longer to over-train and reaches a higher accuracy, and GoogLeNet performs best of all. Each 400 batches corresponds to a single epoch.}
 \label{fig:training_curves_comparison_gamma_pi0}
 \end{figure}
@@ -204,8 +204,8 @@ Figure~\ref{fig:architectures_ROC_comparisons} shows ROC curve comparisons for t
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=0.45\textwidth]{images/architectures_ROC_comparison_gamma_pi0_long}
-\includegraphics[width=0.45\textwidth]{images/architectures_ROC_comparison_ele_chpi_xlog}
+\includegraphics[width=0.45\textwidth]{Images/Calo/architectures_ROC_comparison_gamma_pi0_long.pdf}
+\includegraphics[width=0.45\textwidth]{Images/Calo/architectures_ROC_comparison_ele_chpi_xlog.pdf}
 \caption{ROC curve comparisons for $\gamma$ vs. $\pi^0$ (top) and $e$ vs. $\pi^\pm$ (bottom) classification using DNN, CNN, BDT, and GoogLeNet (GN). Samples include particle energies from 2 to 500 GeV, and an inclusive $\eta$ range.}
 \label{fig:architectures_ROC_comparisons}
 \end{figure}
@@ -214,10 +214,10 @@ Our deep learning models outperform the BDT, with the GN reaching the best class
 
 \begin{figure*}[htbp]
 \centering
-\includegraphics[width=0.45\textwidth]{images/gamma_pi0_accuracy_energy_bins.pdf}
-\includegraphics[width=0.45\textwidth]{images/gamma_pi0_accuracy_eta_bins.pdf} \\
-\includegraphics[width=0.45\textwidth]{images/ele_chpi_accuracy_energy_bins.pdf}
-\includegraphics[width=0.45\textwidth]{images/ele_chpi_accuracy_eta_bins.pdf}
+\includegraphics[width=0.45\textwidth]{Images/Calo/gamma_pi0_accuracy_energy_bins.pdf}
+\includegraphics[width=0.45\textwidth]{Images/Calo/gamma_pi0_accuracy_eta_bins.pdf} \\
+\includegraphics[width=0.45\textwidth]{Images/Calo/ele_chpi_accuracy_energy_bins.pdf}
+\includegraphics[width=0.45\textwidth]{Images/Calo/ele_chpi_accuracy_eta_bins.pdf}
 \caption{Classification accuracy of best performing network for $\gamma$ vs. $\pi^0$ (top) and $e$ vs. $\pi^\pm$ (bottom), in bins of energy (left) and $\eta$ (right).}
 \label{fig:accuracy_bins}
 \end{figure*}
@@ -231,14 +231,14 @@ Figure~\ref{fig:reg_dnn_vs_cnn_variable} shows the energy regression performance
 
 \begin{figure*}[htbp]
 \centering
-\includegraphics[width=0.38\textwidth]{images/bias_vs_E_Ele_variable}
-\includegraphics[width=0.38\textwidth]{images/res_vs_E_Ele_variable} \\
-\includegraphics[width=0.38\textwidth]{images/bias_vs_E_ChPi_variable}
-\includegraphics[width=0.38\textwidth]{images/res_vs_E_ChPi_variable}\\
-\includegraphics[width=0.38\textwidth]{images/bias_vs_E_Gamma_variable}
-\includegraphics[width=0.38\textwidth]{images/res_vs_E_Gamma_variable}\\
-\includegraphics[width=0.38\textwidth]{images/bias_vs_E_Pi0_variable}
-\includegraphics[width=0.38\textwidth]{images/res_vs_E_Pi0_variable}
+\includegraphics[width=0.38\textwidth]{Images/Calo/bias_vs_E_Ele_variable.pdf}
+\includegraphics[width=0.38\textwidth]{Images/Calo/res_vs_E_Ele_variable.pdf} \\
+\includegraphics[width=0.38\textwidth]{Images/Calo/bias_vs_E_ChPi_variable.pdf}
+\includegraphics[width=0.38\textwidth]{Images/Calo/res_vs_E_ChPi_variable.pdf} \\
+\includegraphics[width=0.38\textwidth]{Images/Calo/bias_vs_E_Gamma_variable.pdf}
+\includegraphics[width=0.38\textwidth]{Images/Calo/res_vs_E_Gamma_variable.pdf}\\
+\includegraphics[width=0.38\textwidth]{Images/Calo/bias_vs_E_Pi0_variable.pdf}
+\includegraphics[width=0.38\textwidth]{Images/Calo/res_vs_E_Pi0_variable.pdf}
 \caption{Regression bias (left) and resolution (right) as a function
   of true energy for energy predictions on the REC dataset with
   variable-angle incident angle. From top to bottom: electrons,
@@ -282,7 +282,7 @@ To complete the resampling process, we invert the procedure to go back to our or
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[scale=0.3, clip]{images/resampling.png}
+    \includegraphics[scale=0.3, clip]{Images/Calo/resampling.png}
     \caption{Example of the resampling procedure used to emulate CLIC data on a different detector geometry (the example shown here is simply a larger grid). First, we extrapolate hit information from one geometry to another (top). Next, we extrapolate back to the original geometry (bottom). This allows us to emulate the rougher granularity of the second geometry, while keeping data array sizes constant and enabling us to use the models we have already developed for the CLIC dataset. Note that some information is lost at the edges.}
     \label{fig:resampling}
 \end{figure}
@@ -305,8 +305,8 @@ model performs best, followed by the CNN, then the DNN. All three networks outpe
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[scale=0.5, clip]{images/classification_ROC_ATLAS}
-    \includegraphics[scale=0.5, clip]{images/classification_ROC_CMS}
+    \includegraphics[scale=0.5, clip]{Images/Calo/classification_ROC_ATLAS.pdf}
+    \includegraphics[scale=0.5, clip]{Images/Calo/classification_ROC_CMS.pdf}
     \caption{ROC curve comparisons for variable-angle $\gamma$/$\pi^0$ classification on data resampled to ATLAS-like (top) and CMS-like (bottom) geometries. Algorithms compared are DNN, CNN, GoogLeNet (GN), and BDT.}
     \label{fig:class_ROC_ATLAS_CMS}
 \end{figure}
@@ -315,18 +315,33 @@ Regression results are shown in Figure~\ref{fig:reg_resampled_gamma_ATLAS_CMS} a
 
 \begin{figure*}[htbp]
 \centering
-\includegraphics[width=0.38\textwidth]{images/bias_vs_E_Gamma_variable_ATLAS}
-\includegraphics[width=0.38\textwidth]{images/res_vs_E_Gamma_variable_ATLAS} \\
-\includegraphics[width=0.38\textwidth]{images/bias_vs_E_Gamma_variable_CMS}
-\includegraphics[width=0.38\textwidth]{images/res_vs_E_Gamma_variable_CMS}
+\includegraphics[width=0.38\textwidth]{Images/Calo/bias_vs_E_Gamma_variable_ATLAS.pdf}
+\includegraphics[width=0.38\textwidth]{Images/Calo/res_vs_E_Gamma_variable_ATLAS.pdf} \\
+\includegraphics[width=0.38\textwidth]{Images/Calo/bias_vs_E_Gamma_variable_CMS.pdf}
+\includegraphics[width=0.38\textwidth]{Images/Calo/res_vs_E_Gamma_variable_CMS.pdf}
 \caption{Bias (left) and resolution (right) as a function of true energy for energy predictions for photons, on variable-angle samples resampled to ATLAS-like (top) and CMS-like (bottom) geometries. \label{fig:reg_resampled_gamma_ATLAS_CMS}}
 \end{figure*}
 
 \begin{figure*}[htbp]
 \centering
-\includegraphics[width=0.38\textwidth]{images/bias_vs_E_Pi0_variable_ATLAS}
-\includegraphics[width=0.38\textwidth]{images/res_vs_E_Pi0_variable_ATLAS} \\
-\includegraphics[width=0.38\textwidth]{images/bias_vs_E_Pi0_variable_CMS}
-\includegraphics[width=0.38\textwidth]{images/res_vs_E_Pi0_variable_CMS}
+\includegraphics[width=0.38\textwidth]{Images/Calo/bias_vs_E_Pi0_variable_ATLAS.pdf}
+\includegraphics[width=0.38\textwidth]{Images/Calo/res_vs_E_Pi0_variable_ATLAS.pdf} \\
+\includegraphics[width=0.38\textwidth]{Images/Calo/bias_vs_E_Pi0_variable_CMS.pdf}
+\includegraphics[width=0.38\textwidth]{Images/Calo/res_vs_E_Pi0_variable_CMS.pdf}
 \caption{Bias (left) and resolution (right) as a function of true energy for energy predictions for \pizero, on variable-angle samples resampled to  ATLAS-like (top) and CMS-like (bottom) geometries.\label{fig:reg_resampled_pi0_ATLAS_CMS}}
+\end{figure*}
+
+\section{Calorimeter Window Size}\label{calo_rec_window_size}
+
+The optimal window size to store for ECAL and HCAL is an important issue, since this impacts not only sample storage size, but also training speed and the maximum batch sizes which we could feed to our GPUs. 
+
+From examinations of our generated samples, we found that an ECAL window of 25x25x25 and an HCAL window of 11x11x60 looked reasonable. To test this hypothesis, we performed training using the samples and classification architectures described in our previous studies~\cite{NIPS}, but with different-sized input samples. The architecture was altered to accommodate larger windows simply by increasing the number of neurons on the input layer. Results trained using an ECAL window of size 25x25x25 and 51x51x25 are shown in Figure~\ref{fig:classification_window}. From the similarity of these curves, we have decided that an expanded ECAL window size does not contain much additional useful information, and is thus not necessary for our problems.
+
+\begin{figure*}[htbp]
+    \centering
+    \includegraphics[width=0.45\textwidth]{Images/Calo/accuracy_small_window.png}
+    \includegraphics[width=0.45\textwidth]{Images/Calo/accuracy_large_window.png} \\
+    \includegraphics[width=0.45\textwidth]{Images/Calo/loss_small_window.png}
+    \includegraphics[width=0.45\textwidth]{Images/Calo/loss_large_window.png}
+    \caption{Training history for different choices of the input 3D array zise: Accuracy (top) and loss (bottom) as a function of the training batch for photon/neutral pion classification, using a 25x25x25 (left) and 51x51x25 (right) ECAL window size.\label{fig:classification_window}}
 \end{figure*}

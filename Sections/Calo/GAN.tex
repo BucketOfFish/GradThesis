@@ -11,7 +11,7 @@ Before training our GAN, we pre-processed the GEN dataset by replacing each cell
 
 \begin{figure*}[htbp]
 \centering
-    \includegraphics[scale=0.65, trim={0cm 6cm 3.5cm 1.8cm}]{images/gan_model_alt_upsampling.pdf}
+    \includegraphics[scale=0.65, trim={0cm 6cm 3.5cm 1.8cm}]{Images/Calo/gan_model_alt_upsampling.pdf}
     \caption{3DGAN generator and discriminator network architectures}
     \label{fig:GAN_arch}
 \end{figure*}
@@ -39,13 +39,13 @@ The model training is done using the RMSprop~\cite{rmsProp} optimiser. We altern
 Figure~\ref{fig:GEANT4_events} shows a few events from the GEN data set. The events were selected to cover both ends of the primary-particle energy and angle spectrum. Figure~\ref{fig:GAN_events} presents the corresponding generated events with the same primary particle energy and angle as the GEN events in Figure~\ref{fig:GEANT4_events}. Initial visual inspection shows no obvious difference between the original and GAN generated images. A detailed validation based on several energy-shape related features confirms these results. We discuss a few examples below.
 
 \begin{figure}[htbp]
-    \includegraphics[width=0.48\textwidth]{images/GAN_g4_events.pdf}
+    \includegraphics[width=0.48\textwidth]{Images/Calo/GAN_g4_events.pdf}
     \caption{GEN sample: electrons with different primary particle energies and angles.}
     \label{fig:GEANT4_events}
 \end{figure}
 
 \begin{figure}[htbp]
-    \includegraphics[width=0.48\textwidth]{images/GAN_gan_events.pdf}
+    \includegraphics[width=0.48\textwidth]{Images/Calo/GAN_gan_events.pdf}
     \caption{GAN generated electrons with primary energies and angles corresponding to the electrons showed in Figure~\ref{fig:GEANT4_events}.}
     \label{fig:GAN_events}
 \end{figure}
@@ -55,23 +55,23 @@ Figure~\ref{fig:GAN_features2} shows some additional features aimed at defining 
 \iffalse
 \begin{figure}
     \centering
-    \includegraphics[scale=0.3]{images/GAN_feature_ECAL_E.png}
-    \includegraphics[scale=0.3]{images/GAN_feature_ECAL_nHits.png}
-    \includegraphics[scale=0.3]{images/GAN_feature_ECAL_ratioFirstLayerToSecondLayerE.png}
-    \includegraphics[scale=0.3]{images/GAN_feature_ECAL_ratioFirstLayerToTotalE.png}
-    \includegraphics[scale=0.3]{images/GAN_feature_ECALmomentX1.png}
-    \includegraphics[scale=0.3]{images/GAN_feature_ECALmomentX2.png}
-    \includegraphics[scale=0.3]{images/GAN_feature_ECALmomentX3.png}
-    \includegraphics[scale=0.3]{images/GAN_feature_ECALmomentY1.png}
-    \includegraphics[scale=0.3]{images/GAN_feature_ECALmomentZ1.png}
-    \includegraphics[scale=0.3]{images/GAN_feature_R9.png}
+    \includegraphics[scale=0.3]{Images/Calo/GAN_feature_ECAL_E.png}
+    \includegraphics[scale=0.3]{Images/Calo/GAN_feature_ECAL_nHits.png}
+    \includegraphics[scale=0.3]{Images/Calo/GAN_feature_ECAL_ratioFirstLayerToSecondLayerE.png}
+    \includegraphics[scale=0.3]{Images/Calo/GAN_feature_ECAL_ratioFirstLayerToTotalE.png}
+    \includegraphics[scale=0.3]{Images/Calo/GAN_feature_ECALmomentX1.png}
+    \includegraphics[scale=0.3]{Images/Calo/GAN_feature_ECALmomentX2.png}
+    \includegraphics[scale=0.3]{Images/Calo/GAN_feature_ECALmomentX3.png}
+    \includegraphics[scale=0.3]{Images/Calo/GAN_feature_ECALmomentY1.png}
+    \includegraphics[scale=0.3]{Images/Calo/GAN_feature_ECALmomentZ1.png}
+    \includegraphics[scale=0.3]{Images/Calo/GAN_feature_R9.png}
     \caption{GAN vs. GEANT comparisons for various features. {\bf theta should be $\theta$.}
     \label{fig:GAN_features}}
 \end{figure}
 \fi
 \begin{figure}
     \centering
-    \includegraphics[width=0.48\textwidth, trim={4cm 0cm 9cm 0cm}, clip=true]{images/features_1_rev.pdf}
+    \includegraphics[width=0.48\textwidth, trim={4cm 0cm 9cm 0cm}, clip=true]{Images/Calo/features_1_rev.pdf}
     \caption{GEANT4 vs. GAN comparison for sampling fraction, number
       of hits and shower shapes along x,y,z axis for different angle
       bins with 100-200 GeV primary particle energies.
@@ -80,7 +80,7 @@ Figure~\ref{fig:GAN_features2} shows some additional features aimed at defining 
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.48\textwidth, trim={1cm 0cm 7cm 0cm}, clip=true]{images/features_2_rev.pdf}
+    \includegraphics[width=0.48\textwidth, trim={1cm 0cm 7cm 0cm}, clip=true]{Images/Calo/features_2_rev.pdf}
     \caption{GEANT4 vs. GAN comparison for shower width (second
       moment) in x,y,z, ratio of energy deposited in parts along
       direction of particle traversal to total energy and shower
@@ -98,16 +98,16 @@ When given as input to a particle regression and reconstruction model (see secti
 
 \begin{figure}
     \centering
-    \includegraphics[scale=0.4, trim={0.5cm 0.1cm 0 1.1cm}, clip]{images/GAN_GEANT_energy_regression_comparison.pdf}
+    \includegraphics[scale=0.4, trim={0.5cm 0.1cm 0 1.1cm}, clip]{Images/Calo/GAN_GEANT_energy_regression_comparison.pdf}
     \caption{Predicted vs. true particle energy for GAN and GEANT
       images. Predictions were made using the reconstruction tool described in section~\ref{sec:reco}. This plot was made using 2213 electron events of each type (GAN and GEANT).\label{fig:GAN_regression}}
 \end{figure}
 
 \begin{figure}
     \centering
-    \includegraphics[scale=0.4, trim={0.5cm 0.1cm 0 1.1cm}, clip]{images/GAN_GEANT_class_accuracy_comparison.pdf}
+    \includegraphics[scale=0.4, trim={0.5cm 0.1cm 0 1.1cm}, clip]{Images/Calo/GAN_GEANT_class_accuracy_comparison.pdf}
     \caption{Predicted particle type (electron vs. charge pions) for GAN and GEANT images. There were 2213 electron events for each
       type.\label{fig:GAN_classification}}
 \end{figure}
 
-In order to further validate the GAN image quality we run the 3D CNN reconstruction network described in section~\ref{sec:reco} on the 3DGAN output and compare the response to the results obtained by running the tool on Monte Carlo data. Figure~\ref{fig:GAN_regression} shows a comparison of the energy resolution obtained on GAN and GEANT4 images. The predicted energy shows a reasonable agreement for the mean while the resolution for GAN images seems to be broader than for GEANT4 images. The classification accuracy presented in Figure~\ref{fig:GAN_classification} is very high (close to $100\%$) for both GAN and GEANT4 events. 
+In order to further validate the GAN image quality we run the 3D CNN reconstruction network described in section~\ref{sec:reco} on the 3DGAN output and compare the response to the results obtained by running the tool on Monte Carlo data. Figure~\ref{fig:GAN_regression} shows a comparison of the energy resolution obtained on GAN and GEANT4 images. The predicted energy shows a reasonable agreement for the mean while the resolution for GAN images seems to be broader than for GEANT4 images. The classification accuracy presented in Figure~\ref{fig:GAN_classification} is very high (close to $100\%$) for both GAN and GEANT4 events.
