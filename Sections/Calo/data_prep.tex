@@ -75,3 +75,18 @@ To be more specific, we see in Figure~\ref{fig:HE_ratio} that the ratio of total
 Photons and neutral pions are more difficult to distinguish. This is because neutral pions decay preferentially into two photons, with a branching ratio of almost $99\%$. A Lorentz boost due to the momentum of the pion causes the photons to become collimated, to the point where they are only separated by a small angle. If the pion has a low energy, the opening angle between the two photons is larger and the shower is easily identified as originating from a neutral pion. High-energy neutral pions produce more collimated photon pairs, which are more easily mistaken as a single high-energy photon. The opening angle distribution for neutral pions is shown in Figure~\ref{fig:opening_angle}. In order to limit the study to the most challenging case, we filter the neutral-pion dataset by requiring the opening angle between the two photons to be smaller than 0.01 radian.  The effect of  this requirement on the otherwise uniform energy distribution is shown in Figure~\ref{fig:opening_angle_energy}. As expected, the selection mostly removes low-energy neutral pions. 
 
 The ECAL and HCAL 3D arrays are passed directly to our neural networks. We also compute a set of physics-based features, as described in Ref.~\cite{NIPS}. These features are used to train alternative benchmark algorithms representing currently-used ML algorithms in HEP.
+
+\section{Calorimeter Window Size}\label{calo_rec_window_size}
+
+The optimal window size to store for ECAL and HCAL is an important issue, since this impacts not only sample storage size, but also training speed and the maximum batch sizes which we could feed to our GPUs. 
+
+From examinations of our generated samples, we found that an ECAL window of 25x25x25 and an HCAL window of 11x11x60 looked reasonable. To test this hypothesis, we performed training using an unoptimized CNN neural architectures (which will be described later), but with different-sized input samples. The architecture was altered to accommodate larger windows simply by increasing the number of neurons on the input layer. Results trained using an ECAL window of size 25x25x25 and 51x51x25 are shown in Figure~\ref{fig:classification_window}. From the similarity of these curves, we have decided that an expanded ECAL window size does not contain much additional useful information, and is thus not necessary for our problems.
+
+\begin{figure*}[htbp]
+    \centering
+    \includegraphics[width=0.45\textwidth]{Images/Calo/accuracy_small_window.png}
+    \includegraphics[width=0.45\textwidth]{Images/Calo/loss_small_window.png} \\
+    \includegraphics[width=0.45\textwidth]{Images/Calo/accuracy_large_window.png}
+    \includegraphics[width=0.45\textwidth]{Images/Calo/loss_large_window.png}
+    \caption{Training history for different choices of the input 3D array zise: Accuracy (left) and loss (right) as a function of the training batch for photon/neutral pion classification, using a 25x25x25 (top) and 51x51x25 (bottom) ECAL window size.\label{fig:classification_window}}
+\end{figure*}

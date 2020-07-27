@@ -54,6 +54,20 @@ E = a \cdot E_{ECAL} + b \cdot E_{HCAL} + c
 \label{eq:linreg}
 \end{equation}
 
+Linear regression results for each of the particle types are shown in Figure~\ref{fig:reg_linreg}. Each point in the plot represents the mean bias or resolution within an energy bin. In all resolution plots shown in this thesis, the points have been fitted with the following expected resolution function equation:
+
+\begin{equation}
+\frac{\sigma(\Delta E)}{E_{\text{true}}} = \frac{a}{\sqrt{E_{\text{true}}}} \oplus b \oplus \frac{c}{E_{\text{true}}}
+\label{eq:res}
+\end{equation}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.45\textwidth]{Images/Calo/bias_vs_E_allparts_linreg.pdf}
+\includegraphics[width=0.45\textwidth]{Images/Calo/res_vs_E_allparts_linreg_fits.pdf}
+\caption{Bias (left) and resolution (right) as a function of true energy for linear regression predictions of particle energy for the different particle types, trained on fixed-angle samples. \label{fig:reg_linreg}}
+\end{figure}
+
 We also investigated the use of BDTs for energy regression. This application has seen use in some LHC experiments (e.g., to study $H \rightarrow \gamma\gamma$ decays).  We used the XGBoost package in Python, with the following hyperparameters:
 
 \begin{itemize}
@@ -190,9 +204,9 @@ We must note here that though HCAL information is useful for particle reconstruc
 \label{fig:HCAL_study_gammapi0}
 \end{figure}
 
-\subsection*{Studies with Large Sample Windows}
+\subsection*{Regression with Large Sample Windows}
 
-We wanted to see whether we should use the full large window samples, of size 51x51x25 in ECAL and 11x11x60 in HCAL. We found that for both DNN and CNN, to achieve the best performance for energies above 150~GeV, a minimum $(x,y)$ size of 25x25 in the ECAL and 5x5 in the HCAL is needed. For energies below 150~GeV, the optimal performance is observed for a window size of 51x51 in the ECAL and 11x11 in the HCAL. This is presumably due to wider showers at low energy.  The impact of the choice of window size is shown for DNN in Figure~\ref{fig:reg_dnn_numcells}, with the results for CNN being similar.  Drawbacks to the larger window size, however, include larger files, more memory usage, and that training takes about 5 times longer per epoch.
+We saw earlier that classification was not affected by a larger calorimeter window. We wanted to see the effects of using a smaller window on reconstruction as well. We found that for both DNN and CNN, to achieve the best performance for energies above 150~GeV, a minimum $(x,y)$ size of 25x25 in the ECAL and 5x5 in the HCAL is needed. For energies below 150~GeV, the optimal performance is observed for a window size of 51x51 in the ECAL and 11x11 in the HCAL. This is presumably due to wider showers at low energy.  The impact of the choice of window size is shown for DNN in Figure~\ref{fig:reg_dnn_numcells}, with the results for CNN being similar.  Drawbacks to the larger window size, however, include larger files, more memory usage, and that training takes about 5 times longer per epoch.
 
 \begin{figure}[htbp]
 \centering
@@ -213,6 +227,8 @@ Showers for \chpi\ were observed to be wider than the other particle types, espe
 }
 \label{fig:reg_nn_numcells_chpi_large_window}
 \end{figure}
+
+Overall, though the larger window did make a bit of difference, the improvement was not large enough to overcome the downsides, and we decided to stick with smaller windows for training.
 
 \subsection*{Skip Connections}
 
@@ -240,13 +256,12 @@ For regression, we tried using only the energy summed in layers in the $z$ direc
 
 \section{Hyperparameter Scans}\label{sec:hpscan}
 
-In order to determine the best architectures for the end-to-end reconstruction models, we scanned over a hyperparameter space for each architecture. Learning rate and decay rate were additional hyperparameters for each architecture. For simplicity, we used classification accuracy for the $\gamma$ vs. $\pi^0$ problem as a metric to determine the overall best hyperparameter set for each architecture. This is because a model optimized for this task was found to generate good results for the other tasks as well, since $\gamma$ vs. $\pi^0$ classification was found to be the most difficult problem.
+In order to fine-tune our models, we scanned over a hyperparameter space for each architecture. In addition to architecture parameters, learning rate and decay rate were additional hyperparameters for each architecture. For simplicity, we used classification accuracy for the $\gamma$ vs. $\pi^0$ problem as a metric to determine the overall best hyperparameter set for each architecture. This is because a model optimized for this task was found to generate good results for the other tasks as well, since $\gamma$ vs. $\pi^0$ classification was found to be the most difficult problem.
 
 Training was performed at each hyperparameter point ten times, in order to obtain an estimate of the uncertainty associated with each quoted performance value. For each scan point, the DNN and CNN architectures trained on 400,000 events, using another sample of 400,000 events for testing. DNN and CNN scan points trained for three epochs each, taking about seven hours each. GN trained on 100,000 events and tested on another 100,000. Due to a higher training time, each GN scan point only trained for a single epoch, taking about twenty hours.
 
-For CNN and DNN training, we used batches of 1,000 events when training. However, due to GPU memory limitations, we could not do the same with GN. Instead, we split each batch into 100 minibatches of ten events each. A single minibatch was loaded on the GPU at a time, and gradients were added up after back-propagation. We waited until after each batch was fully calculated to update network weights using the combined gradients.
+For CNN and DNN training, we used batches of 1,000 events when training. However, due to GPU memory limitations, we could not do the same with GN. Instead, we split each batch into 100 minibatches of ten events each. A single minibatch was loaded on the GPU at a time, and gradients were added up after back-propagation. We waited until after each batch was fully calculated to update network weights using the combined gradients. The best settings were found to be as follows:
 
-The best settings were found to be as follows:
 \begin{itemize}
     \item For DNN, 4 hidden layers, 512 neurons per hidden layer, a learning rate of 0.0002, decay rate of 0, and a dropout probability of 0.04.
     \item For CNN, 4 hidden layers and 512 neurons per hidden layer, a learning rate of 0.0004, decay rate of 0, a dropout probability of 0.12, 6 ECAL filters with a kernel size of $6 \times 6 \times 6$.
