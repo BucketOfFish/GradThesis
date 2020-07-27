@@ -1,4 +1,16 @@
-\chapter{Shower Generation}\label{sec:GAN}
+\chapter{Shower Generation Using GAN}\label{sec:GAN}
+
+\section{The Problem}
+
+In addition to actual collision data, physics analyses typically require extremely detailed and precise simulations of collisions, generated using software packages such as GEANT4\cite{GEANT4}. This simulated data is used to develop and test analysis techniques. These simulations involve the physics governing the interaction of particles with matter in the calorimeters, and are generally very CPU intensive. In some cases, such as the ATLAS experiment, simulation currently requires roughly half of the experiment's computing resources\cite{GEANT_usage}. This fraction is expected to increase significantly for the HL-LHC. These challenges require novel computational and algorithmic techniques, which has prompted recent efforts in HEP to apply modern ML to calorimetry~\cite{ML1,ML2,ML3,ML4}.
+
+It is common in HEP to generate large amounts of detailed synthetic data from Monte Carlo simulations. This simulated data allows physicists to determine the expected outcome of a given experiment based on known physics. Having this prior expectation, one can reveal the presence of new phenomena by observing an otherwise inexplicable difference between real and simulated data. An accurate simulation of a detector response is a computationally heavy task, currently taking a significant fraction of the overall computing resources in a typical HEP analysis. Thus we also investigate the use of ML algorithms to speed up the event simulation process. In particular, we build a generative model to simulate detector showers, similar to those on which we train the end-to-end reconstruction algorithm. Such a generator could drastically reduce Monte Carlo simulation time, and turn event generation into an on-demand task.
+
+In order to create realistic calorimetric shower data, we train a generative adversarial network (GAN) on the GEN dataset defined in Section~\ref{sec:data}. Due to training time constraints, we have restricted the current study to ECAL showers for incoming electrons with energy between 100 and 200 GeV. However, we have performed initial studies on expanded energies from 2 to 500 GeV, and will extend on these results in future publications. The task is to create a model that can take an electron's energy and flight direction as inputs and generate a full ECAL shower, represented as a $51 \times 51 \times 25$ array of energy deposits along the trajectory of the incoming electron. 
+%Our reconstruction net (described below) is used as a discriminator during training, in order to effectively match GAN products to the GEN dataset. 
+The advantage of using a GAN is that it's much faster and less computationally intense than traditional Monte Carlo simulation, and the results may more accurately reproduce physical behavior if the GAN is trained on real data.
+
+\subsection*{The Approach}
 
 Generative Adversarial Networks are composed of two networks, a discriminator and a generator. Our model, 3DGAN, implements an architecture inspired by the auxiliary classifier GAN~\cite{acgan}. The generator takes as input a specific particle type, flight direction, and energy, and generates the 3D image of an energy deposit using an auxiliary input vector of random quantities (latent vector). 
 The output has the same format as the 3D array of ECAL hits in the GEN sample (see Section~\ref{sec:data}). The discriminator network receives as input an ECAL 3D array and classifies it as {\it real} (coming from the GEANT4-generated GEN dataset) or {\it fake} (produced by the generator).
@@ -16,7 +28,7 @@ Before training our GAN, we pre-processed the GEN dataset by replacing each cell
     \label{fig:GAN_arch}
 \end{figure*}
 
-\subsection{GAN Architecture}
+\subsection*{GAN Architecture}
 \label{sec:GANarch}
 
 The 3DGAN architecture is based on 3-dimensional convolutional layers~\cite{conv}, as shown in Figure~\ref{fig:GAN_arch}. The generator takes as input a vector with a desired particle energy and angle, and concatenates a latent vector of 254 normally distributed random numbers. This goes through a set of alternating upsampling and convolutional layers. The first convolution layer has $64$ filters with $6 \times 6 \times 8$ kernels. The next two convolutional layers have $6$ filters of $5 \times 8 \times 8$ and $3 \times 5 \times 8$ kernels, respectively. The last convolutional layer has a single filter with a $2 \times 2 \times 2$ kernel. The first three layers are activated by leaky ReLU functions~\cite{LeakyReLU}, while ReLU functions~\cite{ReLU} are used for the last layer. Batch normalization~\cite{batchnorm} and upscaling layers were added after the first and second convolutional layers.
@@ -26,7 +38,7 @@ The 3DGAN model is implemented in KERAS~\cite{keras} and Tensorflow~\cite{tensor
 
 Aside from the architecture shown here, we also tested the use of a Wasserstein GAN~\cite{wgan}, but found no practical advantage in terms of computational speed-up or training performance.
 
-\subsection{Training and Results}
+\section{Training and Results}
 The 3DGAN loss function
 \begin{equation}
     L_{Tot} = W_{G}L_{G} + W_{P}L_{P} + W_{A}L_{A} + W_{E}L_{E} + W_{B}L_{B} 
@@ -93,8 +105,7 @@ The 3DGAN training runs in around $1.5$ hours per epoch on a single NVIDIA GeFor
 
 When given as input to a particle regression and reconstruction model (see section~\ref{sec:reco}), this dataset produces the same output as the original GEANT4 sample, as described in Appendix~\ref{appendix:RECO_on_GAN}.
 
-\section{End-to-end reconstruction of the ECAL showers produced by the 3DGAN}
-\label{appendix:RECO_on_GAN}
+\subsection*{3DGAN Showers}
 
 \begin{figure}
     \centering
