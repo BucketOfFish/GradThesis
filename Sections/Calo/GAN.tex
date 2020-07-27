@@ -2,7 +2,7 @@
 
 \section{The Problem}
 
-In addition to actual collision data, physics analyses typically require extremely detailed and precise simulations of collisions, generated using software packages such as GEANT4\cite{GEANT4}. This simulated data is used to develop and test analysis techniques. These simulations involve the physics governing the interaction of particles with matter in the calorimeters, and are generally very CPU intensive. In some cases, such as the ATLAS experiment, simulation currently requires roughly half of the experiment's computing resources\cite{GEANT_usage}. This fraction is expected to increase significantly for the HL-LHC. These challenges require novel computational and algorithmic techniques, which has prompted recent efforts in HEP to apply modern ML to calorimetry~\cite{ML1,ML2,ML3,ML4}.
+In addition to actual collision data, physics analyses typically require extremely detailed and precise simulations of collisions, generated using software packages such as GEANT4~\cite{GEANT4}. This simulated data is used to develop and test analysis techniques. These simulations involve the physics governing the interaction of particles with matter in the calorimeters, and are generally very CPU intensive. In some cases, such as the ATLAS experiment, simulation currently requires roughly half of the experiment's computing resources~\cite{GEANT_usage}. This fraction is expected to increase significantly for the HL-LHC. These challenges require novel computational and algorithmic techniques, which has prompted recent efforts in HEP to apply modern ML to calorimetry~\cite{ML1,ML2,ML3,ML4}.
 
 It is common in HEP to generate large amounts of detailed synthetic data from Monte Carlo simulations. This simulated data allows physicists to determine the expected outcome of a given experiment based on known physics. Having this prior expectation, one can reveal the presence of new phenomena by observing an otherwise inexplicable difference between real and simulated data. An accurate simulation of a detector response is a computationally heavy task, currently taking a significant fraction of the overall computing resources in a typical HEP analysis. Thus we also investigate the use of ML algorithms to speed up the event simulation process. In particular, we build a generative model to simulate detector showers, similar to those on which we train the end-to-end reconstruction algorithm. Such a generator could drastically reduce Monte Carlo simulation time, and turn event generation into an on-demand task.
 
@@ -21,17 +21,17 @@ The output has the same format as the 3D array of ECAL hits in the GEN sample (s
 
 Before training our GAN, we pre-processed the GEN dataset by replacing each cell energy content $E$ with $E^\alpha$, where $\alpha<1$ is a fixed hyperparameter. This pre-processing compensates for the large energy range (about 7 orders of magnitude) covered by individual cell energies, and mitigates some performance degradation we previously observed at low energies. After testing for different values of $\alpha$, we observed optimal performance for $\alpha=0.85$.
 
-\begin{figure*}[htbp]
-\centering
-    \includegraphics[scale=0.65, trim={0cm 6cm 3.5cm 1.8cm}]{Images/Calo/gan_model_alt_upsampling.pdf}
-    \caption{3DGAN generator and discriminator network architectures}
-    \label{fig:GAN_arch}
-\end{figure*}
-
 \subsection*{GAN Architecture}
 \label{sec:GANarch}
 
 The 3DGAN architecture is based on 3-dimensional convolutional layers~\cite{conv}, as shown in Figure~\ref{fig:GAN_arch}. The generator takes as input a vector with a desired particle energy and angle, and concatenates a latent vector of 254 normally distributed random numbers. This goes through a set of alternating upsampling and convolutional layers. The first convolution layer has $64$ filters with $6 \times 6 \times 8$ kernels. The next two convolutional layers have $6$ filters of $5 \times 8 \times 8$ and $3 \times 5 \times 8$ kernels, respectively. The last convolutional layer has a single filter with a $2 \times 2 \times 2$ kernel. The first three layers are activated by leaky ReLU functions~\cite{LeakyReLU}, while ReLU functions~\cite{ReLU} are used for the last layer. Batch normalization~\cite{batchnorm} and upscaling layers were added after the first and second convolutional layers.
+
+\begin{figure*}[htbp]
+\centering
+    \includegraphics[width=\textwidth]{Images/Calo/gan_model_alt_upsampling.png}
+    \caption{3DGAN generator and discriminator network architectures}
+    \label{fig:GAN_arch}
+\end{figure*}
 
 The discriminator takes as input a $51  \times 51  \times 25$ array and consists of four 3D convolutional layers. The first layer has $16$ filters with $5 \times 6 \times 6$ kernels. The second, third, and fourth convolutional layers each have $8$ filters with $5 \times 6 \times 6$ kernels. There are leaky ReLU activation functions in each convolutional layer. Batch normalization and dropout~\cite{dropout} layers are added after the second, third, and fourth convolutional layers. The output of the final convolution layer is flattened and connected to two output nodes: a classification node, activated by a sigmoid and returning the probability of a given input to be true or fake; and a regression node, activated by a linear function and returning the input particle energy.
 The 3DGAN model is implemented in KERAS~\cite{keras} and Tensorflow~\cite{tensorflow2015-whitepaper}.
@@ -51,13 +51,13 @@ The model training is done using the RMSprop~\cite{rmsProp} optimiser. We altern
 Figure~\ref{fig:GEANT4_events} shows a few events from the GEN data set. The events were selected to cover both ends of the primary-particle energy and angle spectrum. Figure~\ref{fig:GAN_events} presents the corresponding generated events with the same primary particle energy and angle as the GEN events in Figure~\ref{fig:GEANT4_events}. Initial visual inspection shows no obvious difference between the original and GAN generated images. A detailed validation based on several energy-shape related features confirms these results. We discuss a few examples below.
 
 \begin{figure}[htbp]
-    \includegraphics[width=0.48\textwidth]{Images/Calo/GAN_g4_events.pdf}
+    \includegraphics[width=\textwidth]{Images/Calo/GAN_g4_events.pdf}
     \caption{GEN sample: electrons with different primary particle energies and angles.}
     \label{fig:GEANT4_events}
 \end{figure}
 
 \begin{figure}[htbp]
-    \includegraphics[width=0.48\textwidth]{Images/Calo/GAN_gan_events.pdf}
+    \includegraphics[width=\textwidth]{Images/Calo/GAN_gan_events.pdf}
     \caption{GAN generated electrons with primary energies and angles corresponding to the electrons showed in Figure~\ref{fig:GEANT4_events}.}
     \label{fig:GAN_events}
 \end{figure}
@@ -67,23 +67,23 @@ Figure~\ref{fig:GAN_features2} shows some additional features aimed at defining 
 \iffalse
 \begin{figure}
     \centering
-    \includegraphics[scale=0.3]{Images/Calo/GAN_feature_ECAL_E.png}
-    \includegraphics[scale=0.3]{Images/Calo/GAN_feature_ECAL_nHits.png}
-    \includegraphics[scale=0.3]{Images/Calo/GAN_feature_ECAL_ratioFirstLayerToSecondLayerE.png}
-    \includegraphics[scale=0.3]{Images/Calo/GAN_feature_ECAL_ratioFirstLayerToTotalE.png}
-    \includegraphics[scale=0.3]{Images/Calo/GAN_feature_ECALmomentX1.png}
-    \includegraphics[scale=0.3]{Images/Calo/GAN_feature_ECALmomentX2.png}
-    \includegraphics[scale=0.3]{Images/Calo/GAN_feature_ECALmomentX3.png}
-    \includegraphics[scale=0.3]{Images/Calo/GAN_feature_ECALmomentY1.png}
-    \includegraphics[scale=0.3]{Images/Calo/GAN_feature_ECALmomentZ1.png}
-    \includegraphics[scale=0.3]{Images/Calo/GAN_feature_R9.png}
+    \includegraphics[width=0.33\textwidth]{Images/Calo/GAN_feature_ECAL_E.png}
+    \includegraphics[width=0.33\textwidth]{Images/Calo/GAN_feature_ECAL_nHits.png}
+    \includegraphics[width=0.33\textwidth]{Images/Calo/GAN_feature_ECAL_ratioFirstLayerToSecondLayerE.png}
+    \includegraphics[width=0.33\textwidth]{Images/Calo/GAN_feature_ECAL_ratioFirstLayerToTotalE.png}
+    \includegraphics[width=0.33\textwidth]{Images/Calo/GAN_feature_ECALmomentX1.png}
+    \includegraphics[width=0.33\textwidth]{Images/Calo/GAN_feature_ECALmomentX2.png}
+    \includegraphics[width=0.33\textwidth]{Images/Calo/GAN_feature_ECALmomentX3.png}
+    \includegraphics[width=0.33\textwidth]{Images/Calo/GAN_feature_ECALmomentY1.png}
+    \includegraphics[width=0.33\textwidth]{Images/Calo/GAN_feature_ECALmomentZ1.png}
+    \includegraphics[width=0.33\textwidth]{Images/Calo/GAN_feature_R9.png}
     \caption{GAN vs. GEANT comparisons for various features. {\bf theta should be $\theta$.}
     \label{fig:GAN_features}}
 \end{figure}
 \fi
 \begin{figure}
     \centering
-    \includegraphics[width=0.48\textwidth, trim={4cm 0cm 9cm 0cm}, clip=true]{Images/Calo/features_1_rev.pdf}
+    \includegraphics[width=\textwidth, trim={4cm 0cm 9cm 0cm}, clip=true]{Images/Calo/features_1_rev.pdf}
     \caption{GEANT4 vs. GAN comparison for sampling fraction, number
       of hits and shower shapes along x,y,z axis for different angle
       bins with 100-200 GeV primary particle energies.
@@ -92,7 +92,7 @@ Figure~\ref{fig:GAN_features2} shows some additional features aimed at defining 
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.48\textwidth, trim={1cm 0cm 7cm 0cm}, clip=true]{Images/Calo/features_2_rev.pdf}
+    \includegraphics[width=\textwidth, trim={1cm 0cm 7cm 0cm}, clip=true]{Images/Calo/features_2_rev.pdf}
     \caption{GEANT4 vs. GAN comparison for shower width (second
       moment) in x,y,z, ratio of energy deposited in parts along
       direction of particle traversal to total energy and shower
@@ -103,22 +103,18 @@ Figure~\ref{fig:GAN_features2} shows some additional features aimed at defining 
 
 The 3DGAN training runs in around $1.5$ hours per epoch on a single NVIDIA GeForce GTX 1080 card for $60$ epochs. The simulation  time  on a Intel  Xeon 8180  is about $13$ ms/particle  and it goes down to about $4$ ms/particle on a NVIDIA  GeForce  GTX  1080. For  comparison  GEANT4  simulation takes  about $17$ seconds  per  particle on  a  Intel  Xeon  8180 (currently  it  is  not  possible  to  run a full  GEANT4-based  simulation  on  GPUs). Thus our GAN represents a potential simulation speedup of over 4,000 times for this specific aspect of the event simulation.
 
-When given as input to a particle regression and reconstruction model (see section~\ref{sec:reco}), this dataset produces the same output as the original GEANT4 sample, as described in Appendix~\ref{appendix:RECO_on_GAN}.
+When our GAN-generated images are given as an input to our particle reconstruction model, the outputs match those obtained for our original GEANT4 samples. Figure~\ref{fig:GAN_regression} shows a comparison of the energy resolution obtained on GAN and GEANT4 images. The predicted energy shows a reasonable agreement for the mean while the resolution for GAN images seems to be broader than for GEANT4 images. The classification accuracy presented in Figure~\ref{fig:GAN_classification} is very high (close to $100\%$) for both GAN and GEANT4 events.
 
-\subsection*{3DGAN Showers}
-
-\begin{figure}
+\begin{figure}[htbp]
     \centering
-    \includegraphics[scale=0.4, trim={0.5cm 0.1cm 0 1.1cm}, clip]{Images/Calo/GAN_GEANT_energy_regression_comparison.pdf}
+    \includegraphics[width=0.7\textwidth]{Images/Calo/GAN_GEANT_energy_regression_comparison.pdf}
     \caption{Predicted vs. true particle energy for GAN and GEANT
       images. Predictions were made using the reconstruction tool described in section~\ref{sec:reco}. This plot was made using 2213 electron events of each type (GAN and GEANT).\label{fig:GAN_regression}}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[htbp]
     \centering
-    \includegraphics[scale=0.4, trim={0.5cm 0.1cm 0 1.1cm}, clip]{Images/Calo/GAN_GEANT_class_accuracy_comparison.pdf}
+    \includegraphics[width=0.7\textwidth]{Images/Calo/GAN_GEANT_class_accuracy_comparison.pdf}
     \caption{Predicted particle type (electron vs. charge pions) for GAN and GEANT images. There were 2213 electron events for each
       type.\label{fig:GAN_classification}}
 \end{figure}
-
-In order to further validate the GAN image quality we run the 3D CNN reconstruction network described in section~\ref{sec:reco} on the 3DGAN output and compare the response to the results obtained by running the tool on Monte Carlo data. Figure~\ref{fig:GAN_regression} shows a comparison of the energy resolution obtained on GAN and GEANT4 images. The predicted energy shows a reasonable agreement for the mean while the resolution for GAN images seems to be broader than for GEANT4 images. The classification accuracy presented in Figure~\ref{fig:GAN_classification} is very high (close to $100\%$) for both GAN and GEANT4 events.
