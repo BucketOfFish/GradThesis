@@ -1,1 +1,251 @@
 \chapter{Sample Production Details}
+
+There's a lot of tuning which goes into sample production, involving things like trigger selections, MC validation checks, and of course writing code and creating bug fixes. There is a lot of work that goes into sample production (most of which is quite boring), but here I'm just going to talk about a few of the studies I did.
+
+\section{Lepton Triggers}
+
+One thing that goes into sample production is the selection of the trigger menu. We want to make sure that we choose triggers which capture most of the interesting objects, while not allowing an overwhelming amount of data to be present in our samples. Of course, we also select in such a way that the signal over background ratio for physics objects is maximized.
+
+Here I show differences between four sets of trigger selections. First I describe the triggers that go into each menu, and then I compare trigger results in three different regions.
+
+The trigger menus I will compare here are labelled 'trigMatch\_1L2LTrig', 'trigMatch\_1L2LTrigOR', 'trigMatch\_2LTrig', and 'trigMatch\_2LTrigOR'. The difference between 1L2LTrig and 2LTrig menus is that 1L2LTrig menus contain both single-lepton triggers like HLT\_e60\_medium and two-lepton triggers like HLT\_2mu10 while the 2LTrig menus only contain the two-lepton triggers. The difference between OR and non-OR menus is that the non-OR menus use the lowest unprescaled triggers in each run, while the OR menus use all triggers over all runs. The OR triggers are easier to implement and debug. Low-\pt\ isolated single-lepton triggers are not included, since they would bias the estimation of fake leptons using the matrix method (as will be described in the next chapter). High-\pt\ non-isolated single-lepton triggers are also not included, since they make scale factor calculation more complicated, and were found not to increase signal acceptance by very much.
+
+Using data and a selection of signal samples (taken from an electroweak model sample grid), we look at trigger efficiencies in several regions. In Tables~\ref{tab:trigger_first} to~\ref{tab:trigger_last} we quote the percentage of events which pass each trigger in each region, using all events in that region (with no trigger requirement) as a baseline. We found that 2LTrigOR was a good menu to use, as it maintained a good signal over background ratio, while being the simplest to implement. Values in these tables are labelled `nan` when there are no passing events.
+
+\begin{table}
+\begin{center}
+\caption{trigMatch\_1L2LTrig Efficiency in SR Low Region (\%)}
+\begin{tabular}{l|l|l}
+& ee & mm \\
+\hline
+data15-16 & 100 & 93.9655 \\
+data17 & 82.6087 & 84.507 \\
+data18 & 91.3044 & 79.375 \\
+(600, 0) MC16a & 100 & 100 \\
+(600, 0) MC16cd & 100 & 100 \\
+(600, 0) MC16e & 100 & 83.3333 \\
+(200, 100) MC16a & -nan & -nan \\
+(200, 100) MC16cd & -nan & -nan \\
+(200, 100) MC16e & -nan & -nan
+\label{tab:trigger_first}
+\end{tabular}
+\end{center}
+\end{table}
+
+\begin{table}
+\begin{center}
+\caption{trigMatch\_1L2LTrigOR Efficiency in SR Low Region (\%)}
+\begin{tabular}{l|l|l}
+& ee & mm \\
+\hline
+data15-16 & 100 & 95.6897 \\
+data17 & 82.6087 & 97.1831 \\
+data18 & 91.3044 & 96.25 \\
+(600, 0) MC16a & 100 & 100 \\
+(600, 0) MC16cd & 100 & 100 \\
+(600, 0) MC16e & 100 & 100 \\
+(200, 100) MC16a & -nan & -nan \\
+(200, 100) MC16cd & -nan & -nan \\
+(200, 100) MC16e & -nan & -nan \\
+\end{tabular}
+\end{center}
+\end{table}
+
+\begin{table}
+\begin{center}
+\caption{trigMatch\_2LTrig Efficiency in SR Low Region (\%)}
+\begin{tabular}{l|l|l}
+& ee & mm \\
+\hline
+data15-16 & 84.6154 & 90.5172 \\
+data17 & 78.2609 & 92.9577 \\
+data18 & 65.2174 & 93.125 \\
+(600, 0) MC16a & 100 & 100 \\
+(600, 0) MC16cd & 66.6667 & 88.8889 \\
+(600, 0) MC16e & 100 & 100 \\
+(200, 100) MC16a & -nan & -nan \\
+(200, 100) MC16cd & -nan & -nan \\
+(200, 100) MC16e & -nan & -nan \\
+\end{tabular}
+\end{center}
+\end{table}
+
+\begin{table}
+\begin{center}
+\caption{trigMatch\_2LTrigOR Efficiency in SR Low Region (\%)}
+\begin{tabular}{l|l|l}
+& ee & mm \\
+\hline
+data15-16 & 84.6154 & 90.5172 \\
+data17 & 78.2609 & 92.9577 \\
+data18 & 65.2174 & 93.125 \\
+(600, 0) MC16a & 100 & 100 \\
+(600, 0) MC16cd & 66.6667 & 88.8889 \\
+(600, 0) MC16e & 100 & 100 \\
+(200, 100) MC16a & -nan & -nan \\
+(200, 100) MC16cd & -nan & -nan \\
+(200, 100) MC16e & -nan & -nan \\
+\end{tabular}
+\end{center}
+\end{table}
+
+\begin{table}
+\begin{center}
+\caption{trigMatch\_1L2LTrig Efficiency in SR Medium Region (\%)}
+\begin{tabular}{l|l|l}
+& ee & mm \\
+\hline
+data15-16 & 100 & 92.4242 \\
+data17 & 86.2069 & 88 \\
+data18 & 97.7273 & 83.0769 \\
+(600, 0) MC16a & 99.6942 & 98.5795 \\
+(600, 0) MC16cd & 99.6528 & 97.2973 \\
+(600, 0) MC16e & 99.6169 & 96.3636 \\
+(200, 100) MC16a & -nan & 100 \\
+(200, 100) MC16cd & 100 & 100 \\
+(200, 100) MC16e & 100 & -nan \\
+\end{tabular}
+\end{center}
+\end{table}
+
+\begin{table}
+\begin{center}
+\caption{trigMatch\_1L2LTrigOR Efficiency in SR Medium Region (\%)}
+\begin{tabular}{l|l|l}
+& ee & mm \\
+\hline
+data15-16 & 100 & 93.9394 \\
+data17 & 86.2069 & 96 \\
+data18 & 97.7273 & 91.5385 \\
+(600, 0) MC16a & 100 & 98.8636 \\
+(600, 0) MC16cd & 99.6528 & 99.6997 \\
+(600, 0) MC16e & 99.6169 & 99.0909 \\
+(200, 100) MC16a & -nan & 100 \\
+(200, 100) MC16cd & 100 & 100 \\
+(200, 100) MC16e & 100 & -nan \\
+\end{tabular}
+\end{center}
+\end{table}
+
+\begin{table}
+\begin{center}
+\caption{trigMatch\_2LTrig Efficiency in SR Medium Region (\%)}
+\begin{tabular}{l|l|l}
+& ee & mm \\
+\hline
+data15-16 & 91.6667 & 90.9091 \\
+data17 & 79.3103 & 92 \\
+data18 & 84.0909 & 86.1538 \\
+(600, 0) MC16a & 97.5535 & 97.1591 \\
+(600, 0) MC16cd & 94.4444 & 96.6967 \\
+(600, 0) MC16e & 94.636 & 97.5758 \\
+(200, 100) MC16a & -nan & 100 \\
+(200, 100) MC16cd & 100 & 100 \\
+(200, 100) MC16e & 100 & -nan \\
+\end{tabular}
+\end{center}
+\end{table}
+
+\begin{table}
+\begin{center}
+\caption{trigMatch\_2LTrigOR Efficiency in SR Medium Region (\%)}
+\begin{tabular}{l|l|l}
+& ee & mm \\
+\hline
+data15-16 & 95.8333 & 90.9091 \\
+data17 & 79.3103 & 92 \\
+data18 & 84.0909 & 86.1538 \\
+(600, 0) MC16a & 97.5535 & 97.1591 \\
+(600, 0) MC16cd & 94.4444 & 96.6967 \\
+(600, 0) MC16e & 94.636 & 97.5758 \\
+(200, 100) MC16a & -nan & 100 \\
+(200, 100) MC16cd & 100 & 100 \\
+(200, 100) MC16e & 100 & -nan \\
+\end{tabular}
+\end{center}
+\end{table}
+
+\begin{table}
+\begin{center}
+\caption{trigMatch\_1L2LTrig Efficiency in SR High Region (\%)}
+\begin{tabular}{l|l|l}
+& ee & mm \\
+\hline
+data15-16 & 100 & 92.3077 \\
+data17 & 100 & 72.7273 \\
+data18 & 50 & 57.1429 \\
+(600, 0) MC16a & 100 & 94.1176 \\
+(600, 0) MC16cd & 100 & 90.9091 \\
+(600, 0) MC16e & 90 & 100 \\
+(200, 100) MC16a & -nan & -nan \\
+(200, 100) MC16cd & -nan & -nan \\
+(200, 100) MC16e & 100 & -nan \\
+\end{tabular}
+\end{center}
+\end{table}
+
+\begin{table}
+\begin{center}
+\caption{trigMatch\_1L2LTrigOR Efficiency in SR High Region (\%)}
+\begin{tabular}{l|l|l}
+& ee & mm \\
+\hline
+data15-16 & 100 & 92.3077 \\
+data17 & 100 & 81.8182 \\
+data18 & 50 & 66.6667 \\
+(600, 0) MC16a & 100 & 94.1176 \\
+(600, 0) MC16cd & 100 & 90.9091 \\
+(600, 0) MC16e & 90 & 100 \\
+(200, 100) MC16a & -nan & -nan \\
+(200, 100) MC16cd & -nan & -nan \\
+(200, 100) MC16e & 100 & -nan \\
+\end{tabular}
+\end{center}
+\end{table}
+
+\begin{table}
+\begin{center}
+\caption{trigMatch\_2LTrig Efficiency in SR High Region (\%)}
+\begin{tabular}{l|l|l}
+& ee & mm \\
+\hline
+data15-16 & 100 & 92.3077 \\
+data17 & 100 & 81.8182 \\
+data18 & 50 & 66.6667 \\
+(600, 0) MC16a & 100 & 94.1176 \\
+(600, 0) MC16cd & 85.7143 & 90.9091 \\
+(600, 0) MC16e & 90 & 100 \\
+(200, 100) MC16a & -nan & -nan \\
+(200, 100) MC16cd & -nan & -nan \\
+(200, 100) MC16e & 100 & -nan \\
+\end{tabular}
+\end{center}
+\end{table}
+
+\begin{table}
+\begin{center}
+\caption{trigMatch\_2LTrigOR Efficiency in SR High Region (\%)}
+\begin{tabular}{l|l|l}
+& ee & mm \\
+\hline
+data15-16 & 100 & 92.3077 \\
+data17 & 100 & 81.8182 \\
+data18 & 50 & 66.6667 \\
+(600, 0) MC16a & 100 & 94.1176 \\
+(600, 0) MC16cd & 85.7143 & 90.9091 \\
+(600, 0) MC16e & 90 & 100 \\
+(200, 100) MC16a & -nan & -nan \\
+(200, 100) MC16cd & -nan & -nan \\
+(200, 100) MC16e & 100 & -nan
+\label{tab:trigger_last}
+\end{tabular}
+\end{center}
+\end{table}
+
+\section{MC Angle Validation Plots}
+
+Part of MC validation involves checking for any deadspots or hotspots in the 2D eta-phi angle space. To do this, I created plots of our various sample processes in each of our relevant regions. These are shown in Figures~\ref{fig:MC_angle_validation_first} to~\ref{fig:MC_angle_validation_last}, demonstrating that there were no issues in this particular case.
+
+\section{Photon Overlap Removal}
+
+Another issue involved the use of overlap removal in sample production. After the photon method (to be described later) was shown to be problematic, we turned off photon-based overlap removal for the next set of samples. Here I show that this choice did not have a significant impact on relevant Z and data samples.

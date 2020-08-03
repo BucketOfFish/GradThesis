@@ -26,3 +26,15 @@ As mentioned, the masses of these particles are still unconstrained, so we gener
 When the mass difference between $\tilde{\chi}_{2}^{0}$ and $\tilde{\chi}_{1}^{0}$ is less than the $Z$ mass, we have an off-shell model. Otherwise we have an on-Z signal.
 
 The signal samples are produced using MadGraph5 with the NNPDF LO PDF set and contain up to one additional parton in the matrix element. The generation uses Pythia8 for showering and hadronization with EvtGen and the ATLAS A14 tune and the CTEQ 6L1 PDF set in the shower. Decoupled sparticles are vetoed in the production diagrams in MadGraph5. Signal production cross sections are calculated at NNLO$_\text{approx}$ with NNLL resummation. The details of strong signal model generation can be found in the following JIRA tickets~\cite{JIRAGluinoSLN, JIRAGluinoZ, JIRASleptonZ}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Physics Objects}
+
+When selecting objects for this analysis, we decided to use signal leptons with transverse momentum ($p_T$) above 25 GeV, and jets with $p_T$ above 30 GeV. For the purposes of performing jet overlap removal and calculating $E_T^{miss}$, we also allowed baseline leptons above 10 GeV and baseline jets above 20 GeV. In the interest of keeping this paper at a reasonable length, the complete set of object selection and triggering criteria will not be included, but can be found in the complete SUSY analysis paper at \cite{SUSY_2l2j}.
+
+As with most high-energy physics searches, there were a variety of standard-model processes which mimicked the final state we were looking for. Of these, the $t\bar{t}$ process was the largest, followed by diboson (WZ/ZZ) processes. Events with a single Z and two or more jets from initial-state radiation could also mimic our signal, provided that mismeasurement of the jet momentum resulted in a large $E_T^{miss}$ for the event. Events from single-top-quark processes and from lepton misidentification also contributed to the background. To accurately model these backgrounds, we used flavor-symmetry, Z/$\gamma^*$, Monte Carlo, and fake estimation methods, all of which will be described below.
+
+As we had several unknown masses in our models, we needed to find multiple signal regions which could optimize the signal-to-background ratio for a variety of different $\tilde{\chi}^0_1$, $\tilde{\chi}^0_2$, and $\tilde{g}$ masses. In Figure~\ref{signal_regions}, we show the four signal regions we chose, along with their associated validation and control regions, which were used to implement and test various background-rejection methods.
+
+\section{Regions}

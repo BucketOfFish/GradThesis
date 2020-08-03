@@ -1,8 +1,8 @@
-\chapter{Backgrounds}
+\chapter{Background Estimation Methods}
 
-Here we briefly describe the major backgrounds in our analysis. I was in charge of the Z background estimation, as will be discussed in the next section. I also provided theory systematic uncertainties for the MC components of both the Strong and Electroweak analyses.
+Here we briefly describe the major backgrounds in our analysis. I was in charge of the Z background estimation, as will be discussed in the next section. I also provided theory systematic uncertainties for the MC components of both the strong and electroweak searches.
 
-\subsection*{Flavor Symmetry}
+\section{Flavor Symmetry}
 
 We used the flavor symmetry method to remove contributions from processes such as $Z\rightarrow\tau\tau$, $t\tilde{t}$, WW, and tW. Unlike our signal models, which produced only pairs of same-flavor leptons, these processes could produce same-flavor and opposite-flavor lepton pairs with equal probability. The basic idea was to take the opposite-flavor $e\mu$ events from data in each signal region, and to use them to estimate the number of same-flavor events from FS sources in each of those regions. Due to differences in detection and triggering efficiencies for electrons and muons, we had to apply the scaling factor shown in the following equation, where $\epsilon_{e/\mu}$ was the offline selection efficiency for each lepton and $\epsilon_{e\mu/ee}^{trigger}$ was the dilepton trigger efficiency for each channel. The equation for the $\mu\mu$ channel followed the same logic.
 
@@ -10,11 +10,11 @@ We used the flavor symmetry method to remove contributions from processes such a
 n_{ee}^{measured} = \frac{1}{2}\frac{\epsilon_e}{\epsilon_{\mu}}\frac{\epsilon_{ee}^{trigger}}{\epsilon_{e\mu}^{trigger}}n_{e\mu}^{measured}
 \end{equation}
 
-\subsection*{Z/$\gamma^*$ + Jets}
+\section{Z/$\gamma^*$ + Jets}
 
-In our Z+jets backgrounds, the majority of our missing energy comes from jet mismeasurements. Since Monte Carlo has trouble accurately simulating the QCD processes involved in jet processes, we use a data-based method to estimate this component of the background. This method has been used before in physics searches in both CMS and ATLAS.
+In our Z+jets backgrounds, the majority of our missing energy comes from jet mismeasurements. Since Monte Carlo historically had trouble accurately simulating the QCD processes involved in jet processes, we first investigated the use of a data-based method to estimate this component of the background. This method, based on photon data events, had been used before in physics searches in both CMS and ATLAS, but was shown to be inferior to a simpler MC method in this case. The MC-based method applied a scale factor based on a separate control region for each relevant signal and validation region. Both the data-driven photon method and the Z MC method are described in the next section.
 
-\subsection*{Fake Leptons}
+\section{Fake Leptons}
 
 Another contribution to background came from events where one or more non-leptonic objects were incorrectly identified as leptons. Semileptonic $t\bar{t}$, W + jets, and single top events were included in this category. We estimated the number of fake leptons in each region using a matrix method described in detail in \cite{fake_method}. The general idea was that in each signal region, we would apply both loose and tight lepton selections. We labeled the number of baseline (loose) leptons which passed the signal (tight) cut as $N_{pass}$, and called the ones which failed $N_{fail}$. Given two further numbers, $\epsilon^{real}$ and $\epsilon^{fake}$ (fractions which pass the signal cut), we could then estimate the number of fake signal leptons using the following equation. $\epsilon^{real}$ and $\epsilon^{fake}$ were calculated via a tag-and-probe approach. Expanding this method to a dilepton system (where either or both leptons could be fake) required only that we extend this logic to a 4x4 matrix.
 
@@ -22,6 +22,6 @@ Another contribution to background came from events where one or more non-lepton
 N_{pass}^{fake} = \frac{N_{fail}-(1/\epsilon^{real}-1)\times N_{pass}}{1/\epsilon^{fake}-1/\epsilon^{real}}.
 \end{equation}
 
-\subsection*{Monte Carlo}
+\section{Monte Carlo}
 
-Other small components were modelled using MC.
+Other small components were modelled directly using MC.
