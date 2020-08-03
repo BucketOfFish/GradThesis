@@ -244,8 +244,82 @@ data18 & 50 & 66.6667 \\
 
 \section{MC Angle Validation Plots}
 
-Part of MC validation involves checking for any deadspots or hotspots in the 2D eta-phi angle space. To do this, I created plots of our various sample processes in each of our relevant regions. These are shown in Figures~\ref{fig:MC_angle_validation_first} to~\ref{fig:MC_angle_validation_last}, demonstrating that there were no issues in this particular case.
+Part of MC validation involves checking for any deadspots or hotspots in the 2D eta-phi angle space~\cite{twiki_checks} for leading jets and leptons. Any large peaks or dips would demonstrate an issue in the sample production process. To do these checks, I created plots for our various sample processes in each of our strong and electroweak regions.
+
+A random selection of these plots are shown in Figures~\ref{fig:MC_angle_validation_first} to~\ref{fig:MC_angle_validation_last}. Examining these plots demonstrated that there were no issues in this particular case.
+
+\begin{figure}[htbp]
+\centering
+\begin{minipage}{0.45\textwidth}
+    \includegraphics[width=\textwidth]{Images/SUSY/jet_eta_phi_data_CRtt.png}
+    \caption{$\eta$ vs $\phi$ plot for leading jets for data in CRtt.}
+    \label{fig:MC_angle_validation_first}
+\end{minipage}
+\hfill
+\begin{minipage}{0.45\textwidth}
+    \includegraphics[width=\textwidth]{Images/SUSY/jet_eta_phi_diboson_VRLow.png}
+    \caption{$\eta$ vs $\phi$ plot for leading jets for diboson in VRLow.}
+\end{minipage}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\begin{minipage}{0.45\textwidth}
+    \includegraphics[width=\textwidth]{Images/SUSY/jet_eta_phi_higgs_VRC.png}
+    \caption{$\eta$ vs $\phi$ plot for leading jets for higgs in VRC.}
+\end{minipage}
+\hfill
+\begin{minipage}{0.45\textwidth}
+    \includegraphics[width=\textwidth]{Images/SUSY/lep_eta_phi_all_MC_SRHigh.png}
+    \caption{$\eta$ vs $\phi$ plot for leading leptons for all MC in SRHigh.}
+\end{minipage}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\begin{minipage}{0.45\textwidth}
+    \includegraphics[width=\textwidth]{Images/SUSY/lep_eta_phi_data_DRInt.png}
+    \caption{$\eta$ vs $\phi$ plot for leading leptons for data in DRInt.}
+\end{minipage}
+\hfill
+\begin{minipage}{0.45\textwidth}
+    \includegraphics[width=\textwidth]{Images/SUSY/lep_eta_phi_Zjets_SRMed.png}
+    \caption{$\eta$ vs $\phi$ plot for leading lepton for Zjets in SRMed.}
+    \label{fig:MC_angle_validation_last}
+\end{minipage}
+\end{figure}
 
 \section{Photon Overlap Removal}
 
-Another issue involved the use of overlap removal in sample production. After the photon method (to be described later) was shown to be problematic, we turned off photon-based overlap removal for the next set of samples. Here I show that this choice did not have a significant impact on relevant Z and data samples.
+Another issue we had to check was the use of overlap removal in sample production. After the photon method (to be described later) was shown to be problematic, we turned off photon-based overlap removal for the next set of samples. Here I show that this choice did not have a significant impact on relevant Z and data samples.
+
+To do this, I checked a subset of samples for Z MC and data. I produced these samples with and without the OR.DoPhoton flag, and plotted the \MET\ distributions against each other. These plots, shown in Figures~\ref{fig:ORPhoton_first} to~\ref{fig:ORPhoton_last}, demonstrates that turning off photon overlap removal does not have much impact.
+
+The samples used are the following:
+
+\begin{itemize}
+    \item \seqsplit{mc16\_13TeV.364121.Sherpa\_221\_NNPDF30NNLO\_Zee\_MAXHTPTV140\_280\_CFilterBVeto.deriv.DAOD\_SUSY2.e5299\_s3126\_r10724\_p4189}
+    \item \seqsplit{mc16\_13TeV.364102.Sherpa\_221\_NNPDF30NNLO\_Zmumu\_MAXHTPTV0\_70\_BFilter.deriv.DAOD\_SUSY2.e5271\_s3126\_r10201\_p4189}
+    \item \seqsplit{data18\_13TeV.periodB.physics\_Main.PhysCont.DAOD\_SUSY2.grp18\_v01\_p3991}.
+\end{itemize}
+
+\begin{figure}[htbp]
+\centering
+\begin{minipage}{0.45\textwidth}
+    \includegraphics[width=\textwidth]{Images/SUSY/ORDoPhoton_Zee.png}
+    \caption{\MET\ with and without photon overlap removal for Zee.}
+    \label{fig:ORPhoton_first}
+\end{minipage}
+\hfill
+\begin{minipage}{0.45\textwidth}
+    \includegraphics[width=\textwidth]{Images/SUSY/ORDoPhoton_Zmm.png}
+    \caption{\MET\ with and without photon overlap removal for Zmm.}
+\end{minipage}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.45\textwidth]{Images/SUSY/ORDoPhoton_data.png}
+    \caption{\MET\ with and without photon overlap removal for data.}
+    \label{fig:ORPhoton_last}
+\end{figure}
