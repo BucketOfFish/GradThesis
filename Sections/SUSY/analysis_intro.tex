@@ -1,6 +1,6 @@
 \chapter{Analysis Details}
 
-We published a paper recently~\cite{SUSY} in which we conducted searches using two classes of SUSY models, denoted the strong and electroweak models. Both types of search looked for final products with two opposite-sign same-flavor leptons, at least two jets, and large \MET. These searches used the full ATLAS Run 2 dataset of $\sqrt{s}$ = 13 TeV collision data, with an integrated luminosity of $139 fb^{-1}$. I participated mostly in the strong search, so this is what I will describe here. Some parts of this section have been taken with changes from the paper.
+We published a paper recently~\cite{SUSY_2l2j} in which we conducted searches using two classes of SUSY models, denoted the strong and electroweak models. Both types of search looked for final products with two opposite-sign same-flavor leptons, at least two jets, and large \MET. These searches used the full ATLAS Run 2 dataset of $\sqrt{s}$ = 13 TeV collision data, with an integrated luminosity of $139 fb^{-1}$. I participated mostly in the strong search, so this is what I will describe here. Some parts of this section have been taken with changes from the paper.
 
 \section{Signal Models}
 
@@ -27,14 +27,69 @@ When the mass difference between $\tilde{\chi}_{2}^{0}$ and $\tilde{\chi}_{1}^{0
 
 The signal samples are produced using MadGraph5 with the NNPDF LO PDF set and contain up to one additional parton in the matrix element. The generation uses Pythia8 for showering and hadronization with EvtGen and the ATLAS A14 tune and the CTEQ 6L1 PDF set in the shower. Decoupled sparticles are vetoed in the production diagrams in MadGraph5. Signal production cross sections are calculated at NNLO$_\text{approx}$ with NNLL resummation. The details of strong signal model generation can be found in the following JIRA tickets~\cite{JIRAGluinoSLN, JIRAGluinoZ, JIRASleptonZ}.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Physics Objects and Processes}
 
-\section{Physics Objects}
+For the purposes of performing jet overlap removal and calculating $E_T^{miss}$, we chose to use baseline leptons with \pt\ above 10 GeV and baseline jets above 20 GeV. In the interest of keeping this paper at a reasonable length, the complete set of object selection and triggering criteria will not be included, but can be found in the complete SUSY analysis paper at \cite{SUSY_2l2j}. These selections included different $\eta$ acceptances for electrons and muons, various requirements on object reconstruction quality and isolation, and cuts on impact parameters. On top of this, our regions used signal leptons with \pt\ above 25 GeV, and jets with \pt\ above 30 GeV.
 
-When selecting objects for this analysis, we decided to use signal leptons with transverse momentum ($p_T$) above 25 GeV, and jets with $p_T$ above 30 GeV. For the purposes of performing jet overlap removal and calculating $E_T^{miss}$, we also allowed baseline leptons above 10 GeV and baseline jets above 20 GeV. In the interest of keeping this paper at a reasonable length, the complete set of object selection and triggering criteria will not be included, but can be found in the complete SUSY analysis paper at \cite{SUSY_2l2j}.
-
-As with most high-energy physics searches, there were a variety of standard-model processes which mimicked the final state we were looking for. Of these, the $t\bar{t}$ process was the largest, followed by diboson (WZ/ZZ) processes. Events with a single Z and two or more jets from initial-state radiation could also mimic our signal, provided that mismeasurement of the jet momentum resulted in a large $E_T^{miss}$ for the event. Events from single-top-quark processes and from lepton misidentification also contributed to the background. To accurately model these backgrounds, we used flavor-symmetry, Z/$\gamma^*$, Monte Carlo, and fake estimation methods, all of which will be described below.
-
-As we had several unknown masses in our models, we needed to find multiple signal regions which could optimize the signal-to-background ratio for a variety of different $\tilde{\chi}^0_1$, $\tilde{\chi}^0_2$, and $\tilde{g}$ masses. In Figure~\ref{signal_regions}, we show the four signal regions we chose, along with their associated validation and control regions, which were used to implement and test various background-rejection methods.
+As with most high-energy physics searches, there were a variety of standard-model processes which mimicked the final state we were looking for. Of these, the $t\bar{t}$ process was the largest, followed by diboson (WZ/ZZ) processes. Events with a single Z and two or more jets from initial-state radiation could also mimic our signal, provided that mismeasurement of the jet momentum resulted in a large \MET\ for the event. Events from single-top-quark processes and from lepton misidentification also contributed to the background. To accurately model these backgrounds, we used flavor-symmetry (FS), Z MC scaling, fake estimation, and Monte Carlo methods, all of which will be described later.
 
 \section{Regions}
+
+When selecting regions for this analysis, we decided to require at least two signal leptons with transverse momentum ($p_T$) above 25 GeV and at least one jet with $p_T$ above 30 GeV in all regions.
+
+As we had several unknown masses in our models, we needed to find multiple signal regions which could optimize the signal-to-background ratio for a variety of different $\tilde{\chi}^0_1$, $\tilde{\chi}^0_2$, and $\tilde{g}$ masses. In Tables~\ref{tab:strongSRDef} and~\ref{tab:strongVRDef}, we describe the strong signal and validation regions we chose.
+
+\begin{table}[htbp]
+    \centering
+    \begin{tabular}{l|c|c|c|c|c|c|c}
+    Preselection & \multicolumn{7}{c}{Lepton triggers} \\
+    Preselection & \multicolumn{7}{c}{Lepton \pt$>25$; $==2$ leptons (baseline \& signal) SF-OS } \\
+    Preselection & \multicolumn{7}{c}{\mll$>12$} \\
+    Preselection & \multicolumn{7}{c}{\ptll$>40$} \\
+    Preselection & \multicolumn{7}{c}{Jet \pt$>30$; $\geq2$ jets} \\
+    Preselection & \multicolumn{7}{c}{$\Delta\phi(\mathrm{jet}_{1,2},$\MET$)>0.4$} \\
+    \hline
+    Region & \njet & \HT & \MET & \mttwo & \EtmissSig & \ptll & \mll \\
+    \hline
+    SRC   & $-$  & $-$    & $>250$ & $>90$ & $>10$ & $<100$  & $-$ \\
+    SRLow & $-$  & $>250$ & $>250$ & $>100$ & $-$ & $<500$& $-$   \\
+    \quad SRZLow & $\geq4$  & $>250$ & $>250$ & $>100$ & $-$ & $<500$& $81-101$   \\
+    SRMed & $-$  & $>500$ & $>300$ & $>75$ & $-$ & $<800$ & $-$   \\
+    \quad SRZMed & $\geq4$  & $>500$ & $>300$ & $>75$ & $-$ & $<800$ & $81-101$   \\
+    SRHigh& $-$  & $>800$ & $>300$ & $>75$ & $-$ & $-$    & $-$   \\
+    \quad SRZHigh& $\geq4$  & $>800$ & $>300$ & $>75$ & $-$ & $-$    & $81-101$  \\
+    \end{tabular}
+    \caption{Strong signal regions, with units in GeV. When Z regions are used as control regions for FS estimates, the \mll\ window is expanded to 61--121 GeV.}
+    \label{tab:strongSRDef}
+\end{table}
+
+\begin{table}[htbp]
+    \centering
+    \begin{tabular}{l|c|c|c|c|c|c|c}
+    Preselection & \multicolumn{7}{c}{Same as SRs} \\
+    \hline
+    Region & \njet & \HT & \MET & \mttwo & \EtmissSig & \ptll & \mll \\
+    \hline
+    VRC    & $-$  & $-$    & $\bm{150-250}$ & $>90$ & $>10$ & $<100$  & $-$ \\
+    VRLow  & $-$  & $>250$ & $\bm{150-250}$ & $>100$ & $-$ & $<500$& $-$   \\
+    VRMed  & $-$  & $>500$ & $\bm{150-250}$ & $>75$ & $-$ & $<800$ & $-$   \\
+    VRHigh & $-$  & $>800$ & $\bm{150-250}$ & $>75$ & $-$ & $-$    & $-$   \\
+    \hline\hline
+    Preselection & \multicolumn{7}{c}{Same as SRs but} \\
+    Preselection & \multicolumn{7}{c}{\textbf{3 Leptons} (baseline+signal)} \\
+    \hline
+    Region & \njet & \HT & \MET & \mttwo & \EtmissSig & \ptll & \mll \\
+    \hline
+    VR3L  & $-$  & $>250$ & $\bm{>200}$ & $>100$ & $-$ & $-$& $-$   \\
+    \hline\hline
+    Preselection & \multicolumn{7}{c}{Same as SRs but} \\
+    Preselection & \multicolumn{7}{c}{\textbf{Same Sign Leptons}} \\
+    Preselection & \multicolumn{7}{c}{\textbf{SF+DF Leptons}} \\
+    \hline
+    Region & \njet & \HT & \MET & \mttwo & \EtmissSig & \ptll & \mll \\
+    \hline
+    VRSS  & $-$  & $>250$ & $\bm{>150}$ & $>75$ & $-$ & $\bm{-}$& $-$   \\
+    \end{tabular}
+    \caption{Strong validation regions, with units in GeV.  Differences from SRs are highlighted in bold.}
+    \label{tab:strongVRDef}
+\end{table}
