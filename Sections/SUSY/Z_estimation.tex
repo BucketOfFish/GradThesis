@@ -1,48 +1,96 @@
 \chapter{Z Background Estimation}
 
-We describe here two methods of estimating $Z\rightarrow\ell\ell$ backgrounds in our strong SUSY regions. The first method relies on the statistical manipulation of data-driven photon+jets backgrounds, and has been used in our previous analyses. We describe this method, and show that it is inapplicable to our current analysis due to violation of several underlying method assumptions. The second method we describe, based on the scaling of Z Monte Carlo samples to a \mindphijm\ control region for each signal and validation region, is the one we use for our current analysis. We show that this method replicates important features accurately, and is robust to theory systematic variations.
+We describe here two methods of estimating $Z\rightarrow\ell\ell$ backgrounds in our strong SUSY regions. The first method relies on the statistical manipulation of data-driven photon+jets backgrounds, and has been used in our previous analyses. We describe this method, and show that it is ill-suited to our current analysis due to violation of several underlying method assumptions. The second method we describe, based on the scaling of Z Monte Carlo samples to a \mindphijm\ control region for each signal and validation region, is the one we use for our current search. We show that this method replicates important features accurately, and is robust to theory systematic variations.
 
 \section{Photon Method}
 
-In our Z+jets backgrounds, the majority of our missing energy comes from jet mismeasurements. We first investigated a data-driven method to estimate this component of the background, as it has been used before in physics searches in both CMS and ATLAS ~\cite{blah}, including in one of our previous analyses ~\cite{blah}.
+The photon+jets method is one which has been used before in both ATLAS and CMS~\cite{blah}, including in one of our previous analyses~\cite{blah}. In this method, we take photon+jets events from data and perform statistical manipulation to make them look like Z+jets events (Figure~\ref{fig:photon_to_Z}).
 
-This method involves selecting photon+jets events from data, and applying corrections in order to simulate Z+jets events (Figure~\ref{fig:photon_to_Z}). The method works because the two types of processes have very similar jet behavior, allowing us to use a data-driven method for estimating jets, rather than relying on tricky QCD-based simulation in Monte Carlo.
-
-\begin{figure}
+\begin{figure}[htbp]
     \centering
-    %\includegraphics{}
-    \caption{Caption}
+    \includegraphics[width=\textwidth]{Images/SUSY/photon_to_Z.png}
+    \caption{A photon+jets event is made to resemble a Z+jets event by treating the photon as a Z boson of the same momentum, and by splitting it into two leptons.}
     \label{fig:photon_to_Z}
 \end{figure}
 
-The major differences between Z+jets and photon+jets events come from the presence of leptonic components, which can be simulated by pseudo-splitting the photon into two leptons. From looking at photon and Z events in MC, we apply corrections to each photon event to produce a lepton splitting similar to what is seen in an equivalent Z event of the same transverse momentum. To be more specific, we first split the photon into two leptons according to a uniform angle sampling on the unit sphere in the rest frame of the photon. We then boost the daughter leptons back to the lab frame. This lepton splitting causes our first problem, as will be described in the next section.
+The reason we do this is overcome limitations in QCD modelling in jets. That is, since most of the \MET\ in Z+jets events comes from the jets, and not from the Z or its lepton daughters, any analysis which involves \MET\ would benefit from using data-driven methods of estimating this particular background.
 
-After splitting the photon into leptons, we must then perform a resolution smearing procedure to account for the fact that photons and leptons have different measurement resolutions within our detector. [describe how method works, and how we then smear the pT of the photon based on resulting lepton pT]. [In particular, there is significant mismeasurement of muons at high pT. This leads to differences in MET distibutions. To simplify calculations, we treat lepton propagation as mostly being in the direction of Z propagation. Thus our smearing method only affects MET in the direction parallel to the direction of Z propagation (METl), and not in the transverse direction (METt). To apply smearing, we look at METl in slices of pT for both photon and Z events in MC. The differences in mean and standard deviation for the photon and Z distributions for MC16e mm samples can be seen in Table <>. For electrons we apply a shift in mean METl for each event, and for muons we apply both a shift in mean and an additional smearing in resolution based on sampling from a Gaussian of the given standard deviation. Comparisons of photon and Z METl distributions in various pT slices can be seen in Fig. <>.] [this causes problem, described in next section].
+In this method, we can take a photon+jets event and treat the photon as a Z boson of the same \pt. We first "pseudo-split" the photon into two leptons. Second, we perform smearing adjustments on the leptons to simulate their relative measurement uncertainties. Finally, we scale the entire photon+jets \pt\ distribution to match the Z+jets \pt\ distribution.
 
-Next, we take into account the fact that photon and Z processes are produced with different pT distributions in our backgrounds. We correct for this by reweighting photon events in pT bins in order to match the distribution seen in Z events. To do this, we look at an inclusive region <> and apply a scaling factor for each photon event based on yields in the pT slices. Comparisons of photon vs. Z pT (Ptll) distributions both before and after reweighting are shown in Figure~\ref{fig:reweighting}. [however, this leads to our third problem].
+\subsection*{Splitting}
 
-\begin{figure}
+To split the photon into two leptons, we first boost into the rest frame of the photon and perform the decay via a uniform angle sampling on the unit sphere. We then boost the daughter leptons back to the lab frame. In theory, this would allow us to replicate the lepton distributions in our Z+jets background.
+
+However, here we run into our first problem. There are differences in the $\eta$ distributions of photons and Z bosons (Figure~\ref{fig:Z_photon_eta}). As well, there are $\eta$ acceptance distributions for each type of lepton. As such, we have to perform a reweighting in lepton $\eta$ to get the photon "pseudo-split" leptons to match up. However, this is made more difficult by the $|\eta|<2.37$ requirement on photons, as well as the $\eta$ acceptance gaps.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.45\textwidth]{Images/SUSY/Z_eta.png}
+    \includegraphics[width=0.45\textwidth]{Images/SUSY/photon_eta.png}
+    \caption{Z $\eta$ distribution (left) vs. photon $\eta$ distribution.}
+    \label{fig:Z_photon_eta}
+\end{figure}
+
+By having to use low-$\eta$ photons to simulate high-$\eta$ Z+jets events, we get slight unavoidable differences in lepton distributions. These problems caused some issues in final \MET\ distributions, since the leptons were used to perform \MET\ smearing (as will be described next).
+
+\subsection*{Smearing}
+
+The resolution smearing step is to account for the fact that photons and leptons have different measurement resolutions within our detector. In particular, there is significant mismeasurement of muons at high \pt, which produces a contribution to \MET\ in the propagation direction of the muon. Though most \MET\ in our Z/$\gamma$+jets events is taken to be coming from the jets, these leptonic contributions cause an effect which must be corrected for.
+
+To simplify calculations, we treat lepton propagation as mostly being in the direction of Z/$\gamma$ propagation. Thus our smearing method only affects \MET\ in the direction parallel to the direction of Z/$\gamma$ propagation (\METl), and not in the transverse direction (\METt). To apply smearing, we look at \METl\ in slices of \pt\ for both photon and Z events in MC. For each bin, we calculate the differences in mean and standard deviation for the photon and Z distributions.
+
+For electrons we apply a shift in mean \METl\ for each event, and for muons we apply both a shift in mean and an additional smearing in resolution based on sampling from a Gaussian of the given standard deviation. Comparisons of photon and Z \METl\ distributions after smearing in various \pt\ slices can be seen in Figure~\ref{fig:Z_photon_eta}.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.45\textwidth]{Images/SUSY/METl_bin_5.pdf}
+    \includegraphics[width=0.45\textwidth]{Images/SUSY/METl_bin_16.pdf}
+    \includegraphics[width=0.45\textwidth]{Images/SUSY/METl_bin_21.pdf}
+    \caption{\METl\ comparisons between Z+jets (in the $\mu\mu$ channel) and smeared photon+jets events in a low-\pt\ bin (left), a medium-\pt\ bin (right), and a high-\pt\ bin (bottom). Scaling has been applied to smeared photons.}
+    \label{fig:Z_photon_eta}
+\end{figure}
+
+These \pt-binned \METl\ comparisons reveal a problem. Though \METl\ is replicated well at high \pt, turning a photon distribution that looked nothing like the Z distribution into something fairly close, the effect is not so good at low \pt. In fact, at low \pt\ we see that the photon resolution started off worse than the muon resolution, violating one of the assumptions of our method. There, the smearing method allowed us to mean-shift to better match the Z+jets \METl\ distribution, but could not simulate the required improvement in resolution.
+
+The overall result of the smearing method can be seen in Figure~\ref{fig:Z_photon_eta_total}. We see that though the photon \METl\ distribution has improved, it still does not match well with the Z+jets distribution. In particular, there is a skew issue which comes from the facts that \METl\ means shift leftward as \pt\ increases, and that smearing performs worse at low \pt. This problem ended up causing mismodeling issues with the \MET\ variables.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.45\textwidth]{Images/SUSY/METl_total.pdf}
+    \caption{\METl\ comparisons between all Z+jets and smeared photon+jets events.}
+    \label{fig:Z_photon_eta_total}
+\end{figure}
+
+\subsection*{Reweighting}
+
+Next, we take into account the fact that photon and Z processes are produced with different \pt\ distributions. We correct for this by reweighting photon events in \pt\ bins in order to match the distribution seen in Z events. To do this, we look at an inclusive region (<INSERT REGION>) and apply a scaling factor for each photon event based on yields in the pT slices. Comparisons of photon vs. Z pT (Ptll) distributions both before and after reweighting are shown in Figure~\ref{fig:reweighting}.
+
+\begin{figure}[hbtp]
     \centering
     %\includegraphics{}
     \caption{Caption}
     \label{fig:reweighting}
 \end{figure}
 
-Finally, for each plotting region we look at the total photon and Z yield in a control region with \MET$<100$. We then apply an overall scaling factor to the photon component so that the photon yield matches the Z yield in the control region. This last step does not change the shapes of any photon-method distributions.
+However, this leads to our third problem. We see in the plot that the photon and Z \pt\ ranges are not the same. This is due to different availabilities of photon and Z triggers. Lacking the low-\pt\ photon information means that a lot of the soft lepton events would be inaccurately modelled by this method.
 
-\section{Problems with the Photon Method}
+\subsection*{Examining Other Assumptions}
 
-[problem due to photon and lepton detection etas]
+[MET not all from jets]
 
-[problem with muon resolution being too good]
-
-[problem with photon pT range]
-
-Final MC closure comparisons of various features between Z+jets and processed photon+jets events are shown in Figure~\ref{}, demonstrating some of the problems we have discussed.
+[show MET feature plots]
 
 \section{Z MC Method}
 
-\section{Z Background Systematics}
+Due to all of the problems listed in the last section, we decided to take a look at Z MC again. Luckily, it appeared that with recent Monte Carlo sample generation updates, many of the problems previously seen with QCD modelling were no longer an issue. Various feature checks revealed that Z MC modelled \MET\ variables well.
+
+\subsection*{Z Feature Checks}
+
+\subsection*{dPhi Scaling Method}
+
+\subsection*{Yield Tables}
+
+\subsection*{Systematic Tables}
 
 Here we compare two methods for obtaining theory systematic uncertainties for the Z background. First we have the \mindphijm method, as described in the body of the paper, and for which the Strong region systematics uncertainties are reproduced in Table~\ref{tab:ZMC_ratio_systematics_rep}. Second, we have the uncertainties in yield which we would obtain just from taking the differences in Z MC yield for each region. This is shown in Table~\ref{tab:ZMC_yield_systematics}.
 
