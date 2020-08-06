@@ -63,26 +63,57 @@ The overall result of the smearing method can be seen in Figure~\ref{fig:Z_photo
 
 \subsection*{Reweighting}
 
-Next, we take into account the fact that photon and Z processes are produced with different \pt\ distributions. We correct for this by reweighting photon events in \pt\ bins in order to match the distribution seen in Z events. To do this, we look at an inclusive region (<INSERT REGION>) and apply a scaling factor for each photon event based on yields in the pT slices. Comparisons of photon vs. Z pT (Ptll) distributions both before and after reweighting are shown in Figure~\ref{fig:reweighting}.
+Next, we take into account the fact that photon and Z processes are produced with different \pt\ distributions. We correct for this by reweighting photon events in \pt\ bins in order to match the distribution seen in Z events.
+
+To do this, we look at \pt\ slices in an inclusive region ($>=2$ leptons, $>=2$ jets). We compare yields for photons vs. Z, as determined by data minus all other relevant processes. In each \pt\ bin, we scale photon events by the ratio of photons vs. Z yields. Comparisons of photon vs. Z \ptll\ distributions both before and after reweighting are shown in Figure~\ref{fig:reweighting}.
 
 \begin{figure}[hbtp]
     \centering
-    %\includegraphics{}
-    \caption{Caption}
+    \includegraphics[width=0.7\textwidth]{Images/SUSY/ptll_distributions.pdf}
+    \caption{Data \pt\ distribution in an inclusive region, along with diboson MC, ttbar MC, and reweighted data photons. We see that the photon \pt\ does not extend below 25 GeV.}
     \label{fig:reweighting}
 \end{figure}
 
-However, this leads to our third problem. We see in the plot that the photon and Z \pt\ ranges are not the same. This is due to different availabilities of photon and Z triggers. Lacking the low-\pt\ photon information means that a lot of the soft lepton events would be inaccurately modelled by this method.
+However, this leads to our third problem. We see in the plot that the photon \pt\ range does not extend all the way down. This is due to different availabilities of photon and Z triggers. Lacking the low-\pt\ photon information means that a lot of the soft lepton events would be inaccurately modelled by this method.
 
 \subsection*{Examining Other Assumptions}
 
-[MET not all from jets]
+We have seen several problems already which make the photon+jets method problematic in this analysis. We can see \MET\ features as calculated via this method in Figure~\ref{fig:photon_method_MET}. We see that the modelling here can definitely be better.
 
-[show MET feature plots]
+\begin{figure}[hbtp]
+    \centering
+    \includegraphics[width=0.45\textwidth]{Images/SUSY/photon_method_MET.pdf}
+    \includegraphics[width=0.45\textwidth]{Images/SUSY/photon_method_METl.pdf}
+    \includegraphics[width=0.45\textwidth]{Images/SUSY/photon_method_METt.pdf}
+    \caption{\MET\ distributions, as determined by the data-driven photon+jets method. We have (left) \MET, (right) \METl, and (bottom) \METt.}
+    \label{fig:photon_method_MET}
+\end{figure}
+
+However, aside from these issues, we can identify some problems in our initial assumptions as well. Our entire method hinges on the idea that \MET\ in Z/$\gamma$+jets events comes mostly from jets, not from the bosonic elements. We examine this assumption by plotting \mindphijm\ and \dphiptllmet. If \MET\ does indeed come mostly from jets, then we would expect the distribution of \mindphijm\ to be peaked around $\phi$ of 0 and $\pi$, and we would expect that of \dphiptllmet\ to be mostly flat.
+
+The \mindphijm\ and \dphiptllmet\ distributions for Z and for photon are shown in Figures~\ref{fig:Z_distributions} and~\ref{fig:photon_distributions}, given the standard baseline preselections. We see that the initial assumption is significantly violated for both processes. For these reasons, we decided to investigate a different method of Z background estimation.
+
+\begin{figure}[hbtp]
+    \centering
+    \includegraphics[width=0.45\textwidth]{Images/SUSY/Z_dphijm.png}
+    \includegraphics[width=0.45\textwidth]{Images/SUSY/Z_dphipm.png}
+    \caption{\mindphijm\ (left) and \dphiptllmet\ (right) distributions for Z MC, given baseline preselections ($>=2$ leptons, leading leptons OS, $>=1$ jet, \ptll$>25$).}
+    \label{fig:Z_distributions}
+\end{figure}
+
+\begin{figure}[hbtp]
+    \centering
+    \includegraphics[width=0.45\textwidth]{Images/SUSY/photon_dphijm.png}
+    \includegraphics[width=0.45\textwidth]{Images/SUSY/photon_dphipm.png}
+    \caption{\mindphijm\ (left) and \dphiptllmet\ (right) distributions for photon data, given baseline preselections (no leptons, $>=1$ jet, \ptll$>25$).}
+    \label{fig:photon_distributions}
+\end{figure}
 
 \section{Z MC Method}
 
-Due to all of the problems listed in the last section, we decided to take a look at Z MC again. Luckily, it appeared that with recent Monte Carlo sample generation updates, many of the problems previously seen with QCD modelling were no longer an issue. Various feature checks revealed that Z MC modelled \MET\ variables well.
+Due to all of the problems listed in the last section, we decided to take a look at Z MC again. Luckily, it appeared that with recent Monte Carlo sample generation updates, many of the problems previously seen with QCD modelling were no longer an issue.
+
+We developed a new MC-based method for Z background estimation, and performed various feature and systematics checks. These checks revealed that Z MC modelled \MET\ variables well.
 
 \subsection*{Z Feature Checks}
 

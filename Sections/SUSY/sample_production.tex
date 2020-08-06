@@ -289,6 +289,32 @@ A random selection of these plots are shown in Figures~\ref{fig:MC_angle_validat
 \end{minipage}
 \end{figure}
 
+\section{\ptll\ Cut}
+
+Here we look at the effect of a \ptll\ cut on signal and data. Specifically, we see what happens if we take a baseline selection of at least two jets (with \pt\ above 30 GeV), at least two leptons (with \pt\ above 25 GeV), and \MET\ above 200 GeV, and add a \ptll$>40$ GeV cut.
+
+In Figure~\ref{fig:ptll_cut}, we look at an MC16e SLN1 sample grid. These are electroweak samples, but they behave similarly to the strong model samples. Here we look at events which have already passed the baseline selection, and see how many of them would pass an additional \ptll\ cut. Furthermore, we compare them with the passing efficiency numbers for all background processes (as simulated by MC), and for the largest background, ttbar, in Table~\ref{tab:ptll_cut}. We see that the \ptll\ cut removes more background than signal over most of the grid. For this reason we added the \ptll$>40$ cut to our baseline selection.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.85\textwidth]{Images/SUSY/ptll_cut_efficiency.pdf}
+    \caption{Efficiency of a \ptll\ cut on the SLN1 signal grid.}
+    \label{fig:ptll_cut}
+\end{figure}
+
+\begin{table}[htbp]
+\caption{\ptll\ Cut Efficiency}
+\begin{center}
+\begin{tabular}{c|c|c|c}
+& mc16a & mc16cd & mc16e \\
+\hline
+ttbar & 0.866 & 0.883 & 0.881 \\
+all MC & 0.881 & 0.904 & 0.896 \\
+\end{tabular}
+\end{center}
+\label{tab:ptll_cut} 
+\end{table}
+
 \section{Photon Overlap Removal}
 
 Another issue we had to check was the use of overlap removal in sample production. After the photon method (to be described later) was shown to be problematic, we turned off photon-based overlap removal for the next set of samples. Here I show that this choice did not have a significant impact on relevant Z and data samples.
