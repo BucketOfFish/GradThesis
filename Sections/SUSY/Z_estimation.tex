@@ -91,7 +91,7 @@ We have seen several problems already which make the photon+jets method problema
 
 However, aside from these issues, we can identify some problems in our initial assumptions as well. Our entire method hinges on the idea that \MET\ in Z/$\gamma$+jets events comes mostly from jets, not from the bosonic elements. We examine this assumption by plotting \mindphijm\ and \dphiptllmet. If \MET\ does indeed come mostly from jets, then we would expect the distribution of \mindphijm\ to be peaked around $\phi$ of 0 and $\pi$, and we would expect that of \dphiptllmet\ to be mostly flat.
 
-The \mindphijm\ and \dphiptllmet\ distributions for Z and for photon are shown in Figures~\ref{fig:Z_distributions} and~\ref{fig:photon_distributions}, given the standard baseline preselections. We see that the initial assumption is significantly violated for both processes. For these reasons, we decided to investigate a different method of Z background estimation.
+The \mindphijm\ and \dphiptllmet\ distributions for Z and for photon are shown in Figures~\ref{fig:Z_distributions} and~\ref{fig:photon_distributions}, given the baseline preselections for the photon method. We see that the initial assumption is significantly violated for both processes. For these reasons, we decided to investigate a different method of Z background estimation.
 
 \begin{figure}[hbtp]
     \centering
@@ -113,21 +113,159 @@ The \mindphijm\ and \dphiptllmet\ distributions for Z and for photon are shown i
 
 Due to all of the problems listed in the last section, we decided to take a look at Z MC again. Luckily, it appeared that with recent Monte Carlo sample generation updates, many of the problems previously seen with QCD modelling were no longer an issue.
 
-We developed a new MC-based method for Z background estimation, and performed various feature and systematics checks. These checks revealed that Z MC modelled \MET\ variables well.
-
-\subsection*{Z Feature Checks}
+We developed a new MC-based method for Z background estimation, and performed systematics checks as well as visual comparisons of various \MET\ and jet features. These checks revealed that Z MC modelled \MET\ variables well.
 
 \subsection*{dPhi Scaling Method}
 
-\subsection*{Yield Tables}
+In this method, we define a new control region for each of our signal and validation regions. Where our normal regions have a \mindphijm$>0.4$ cut, our control regions have an opposite \mindphijm$<0.4$ cut. This new cut maximizes the Z+jets contribution in the region by looking specifically for events where \MET\ is coming from jets.
 
-\subsection*{Systematic Tables}
+Though we saw previously that there are a significant percentage of Z+jets events where \MET\ is not aligned with the jets, the converse statement still appears to be valid. That is, events where \MET\ aligns with jets are disproportionately coming from Z+jets processes. We can validate this statement by looking at Z yields vs. yields from other processes in the upcoming tables.
 
-Here we compare two methods for obtaining theory systematic uncertainties for the Z background. First we have the \mindphijm method, as described in the body of the paper, and for which the Strong region systematics uncertainties are reproduced in Table~\ref{tab:ZMC_ratio_systematics_rep}. Second, we have the uncertainties in yield which we would obtain just from taking the differences in Z MC yield for each region. This is shown in Table~\ref{tab:ZMC_yield_systematics}.
+For each control region, we find a scaling factor for Z MC such that the sum of all background yields in the control region equals the data yield. That is, the scale factor is equal to the total yield of data minus non-Z backgrounds, divided by Z yield. The scaling factor is then used to scale Z MC in the normal region to produce the final predicted yield.
 
-The yield systematics are quoted by using the maximum \mll bin yield difference in each region, using the binning scheme as described in the body of our paper. If the highest bin yield difference is an outlier (at least $10\%$ higher than the second-highest difference), then we quote the second-highest difference instead. We see that this method produces theory systematic uncertainties which are much higher than those obtained for the \mindphijm method. We demonstrate this difference by looking at the \mindphijm shapes in three regions, SRC (Figure~\ref{fig:mindphijm_SRC}), SRLow (Figure~\ref{fig:mindphijm_SRLow}), and SRHigh (Figure~\ref{fig:mindphijm_SRMed}). In these plots we show the nominal \mindphijm distribution against the scale and PDF variations with the largest differences in yield uncertainty. These plots demonstrate that though total Z MC yield is strongly influenced by systematic variations, the \mindphijm distribution shape is relatively unaffected. Thus our \mindphijm ratio method is robust to these systematic changes.
+\subsection*{Method Validation}
 
-\begin{table}
+We first demonstrate the validity of the method by defining a loose region called VRZ, which is dominated by Z+jets events. In this region we use MC to estimate all backgrounds. VRZ has exactly two same-flavor leptons and at least two jets, no b-tagged jets, and \ptll$>40$. VRZ also has the \mindphijm$<0.4$ cut common to all our regions.
+
+We check the resulting \MET, \mindphijm, and \dphiptllmet\ shapes in VRZ. The data vs. MC \MET distribution in VRZ is presented in Figure~\ref{fig:VRZ_MET}, while \mindphijm\ and \dphiptllmet\ are shown both inclusively and in four \MET\ bins (0-50 GeV, 50-100 GeV, 100-150 GeV, and 150-200 GeV) in Figures~\ref{fig:VRZ_dPhi2JetMET} and~\ref{fig:VRZ_dPhiPtllMET}. As demonstrated in these figures, the MC provides good modeling of relevant quantities.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.7\textwidth]{Images/SUSY/reweight_Ptll_all_SF_met_Et_VRZ.eps}
+\caption{\MET\ in the VRZ validation region. A scaling factor has been applied based on using the \mindphijm\ method in the corresponding control region. The y-axis is on a log scale.}
+\label{fig:VRZ_MET}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.45\textwidth]{Images/SUSY/reweight_Ptll_all_SF_minDPhi2JetsMet_VRZ_MET0_50.eps}
+\includegraphics[width=0.45\textwidth]{Images/SUSY/reweight_Ptll_all_SF_minDPhi2JetsMet_VRZ_MET50_100.eps}
+\includegraphics[width=0.45\textwidth]{Images/SUSY/reweight_Ptll_all_SF_minDPhi2JetsMet_VRZ_MET100_150.eps}
+\includegraphics[width=0.45\textwidth]{Images/SUSY/reweight_Ptll_all_SF_minDPhi2JetsMet_VRZ_MET150_200.eps}
+\includegraphics[width=0.45\textwidth]{Images/SUSY/reweight_Ptll_all_SF_minDPhi2JetsMet_VRZ.eps}
+\caption{\mindphijm\ in VRZ, both inclusively (bottom) and in various MET bins.}
+\label{fig:VRZ_dPhi2JetMET}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.45\textwidth]{Images/SUSY/reweight_Ptll_all_SF_dPhiPllMet_VRZ_MET0_50.eps}
+\includegraphics[width=0.45\textwidth]{Images/SUSY/reweight_Ptll_all_SF_dPhiPllMet_VRZ_MET50_100.eps}
+\includegraphics[width=0.45\textwidth]{Images/SUSY/reweight_Ptll_all_SF_dPhiPllMet_VRZ_MET100_150.eps}
+\includegraphics[width=0.45\textwidth]{Images/SUSY/reweight_Ptll_all_SF_dPhiPllMet_VRZ_MET150_200.eps}
+\includegraphics[width=0.45\textwidth]{Images/SUSY/reweight_Ptll_all_SF_dPhiPllMet_VRZ.eps}
+\caption{\dphiptllmet\ in VRZ, both inclusively (bottom) and in various MET bins.}
+\label{fig:VRZ_dPhiPtllMET}
+\end{figure}
+
+\subsection*{Scale Factors and Yields}
+
+The scale factors obtained via this method are shown in Table~\ref{tab:ZMC_SF} for each strong signal and validation region. Statistical uncertainties are calculated based on the number of events in each region.
+
+\begin{table}[htbp]
+\begin{center}
+\begin{tabular}{l|r}
+    \hline
+    \hline
+    Region & Z+jets Scale Factor \\
+    \hline
+    VRZ & $1.076\pm0.003$ \\
+    VRZ + \MET 0-50 & $1.088\pm0.004$ \\
+    VRZ + \MET 50-100 & $0.978\pm0.009$ \\
+    VRZ + \MET 100-150 & $0.815\pm0.037$ \\
+    VRZ + \MET 150-200 & $0.626\pm0.126$ \\
+    \hline
+    SRC & $2.475140\pm3.215942$ \\
+    SRLow & $1.415516\pm0.463222$\\
+    SRMed & $1.690879\pm0.564070$ \\
+    SRHigh & $1.203063\pm0.450705$ \\
+    SRZLow & $1.720489\pm0.670138$ \\
+    SRZMed & $1.877628\pm0.787696$\\
+    SRZHigh & $1.290495\pm0.617901$ \\
+    VRC & $1.423439\pm5.020987$ \\
+    VRLow & $0.597274\pm0.180240$ \\
+    VRMed & $0.682661\pm0.277476$ \\
+    VRHigh & $0.898953\pm0.548353$ \\
+    \hline
+\end{tabular}
+\end{center}
+\caption{Scale factors for the Z+jets background, obtained via the \mindphijm\ scaling method. The VRZ region scale factor is computed using all MC processes, but the other SRs and VRs use background yields and uncertainties obtained via our other background estimation methods.}
+\label{tab:ZMC_SF}
+\end{table}
+
+Table~\ref{tab:ZMC_region_yields} uses these scale factors to calculate the expected Z+jets contributions to each VR and SR. The expected contribution from all other backgrounds is also shown in the table, for comparison purposes. For the VRs, the total background expectation is compared to the observed data yield. For all VRs, the data yield is consistent with the total expected background. For the SRs, the expected Z+jets background is at most 13\% of the total background in each region.
+
+\begin{sidewaystable}[htbp]
+\caption{Validation of the Z+jets background estimate from MC, scaled to match the data yield in the region with \mindphijm$<0.4$. The non-Z backgrounds are estimated from MC. The total background consisting of the sum of these two predictions is compared to the data yields (for the VRs only).}
+\begin{center}
+\begin{tabular}{l|rr|rr|r}
+\hline
+\hline
+Region & Z+jets Background & Other Backgrounds & Total Background & Data & Significance\\
+\hline
+VRZ & $2918632.4\pm3891.8$ & $146037.6\pm461.7$ & $3064670.0\pm3919.1$ & 3072267 & 1.770 \\
+VRZ\_MET0\_50 & $2676506.5\pm3767.8$ & $82187.3\pm421.0$ & $2758693.8\pm3791.2$ & 2760892 & 0.531 \\
+VRZ\_MET50\_100 & $237585.5\pm1000.4$ & $41602.0\pm177.2$ & $279187.5\pm1016.0$ & 282322 & 2.734 \\
+VRZ\_MET100\_150 & $6828.4\pm158.8$ & $14591.2\pm60.4$ & $21419.6\pm169.8$ & 21134 & -1.278 \\
+VRZ\_MET150\_200 & $329.9\pm24.6$ & $4556.7\pm27.6$ & $4886.6\pm37.0$ & 4940 & 0.672 \\
+VRC & $82.5\pm36.4$ & $317.5\pm7.9$ & $400.0\pm37.3$ & 301 & -2.409 \\
+VRLow & $40.7\pm2.7$ & $286.3\pm5.2$ & $327.0\pm5.9$ & 325 & -0.104 \\
+VRMed & $28.1\pm1.1$ & $377.1\pm5.2$ & $405.2\pm5.3$ & 362 & -2.186 \\
+VRHigh & $15.4\pm0.4$ & $84.2\pm1.8$ & $99.6\pm1.9$ & 85 & -1.549 \\
+VRLowZ & $12.5\pm0.9$ & $60.7\pm1.6$ & $73.2\pm1.8$ & 62 & -1.390 \\
+VRMedZ & $11.8\pm0.5$ & $54.5\pm1.7$ & $66.3\pm1.8$ & 54 & -1.631 \\
+VRHighZ & $8.0\pm0.3$ & $13.6\pm0.5$ & $21.6\pm0.5$ & 19 & -0.584 \\
+SRC & $0.7\pm0.2$ & $38.6\pm1.1$ & $39.3\pm1.1$ & - & - \\
+SRLow & $4.6\pm0.8$ & $124.2\pm1.5$ & $128.8\pm1.7$ & - & - \\
+SRMed & $2.3\pm0.2$ & $92.6\pm1.7$ & $94.9\pm1.7$ & - & - \\
+SRHigh & $1.9\pm0.1$ & $35.0\pm1.1$ & $36.9\pm1.1$ & - & - \\
+SRLowZ & $2.4\pm0.3$ & $31.4\pm0.5$ & $33.8\pm0.6$ & - & - \\
+SRMedZ & $1.4\pm0.2$ & $17.4\pm0.4$ & $18.9\pm0.5$ & - & - \\
+SRHighZ & $0.7\pm0.1$ & $7.4\pm0.3$ & $8.1\pm0.3$ & - & - \\
+\hline
+\end{tabular}
+\end{center}
+\label{tab:ZMC_region_yields}
+\end{sidewaystable}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection*{Systematic Uncertainties}
+
+Table~\ref{tab:ZMC_ratio_systematics} shows the systematic uncertainties in Z estimation from applying the \mindphijm\ scaling method. We obtain these numbers by obtaining the nominal SR over CR yield ratio for Z MC in each region, and then comparing these ratios for each systematic variation. The largest fractional difference in this ratio for each type of systematic is quoted in the table. We can see that the systematic uncertainties are quite small, demonstrating that our \mindphijm\ method is stable against systematic variations. We demonstrate in Appendix~\ref{app:ZMC_systematics} that this is true despite a large difference in absolute yield due to these variations.
+
+\begin{table}[htbp]
+\caption{Z MC dPhi Ratio Systematic Uncertainties}
+\begin{center}
+\begin{tabular}{c|c|c}
+region & scale uncertainty & PDF uncertainty \\
+\hline
+SRC & 0.410 & 0.068 \\
+SRLow & 0.058 & 0.001 \\
+SRMed & 0.014 & 0.010 \\
+SRHigh & 0.042 & 0.019 \\
+SRLowZ & 0.035 & 0.007 \\
+SRMedZ & 0.017 & 0.008 \\
+SRHighZ & 0.006 & 0.014 \\
+VRC & 0.124 & 0.088 \\
+VRLow & 0.044 & 0.011 \\
+VRMed & 0.038 & 0.003 \\
+VRHigh & 0.013 & 0.006 \\
+VRLowZ & 0.015 & 0.010 \\
+VRMedZ & 0.010 & 0.003 \\
+VRHighZ & 0.026 & 0.017 \\
+\end{tabular}
+\end{center}
+\label{tab:ZMC_ratio_systematics}
+\end{table}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Here we compare two methods for obtaining theory systematic uncertainties for the Z background. First we have the \mindphijm\ method, as described above, and for which the strong region systematics uncertainties are reproduced in Table~\ref{tab:ZMC_ratio_systematics_rep}. Second, we have the uncertainties in yield which we would obtain just from taking the differences in Z MC yield for each region. This is shown in Table~\ref{tab:ZMC_yield_systematics}.
+
+The yield systematics are quoted by using the maximum \mll\ bin yield difference in each region, using the binning scheme as described in the body of our paper. If the highest bin yield difference is an outlier (at least $10\%$ higher than the second-highest difference), then we quote the second-highest difference instead. We see that this method produces theory systematic uncertainties which are much higher than those obtained for the \mindphijm\ method. We demonstrate this difference by looking at the \mindphijm\ shapes in three regions, SRC, SRLow, and SRMed (Figure~\ref{fig:mindphijm_validate}). In these plots we show the nominal \mindphijm distribution against the scale and PDF variations with the largest differences in yield uncertainty. These plots demonstrate that though total Z MC yield is strongly influenced by systematic variations, the \mindphijm\ distribution shape is relatively unaffected. Thus our \mindphijm\ ratio method is robust to these systematic changes.
+
+\begin{table}[htbp]
 \caption{Z MC dPhi Ratio Systematic Uncertainties}
 \begin{center}
 \begin{tabular}{c|c|c}
@@ -152,7 +290,7 @@ VRHighZ & 0.026 & 0.017 \\
 \label{tab:ZMC_ratio_systematics_rep} 
 \end{table}
 
-\begin{table}
+\begin{table}[htbp]
 \caption{Z MC Yield Systematic Uncertainties}
 \begin{center}
 \begin{tabular}{c|c|c}
@@ -179,27 +317,11 @@ VRHighZ & 0.449 & 0.020 \\
 
 \begin{figure}[tbhp]
 \centering
-%\includegraphics[width=0.8\textwidth]{figures/ZMC/systematics/SRC.png}
+\includegraphics[width=0.7\textwidth]{Images/SUSY/validate_SRC.png}
+\includegraphics[width=0.7\textwidth]{Images/SUSY/validate_SRLow.png}
+\includegraphics[width=0.7\textwidth]{Images/SUSY/validate_SRMed.png}
 \caption{
-\mindphijm shape for nominal Z MC in the SRC region, compared with shapes for scale and PDF systematics with the largest differences in yield.
+\mindphijm\ shape for nominal Z MC in the SRC (top), SRLow (middle), and SRMed (bottom) regions, compared with shapes for scale and PDF systematics with the largest differences in yield.
 }
-\label{fig:mindphijm_SRC} 
-\end{figure} 
-
-\begin{figure}[tbhp]
-\centering
-%\includegraphics[width=0.8\textwidth]{figures/ZMC/systematics/SRLow.png}
-\caption{
-\mindphijm shape for nominal Z MC in the SRLow region, compared with shapes for scale and PDF systematics with the largest differences in yield.
-}
-\label{fig:mindphijm_SRLow} 
-\end{figure} 
-
-\begin{figure}[tbhp]
-\centering
-%\includegraphics[width=0.8\textwidth]{figures/ZMC/systematics/SRMed.png}
-\caption{
-\mindphijm shape for nominal Z MC in the SRMed region, compared with shapes for scale and PDF systematics with the largest differences in yield.
-}
-\label{fig:mindphijm_SRMed} 
-\end{figure} 
+\label{fig:mindphijm_validate} 
+\end{figure}
