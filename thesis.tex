@@ -9,10 +9,11 @@
 \usepackage{bm}
 \usepackage{rotating}
 
-%\bibliography{Bibliography/intro}
+\bibliography{Bibliography/intro}
+\bibliography{Bibliography/ATLAS}
+\bibliography{Bibliography/SUSY}
 \bibliography{Bibliography/ML}
 \bibliography{Bibliography/calo_ML}
-\bibliography{Bibliography/SUSY}
 
 \begin{document}
 
@@ -28,20 +29,19 @@
 \mainmatter
 
 \part{A Brief Introduction to Particle Physics}
-\input{Sections/ParticlePhysics/history.tex} %[text/images/citations]
-\input{Sections/ParticlePhysics/standard_model.tex} %[text/images/citations]
-\input{Sections/ParticlePhysics/SUSY.tex} %[text/images/citations]
+\input{Sections/ParticlePhysics/history.tex}
+\input{Sections/ParticlePhysics/SM_SUSY.tex}
 
 \part{How to Conduct a Particle Physics Experiment}
-\input{Sections/ATLAS/detector.tex} %[text/images/citations]
-\input{Sections/ATLAS/data.tex} %[text/images/citations]
+\input{Sections/ATLAS/detector.tex}
+\input{Sections/ATLAS/data.tex}
 \input{Sections/ATLAS/how_to_search.tex} %[text/images/citations]
 
 \part{A Search for Supersymmetry}
-\input{Sections/SUSY/analysis_intro.tex} %[text/images/citations]
+\input{Sections/SUSY/analysis_intro.tex} %[citations]
 \input{Sections/SUSY/sample_production.tex} %[citations]
 \input{Sections/SUSY/backgrounds.tex} %[citations]
-\input{Sections/SUSY/Z_estimation.tex} %[text/images/citations]
+\input{Sections/SUSY/Z_estimation.tex} %[citations]
 \input{Sections/SUSY/results.tex} %[text/images/citations]
 
 \part{A Brief Introduction to Machine Learning}
@@ -58,7 +58,7 @@
 \input{Sections/Calo/conclusion.tex}
 
 \part{Identifying  Heavy-Flavor  Leptons  Using  Recurrent  Neural Nets}
-\input{Sections/LepIso/lepton_isolation.tex} %[text/images/citations]
+\input{Sections/LepIso/lepton_isolation.tex} %[citations]
 
 \part{Other Projects}
 \input{Sections/OtherProjects/FTk.tex} %[text/images/citations]

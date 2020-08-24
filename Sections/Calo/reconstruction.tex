@@ -281,7 +281,7 @@ For CNN and DNN training, we used batches of 1,000 events when training. However
 \label{fig:scan_hyperparameter}
 \end{figure*}
 
-The DNN, CNN, and GN-based models had 9823774 ($\sim$10M), 3003692 ($\sim$3M), and 14956286 ($\sim$15M) trainable parameters respectively after the hyperparameter scans.
+The DNN, CNN, and GN-based models had 9823774 (~10M), 3003692 (~3M), and 14956286 (~15M) trainable parameters respectively after the hyperparameter scans.
 
 Selected hyperparameter scan slices are shown in Figure~\ref{fig:scan_hyperparameter}. 
 These 2D scans were obtained setting all values besides the two under consideration (i.e., those on the axes) to be fixed at default values: a dropout rate of 0.08, a learning rate of 0.0004, a decay rate of 0.04, three dense layers for CNN and DNN, and 512 neurons per hidden layer. For GN, the default number of ECAL filters was 3, with a kernel size of 4.
