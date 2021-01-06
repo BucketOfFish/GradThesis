@@ -1,6 +1,6 @@
 \chapter{Analysis Details}
 
-We published a paper recently~\cite{SUSY_2l2j} in which we conducted searches using two classes of SUSY models, denoted the strong and electroweak models. Both types of search looked for final products with two opposite-sign same-flavor leptons, at least two jets, and large \MET. These searches used the full ATLAS Run 2 dataset of $\sqrt{s}$ = 13 TeV collision data, with an integrated luminosity of $139 fb^{-1}$. I participated mostly in the strong search, so this is what I will describe here. Some parts of this section have been taken with changes from the paper.
+We unblinded results recently for searches using two classes of SUSY models, denoted the strong and electroweak models \cite{SUSY_2l2j}. Both types of search looked for final products with two opposite-sign same-flavor leptons, at least two jets, and large \MET. These searches used the full ATLAS Run 2 dataset of $\sqrt{s}$ = 13 TeV collision data, with an integrated luminosity of $139 fb^{-1}$. I participated mostly in the strong search, so this is what I will describe here. Some parts of this section have been taken with changes from our papers.
 
 \section{Signal Models}
 
@@ -15,7 +15,17 @@ We looked at three different models in the strong analysis (Figure~\ref{fig:SUSY
     \label{fig:SUSY_models}
 \end{figure}
 
-Each of these models begins with a gluino or squark decaying via quark jets into the second lightest neutralino. These neutralinos then undergo either a two-lepton decay, an on-shell Z decay, or an off-shell Z decay, and end up producing the lightest neutralino, which exits the detector without being detected. Depending on the model, the resulting lepton pairs produce different \mll\ distributions. The lightest neutralino, which is also the lightest SUSY particle (LSP) in these models, shows up in our events as \MET.
+Each of these models begins with a gluino or squark decaying via quark jets into the second lightest neutralino. These neutralinos then undergo either a two-lepton decay, an on-shell Z decay, or an off-shell Z decay, and end up producing the lightest neutralino, which exits the detector without being detected. Of course, the Z bosons also decay into two leptons before being detected. Depending on the model, the resulting lepton pairs produce different \mll\ distributions. The lightest neutralino, which is also the lightest SUSY particle (LSP) in these models, shows up in our events as \MET.
+
+Due to the different kinematics of these models, the resulting \mll\ distributions of the two-lepton masses would be different. The slepton models only produce what we call edge signals, since the \mll\ distribution ends at a sharp edge. For the other models, when the mass difference between $\tilde{\chi}_{2}^{0}$ and $\tilde{\chi}_{1}^{0}$ is less than the $Z$ mass, we have an off-shell model, which produces a different type of edge signal. Otherwise we have an on-Z signal, which results in a normal Z-shaped \mll\ distribution. The slepton models produce the edge signals shown on the left half of Figure~\ref{fig:edge_signals}, and the other models produce the edge signals shown on the right half.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.3\textwidth]{Images/SUSY/slepton_edge.png}
+    \includegraphics[width=0.38\textwidth]{Images/SUSY/Z_edge.png}
+    \caption{(Left) \mll\ shape produced by gluino-slepton model. (Right) \mll\ shape produced by other models when the mass difference in initial and final state SUSY particles is greater than the $Z$ mass.}
+    \label{fig:edge_signals}
+\end{figure}
 
 \section{Signal Production Grids}
 
@@ -23,9 +33,7 @@ In all three models, we consider quark decay or production using five flavors ($
 
 As mentioned, the masses of these particles are still unconstrained, so we generate samples in grids over two dimensions, scanning over the LSP mass and either the gluino or squark mass. All squarks are assumed to be mass degenerate in these models. In each case, $\tilde{\chi}_0^2$ is constrained to have a mass halfway between the LSP mass and the mass of the gluino or squark. For example, for the gluino models, $m(\tilde{\chi}_0^2) = [m(\tilde{g})+m(\tilde{\chi^1_0})]/2$. For the slepton model, the masses of the left-handed sleptons are set to $m(\tilde{\ell}) = [m(\tilde{\chi^2_0})+m(\tilde{\chi^1_0})]/2$, while the right-handed sleptons are decoupled.
 
-When the mass difference between $\tilde{\chi}_{2}^{0}$ and $\tilde{\chi}_{1}^{0}$ is less than the $Z$ mass, we have an off-shell model. Otherwise we have an on-Z signal.
-
-The signal samples were produced using MadGraph5 with the NNPDF LO PDF set, and contain up to one additional parton in the matrix element. The generation used Pythia8 for showering and hadronization with EvtGen and the ATLAS A14 tune and the CTEQ 6L1 PDF set in the shower. Decoupled sparticles were vetoed in the production diagrams in MadGraph5. Signal production cross sections were calculated at NNLO$_\text{approx}$ with NNLL resummation. The details of strong signal model generation can be found in the following JIRA tickets~\cite{JIRAGluinoSLN, JIRAGluinoZ, JIRASleptonZ}.
+The signal samples were produced using MadGraph5 with the NNPDF LO PDF set, and contain up to one additional parton in the matrix element. The generation used Pythia8 for showering and hadronization with EvtGen and the ATLAS A14 tune and the CTEQ 6L1 PDF set in the shower. Decoupled sparticles were vetoed in the production diagrams in MadGraph5. Signal production cross sections were calculated at NNLO$_\text{approx}$ with NNLL resummation.
 
 \section{Physics Objects and Processes}
 
