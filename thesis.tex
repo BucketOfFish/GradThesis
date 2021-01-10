@@ -10,6 +10,12 @@
 \usepackage{rotating}
 \usepackage{float}
 
+\usepackage{tocloft}
+\renewcommand\cftpartpresnum{Part~}
+\renewcommand{\cftpartleader}{\cftdotfill{\cftdotsep}}
+\renewcommand{\cftchapleader}{\cftdotfill{\cftdotsep}}
+\usepackage[nottoc,numbib]{tocbibind}
+
 \bibliography{Bibliography/intro}
 \bibliography{Bibliography/ATLAS}
 \bibliography{Bibliography/SUSY}
@@ -22,9 +28,14 @@
 \input{Sections/Structure/front_matter.tex} %[text]
 \input{Sections/Structure/introduction.tex}
 
+\pagebreak
 \tableofcontents
+\pagebreak
 \listoftables
+\pagebreak
 \listoffigures
+\pagebreak
+\addcontentsline{toc}{chapter}{List of Abbreviations and Definitions}
 \input{Sections/Structure/abbrev_and_def.tex} %[text]
 
 \mainmatter
@@ -71,6 +82,7 @@
 
 \clearpage
 \backmatter
+\addcontentsline{toc}{chapter}{References}
 \printbibliography
 
 \end{document}
